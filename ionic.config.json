@@ -1,0 +1,7 @@
+{
+  "name": "conductor-fastworld",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
