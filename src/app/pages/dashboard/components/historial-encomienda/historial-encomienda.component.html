@@ -1,0 +1,244 @@
+<ion-header>
+  <ion-toolbar>
+    <app-btn-menu slot="start"></app-btn-menu>
+    <ion-title slot="start">Historial</ion-title>
+    <ion-item class="ion-text-start" slot="end">
+      <ion-icon color="orange" slot="start" name="search"></ion-icon>
+      <ion-input  (ionChange)="onSearchChange($event)" [debounce]="400" #searchInput placeholder="Buscar" ></ion-input>
+      <ion-button  [hidden]="searchInput.value == '' " (click)="searchInput.value = ''" expand="block" fill="clear" shape="round">
+        <ion-icon color="orange" slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-item> 
+    <ion-buttons slot="end">
+      <ion-menu-button menu="menu-historial"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-menu  contentId="menu-historial" menuId="menu-historial" side="end" type="overlay">
+  <ion-header >
+    <ion-toolbar color="orange" class="ion-text-center">
+      <ion-card-header>
+        <ion-card-title><b>Opciones</b></ion-card-title>
+      </ion-card-header>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+
+    <ion-item-group>
+      <ion-item-divider>
+        <ion-label>Filtrar Busqueda</ion-label>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label position="stacked">Buscar por</ion-label>
+        <ion-icon slot="start" name="funnel"></ion-icon>
+        <ion-select interface="popover" [value]="0">
+          <ion-select-option [value]="0">Identificador</ion-select-option>
+          <ion-select-option [value]="1">Nombre y Apellido</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-item-group>
+
+    <ion-item-group class="ion-text-center"> 
+      <ion-item-divider>
+        <ion-label>Seleccionar rango de busqueda </ion-label>
+      </ion-item-divider>
+      <ion-item >
+        <ion-label position="stacked">Rango <ion-text class="ion-hide-sm-down">de Busqueda</ion-text></ion-label>
+        <ion-select #dateRangeSelect [value]="0"  interface="popover">
+          <ion-select-option [value]="0">Hoy</ion-select-option>
+          <ion-select-option [value]="1">Ultimos 7 dias</ion-select-option>
+          <ion-select-option [value]="2">Del mes</ion-select-option>
+          <ion-select-option [value]="3">Ultimos 3 meses</ion-select-option>
+          <ion-select-option [value]="4">Personalizado</ion-select-option>
+        </ion-select>
+        <ion-icon slot="start" name="list"></ion-icon>
+      </ion-item>
+      <section *ngIf="dateRangeSelect.value == 4">
+        <ion-item>
+          <ion-label position="stacked">Fecha de Inicio</ion-label>
+          <ion-input  type="date" ></ion-input>
+          <ion-icon slot="end" name="calendar"></ion-icon>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Fecha de Inicio</ion-label>
+          <ion-input type="date" ></ion-input>
+          <ion-icon slot="end" name="calendar"></ion-icon>
+        </ion-item>
+        <ion-button class="ion-margin" color="orange" shape="round">
+          <ion-label>Buscar</ion-label>
+          <ion-icon slot="start" name="search"></ion-icon>
+        </ion-button>
+      </section>
+
+    </ion-item-group>
+    <ion-item-group class="ion-text-center">
+      <ion-item-divider>
+        <ion-label>Exportar Datos</ion-label>
+      </ion-item-divider>
+      <ion-item >
+        <ion-label position="stacked">Exportar</ion-label>
+        <ion-select #dateRangeSelect placeholder="Seleccionar"  interface="popover">
+          <ion-select-option [value]="0"> PDF</ion-select-option>
+          <ion-select-option [value]="1">Excel</ion-select-option>
+        </ion-select>
+        <ion-icon slot="start" name="document-text"></ion-icon>
+      </ion-item>
+      <ion-button class="ion-margin" color="orange" shape="round">
+        <ion-label>Generar</ion-label>
+        <ion-icon slot="start" name="download"></ion-icon>
+      </ion-button>
+    </ion-item-group>
+  </ion-content>
+</ion-menu>
+<ion-router-outlet id="menu-historial"></ion-router-outlet>
+
+
+<ion-content>
+  <cdk-virtual-scroll-viewport itemSize="189" minBufferPx="900" maxBufferPx="1350" class="ion-content-scroll-host">
+    <ng-container *ngIf="this.source as Source">
+      <ion-accordion-group>
+      <ion-card  *cdkVirtualFor="let item of Source ; let i = index">
+        <ion-item lines="full">
+          <ion-icon color="orange" name="cube" slot="start"></ion-icon>
+          <ion-label slot="start" >
+            <p>Encomienda: {{item.id}}</p>
+            <h2 [ngSwitch]="item.attributes.shipping_status">
+              <ion-text *ngSwitchCase="'aceptado'" color="tertiary">
+                <p>{{ item.attributes.shipping_status | titlecase}}</p>
+              </ion-text>
+              <ion-text *ngSwitchCase="'entregado'" color="success">
+                <p>{{ item.attributes.shipping_status | titlecase}}</p>
+              </ion-text>
+              <ion-text *ngSwitchCase="'invalido'" color="medium">
+                <p>{{ item.attributes.shipping_status | titlecase}}</p>
+              </ion-text>
+              <ion-text *ngSwitchCase="'pendiente'" color="dark">
+                <p>{{ item.attributes.shipping_status | titlecase}}</p>
+              </ion-text>
+              <ion-text *ngSwitchCase="'recibido'" color="primary">
+                <p>{{ item.attributes.shipping_status | titlecase}}</p>
+              </ion-text>
+              <ion-text *ngSwitchCase="'reportado'" color="danger">
+                <p>{{ item.attributes.shipping_status | titlecase}}</p>
+              </ion-text>
+              <ion-text *ngSwitchDefault color="dark">
+                <p>Sin Estado</p>
+              </ion-text>
+            </h2>
+          </ion-label>
+          <ion-label class="ion-text-center" slot="end">
+            <p>{{item.attributes.createdAt | date:'shortDate'}}</p>
+            <p>{{item.attributes.createdAt | date:'shortTime'}}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ng-container *ngIf="item.attributes.receiver != null; else notReceiver">
+            <ion-label>
+              <p style="display: flex; align-items: center;" class="ion-text-wrap">
+                <ion-icon style="margin: 6px;" name="person"></ion-icon>
+                <ion-text> Cliente</ion-text>
+              </p>
+              <h4>Jesus Augusto Guzman Martinez</h4>
+            </ion-label>
+              <ion-fab-button href="tel:{{item.attributes.receiver.phone}}" size="small">
+                <ion-icon name="call"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + item.attributes.receiver.phone.replace('+','')" target="_blank" rel="noopener noreferrer" color="success" size="small">
+                <ion-icon name="logo-whatsapp"></ion-icon>
+              </ion-fab-button>
+          </ng-container>
+          <ng-template #notReceiver>
+            <ion-label>
+              <p style="display: flex; align-items: center;" class="ion-text-wrap">
+                <ion-icon style="margin: 6px;" name="person"></ion-icon>
+                <ion-text> Cliente</ion-text>
+              </p>
+              <h4>Esperando confirmnación</h4>
+            </ion-label>
+          </ng-template>
+        </ion-item>
+        <ion-card-content class="ion-no-padding">
+          <ion-accordion [value]="'acord'+i">
+            <ion-item button slot="header" color="light">
+              <ion-label>
+                <h2 style="display: flex; align-items: center; justify-content: center;" class="ion-text-wrap">
+                  <ion-icon style="margin: 6px;" name="add"></ion-icon>
+                  <ion-text>Mostrar resumen</ion-text>
+                </h2>
+              </ion-label>
+            </ion-item>
+            <div slot="content">
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-col size="6">
+                    <ion-item>
+                      <ion-label >
+                        <p style="display: flex; align-items: center;">
+                          <ion-icon name="grid"></ion-icon>
+                          <ion-text color="orange">Categoria</ion-text>
+                        </p>
+                        <h2>{{ (item.attributes.category |titlecase) }}</h2>
+                      </ion-label>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-item >
+                      <ion-label >
+                        <p style="display: flex; align-items: center;">
+                          <ion-icon name="logo-usd"></ion-icon>
+                          <ion-text color="orange">Valor de encomienda</ion-text>
+                        </p>
+                        <h2>{{ (item.attributes.money_catch | currency) }}</h2>
+                      </ion-label>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+              <ion-item *ngIf="item.attributes.receiver != null; else notDirection" button [href]="'https://maps.google.com/?q=' +  item.attributes.receiver.direction.position.lat + ',' +  item.attributes.receiver.direction.position.lng" target="_blank" rel="noreferrer external">
+                <ion-label class="ion-text-wrap">
+                  <p  style="display: flex; align-items: center;">
+                    <ion-text color="orange">Direccion de Entrega</ion-text>
+                  </p>
+                  <h4>{{ item.attributes.receiver.direction.address}}</h4>
+                </ion-label>
+                <ion-icon slot="start" name="map"></ion-icon>
+              </ion-item>
+              <ng-template #notDirection>
+                <ion-item>
+                  <ion-label class="ion-text-wrap">
+                    <p  style="display: flex; align-items: center;">
+                      <ion-icon name="pin"></ion-icon>
+                      <ion-text color="orange">Direccion de Entrega</ion-text>
+                    </p>
+                    <h4>Sin Especificar</h4>
+                  </ion-label>
+                  <ion-icon slot="start" name="map"></ion-icon>
+                </ion-item>
+              </ng-template>
+
+
+              <ion-item  (click)="this.showModalDetailsPackages(item.id)" button slot="header" color="light">
+                <ion-label >
+                  <h2 style="display: flex; align-items: center; justify-content: center;" class="ion-text-wrap">
+                    <ion-text>Mostrar Información Detallada</ion-text>
+                  </h2>
+                </ion-label>
+              </ion-item>
+
+            </div>
+          </ion-accordion>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card *ngIf="(source.loading | async)">
+        <ion-card-header class="ion-text-center">
+          <ion-card-subtitle>Buscando Información</ion-card-subtitle>
+          <ion-spinner name="circular"></ion-spinner>
+        </ion-card-header>
+      </ion-card>
+
+    </ion-accordion-group>
+    </ng-container>
+  </cdk-virtual-scroll-viewport>
+</ion-content>

@@ -1,0 +1,44 @@
+ion-label {
+    &#forgot-pass {
+        padding-right: 16px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+}
+
+a{
+    color: var(--ion-color-orange);
+}
+
+p{
+    &#link-register {
+        &.divider {
+            display: flex;
+            &:before,
+            &:after {
+                content: "";
+                flex: 1;
+            }
+        }
+        &.line {
+            align-items: center;
+            margin: 1em -1em;
+            &:before,
+            &:after {
+                height: 1px;
+                margin: 0 1em;
+            }
+        }
+        &.one-line {
+            &:before,
+            &:after {
+                background: #424246;
+            }
+        }
+    }
+}

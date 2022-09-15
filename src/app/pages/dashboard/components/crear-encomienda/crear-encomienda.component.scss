@@ -1,0 +1,41 @@
+@media only screen and (min-width:540px) {
+    ion-img#img-list {
+        width: 60vw;
+        height: 60vh;
+    }
+}
+
+@media only screen and (min-width:960px) {
+    ion-img#img-list {
+        width: 45vw;
+        height: 45vh
+    }
+}
+
+ion-card-content{
+    &#section-ticket {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        &>ion-card-subtitle {
+            width: 75%;
+        }
+
+        img#img-ticket {
+            width: 35%;
+
+        }
+    }
+}
+
+
+.emptyList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+

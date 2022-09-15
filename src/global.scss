@@ -24,3 +24,38 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+/* custom */
+@import "./theme/custom.scss";
+
+
+
+
+
+/* Swiper */
+@import '~swiper/scss';
+@import '~@ionic/angular/css/ionic-swiper';
+@import '~swiper/scss/pagination';
+
+cdk-virtual-scroll-viewport {
+    height: 100%;
+    width: 100%;
+    .cdk-virtual-scroll-content-wrapper {
+      max-width: 100% !important;
+    }
+}
+
+*{
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+
+
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}

@@ -1,0 +1,100 @@
+<ion-content  >
+  <div class="body" >
+    <ion-card *ngIf="encomienda">
+      <ion-card-header class="ion-text-center ion-padding ">
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="12">
+              <ion-img [src]="'../../../assets/svg/banner.svg'"></ion-img>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-card-title>Usted a Solicitado una Encomienda</ion-card-title>
+      </ion-card-header>
+      <ion-card-content [formGroup]="this.ticketForm" class="ion-no-padding">
+        <ion-label class="ion-text-center">
+          <h3><ion-text color="orange">Remitente</ion-text></h3>
+          <ion-text color="ligth"><h6><b>Ticket</b> {{this.encomienda?.id}} </h6></ion-text>
+          <h1>{{(this.encomienda?.sender.basic.name | titlecase)}} {{(this.encomienda?.sender.basic.lastname | titlecase)}}</h1>
+        </ion-label>
+        <ion-grid  fixed>
+          <ion-row>
+            <ion-col size="6">
+              <ion-item >
+                <ion-label [color]="this.ticketForm.get('name_complete').valid ? 'success' : 'danger' " position="stacked">Nombre y Apellidos</ion-label>
+                <ion-input formControlName="name_complete" type="text" placeholder="Ingresar Nombre"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item >
+                <ion-label [color]="this.ticketForm.get('phone').valid ? 'success' : 'danger' "  position="stacked">Telefono</ion-label>
+                <ion-input formControlName="phone" type="tel" placeholder="Ingresar telefono"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <ion-item >
+                <ion-label color="dark" position="stacked">Informacion Adicional</ion-label>
+                <ion-textarea formControlName="description" placeholder="Indicaciones de Entrega (Dirección, Etapa, mz, Villa, etc) "></ion-textarea>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+      <ion-card-header class="ion-text-center ion-padding ">
+        <ion-card-subtitle>Para confirmar la entrega de su encomienda, es necesario llenar su información</ion-card-subtitle>
+        <ion-button (click)="this.onOpenModalMap()" color="orange" class="ion-margin" expand="block" shape="round" [disabled]="ticketForm.invalid">
+          <ion-label>Enviar mi Ubicación</ion-label>
+          <ion-icon slot="start" name="location"></ion-icon>
+        </ion-button>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card *ngIf="complete">
+      <ion-card-header class="ion-text-center ion-padding ">
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="12">
+              <ion-img [src]="'../../../assets/svg/banner.svg'"></ion-img>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-card-title>Usted a Solicitado una Encomienda</ion-card-title>
+      </ion-card-header>
+      <ion-card-header>
+        <ion-card-subtitle>Gracias por confiar en nosotros 🖐</ion-card-subtitle>
+        <ion-card-title>Su ubicacion a sido enviada con exito</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="ion-text-center">
+        <ion-label>
+          <h4>Ya puede cerrar esta Pagina 🙂</h4>
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="expired">
+      <ion-card-header class="ion-text-center ion-padding ">
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="12">
+              <ion-img [src]="'../../../assets/svg/banner.svg'"></ion-img>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-card-title>Confirmación Expirada 🚫</ion-card-title>
+      </ion-card-header>
+      <ion-card-header class="ion-text-center">
+        <ion-card-subtitle>
+          <h2>tiempo de validacion agotado</h2>
+          <p>Puede ponerse en contacto con su distribuidor y verificar la Información</p>
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content class="ion-text-center">
+        <ion-label>
+          <h4>Ya puede cerrar esta Pagina 🙂</h4>
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

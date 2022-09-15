@@ -1,0 +1,51 @@
+  <ion-card class="ion-text-center">
+    <ion-card-header class="ion-text-start">
+      <ion-card-title><h1>Ingresar</h1></ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item-group #formLoginRef [formGroup]="this.formLogin">
+        <ion-item>
+          <ion-label position="stacked">Usuario</ion-label>
+          <ion-input class="input-autocomplete" (keydown.enter)="this.enterOrGo()" autocomplete="email" formControlName="email" type="email" placeholder="example@gmail.com"></ion-input>
+          <ion-icon slot="start" name="people"></ion-icon>
+        </ion-item>
+        <ion-item class="item-center-icon">
+          <ion-label position="stacked">Contraseña</ion-label>
+          <ion-button class="eye-button" slot="end" (click)="eyeIconRef.name == 'eye-off' ? eyeIconRef.name = 'eye':eyeIconRef.name = 'eye-off'">
+            <ion-icon #eyeIconRef slot="icon-only" name="eye-off"></ion-icon>
+          </ion-button>
+          <ion-input class="input-autocomplete" (keydown.enter)="this.enterOrGo()" autocomplete="password" formControlName="pass" [type]="eyeIconRef.name == 'eye-off' ?'password': eyeIconRef.name == 'eye'? 'text':'password'" placeholder="••••••••••••"></ion-input>
+          <ion-icon slot="start" name="key"></ion-icon>
+        </ion-item>
+        <ion-label id="forgot-pass">¿Perdiste tu Clave?</ion-label>
+        <ion-button expand="block" class="ion-text-center" type="submit" [disabled]="this.formLogin.invalid" color="orange" (click)="onLogin()" fill="solid" shape="round">
+          <ng-container *ngIf="!this.loading; else _loading">
+            <ion-label>Ingresar </ion-label>
+            <ion-icon slot="end" name="chevron-forward"></ion-icon>
+          </ng-container>
+          <ng-template #_loading>
+            <ion-spinner slot="end" name="crescent"></ion-spinner>
+          </ng-template>
+        </ion-button>
+      </ion-item-group>
+    </ion-card-content>
+    <ion-card-header>
+
+      <p class="divider line one-line" id="link-register" >Iniciar sesion con</p>
+      <ion-grid fixed>
+        <ion-row class="ion-justify-content-between">
+          <ion-col style="display: flex;" class="ion-justify-content-center" size="6">
+            <ion-fab-button color="orange">
+              <ion-icon name="logo-google"></ion-icon>
+            </ion-fab-button>
+          </ion-col>
+          <ion-col style="display: flex;" class="ion-justify-content-center"  size="6" >
+            <ion-fab-button color="orange">
+              <ion-icon name="logo-facebook"></ion-icon>
+            </ion-fab-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-text >¿No tienes una cuenta?<br> <a>Ingresa aqui</a> y obten una 🌐</ion-text>
+    </ion-card-header>
+  </ion-card>

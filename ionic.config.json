@@ -1,5 +1,5 @@
 {
-  "name": "conductor-fastworld",
+  "name": "client-fastworld",
   "integrations": {
     "capacitor": {}
   },
