@@ -79,7 +79,7 @@
               </ion-button>
             </ion-col>
             <ion-col sizeSm="6" sizeXs="12">
-              <ion-button [disabled]="this.stepsForm.get('business').get('documentImg').invalid" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
+              <ion-button [disabled]="fileDni.value != ''" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
                 <ion-label>siguiente</ion-label>
                 <ion-icon slot="end" name="chevron-forward"></ion-icon>
               </ion-button>
@@ -95,9 +95,9 @@
         <ion-card-title>Ingresar Foto de la Placa 📸</ion-card-title>
       </ion-card-header>
       <ion-card-content class="card-content">
-        <img class="dni" #imgViewPortPlaca button (click)="fileDni.click();" [src]="' '" alt=""  onerror="this.src=`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'></svg>`;">
-        <input  (change)="imgHandler($event,imgViewPortPlaca)" style="display: none;" id="image_dni" #fileDni type="file" accept="image/*">
-        <ion-button class="ion-margin" color="orange" (click)="fileDni.click();" shape="round">
+        <img class="dni" #imgViewPortPlaca button (click)="filePlaca.click();" [src]="' '" alt=""  onerror="this.src=`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'></svg>`;">
+        <input (change)="imgHandler($event,imgViewPortPlaca)" style="display: none;" id="image_placa" #filePlaca type="file" accept="image/*">
+        <ion-button class="ion-margin" color="orange" (click)="filePlaca.click();" shape="round">
           <ion-label>Buscar</ion-label>
         </ion-button>
         <ion-grid fixed>
@@ -109,7 +109,7 @@
               </ion-button>
             </ion-col>
             <ion-col sizeSm="6" sizeXs="12">
-              <ion-button [disabled]="this.stepsForm.get('business').get('documentImg').invalid" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
+              <ion-button [disabled]="filePlaca.value != ''" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
                 <ion-label>siguiente</ion-label>
                 <ion-icon slot="end" name="chevron-forward"></ion-icon>
               </ion-button>
