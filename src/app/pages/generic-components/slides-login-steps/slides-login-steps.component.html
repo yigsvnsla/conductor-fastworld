@@ -79,7 +79,7 @@
               </ion-button>
             </ion-col>
             <ion-col sizeSm="6" sizeXs="12">
-              <ion-button [disabled]="fileDni.value != ''" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
+              <ion-button [disabled]="this.uploadFiles.length <= 0" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
                 <ion-label>siguiente</ion-label>
                 <ion-icon slot="end" name="chevron-forward"></ion-icon>
               </ion-button>
@@ -109,7 +109,7 @@
               </ion-button>
             </ion-col>
             <ion-col sizeSm="6" sizeXs="12">
-              <ion-button [disabled]="filePlaca.value != ''" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
+              <ion-button [disabled]=" this.uploadFiles.length <= 1 " expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
                 <ion-label>siguiente</ion-label>
                 <ion-icon slot="end" name="chevron-forward"></ion-icon>
               </ion-button>
