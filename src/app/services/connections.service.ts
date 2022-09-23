@@ -137,7 +137,7 @@ export class ConectionsService {
         tap(async res => {
           this.cookiesService.set(environment['cookie_tag'], res.jwt);
           (await this.localStorageService.remove(environment['user_tag']));
-          (await this.localStorageService.set(environment['user_tag'], res.user));
+          (await this.localStorageService.set(environment['user_tag'], res.user));          
           this.router.navigateByUrl('dashboard');
         }),
         catchError((err) => this.errorHandler(err))

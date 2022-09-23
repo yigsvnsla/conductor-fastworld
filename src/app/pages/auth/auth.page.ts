@@ -11,7 +11,6 @@ import { CupertinoPane } from 'cupertino-pane';
 export class AuthPage implements OnInit {
 
   public loginPane : CupertinoPane
-  public registerPane : CupertinoPane
 
   constructor(
     private localStorageService:LocalStorageService
@@ -29,14 +28,7 @@ export class AuthPage implements OnInit {
       fastSwipeClose:true,
 
     })
-    
-    this.registerPane = new CupertinoPane('app-register', {
-      parentElement:'ion-content',
-      fitHeight: true,
-      backdrop: true,
-      fastSwipeClose:true,
-
-    })    
+     
   }
 
 
@@ -48,10 +40,5 @@ export class AuthPage implements OnInit {
   // Mostrar Panel de Ingreso
   public async onShowLogin(){
     await this.loginPane.present({animate: true})
-  }
-
-  //Mostrar Panel de Registro
-  public async onShowRegister(){
-    await this.registerPane.present({animate: true})
   }
 }

@@ -1,6 +1,5 @@
 <ion-content>
   <app-login hide-on-bottom overflow-y ></app-login>
-  <app-register hide-on-bottom overflow-y [pane]="this.registerPane"></app-register>
   <ion-grid fixed class="body">
     <ion-row>
       <ion-col size="12">
@@ -19,21 +18,6 @@
             <ion-button color="orange" shape="round" (click)="onShowLogin()">
               <ion-icon slot="end" name="key"></ion-icon>
               <ion-label>Ingresar</ion-label>
-            </ion-button>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-      <ion-col size="12">
-        <ion-card mode="ios">
-          <ion-card-header class="ion-text-center">
-            <ion-card-title>Registrarme</ion-card-title>
-            <br>
-            <ion-card-subtitle>Con pocos requistos empieza a enviar encomiendas 📦</ion-card-subtitle>
-          </ion-card-header>
-          <ion-card-content class="ion-text-center">
-            <ion-button color="orange" shape="round" (click)="onShowRegister()">
-              <ion-icon slot="end" name="person"></ion-icon>
-              <ion-label>Registrar</ion-label>
             </ion-button>
           </ion-card-content>
         </ion-card>

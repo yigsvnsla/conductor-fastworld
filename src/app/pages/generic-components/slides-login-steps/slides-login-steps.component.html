@@ -1,41 +1,21 @@
 <ion-content [formGroup]="this.stepsForm">
-  <ng-container formGroupName="business">
+  <swiper (swiper)="this.setSwiperInstance($event)" [config]="this.swiperConfig">
 
-    <swiper (swiper)="this.setSwiperInstance($event)" [config]="this.swiperConfig">
-
-    <ng-template id="slide1" swiperSlide>
-      <ion-img class="intro" [src]="'../../../../assets/svg/undraw_order_delivered_re_v4ab.svg'"></ion-img>
+    <ng-template swiperSlide>
+      <ion-img class="intro" [src]="'../../../../assets/svg/undraw_letter_re_8m03.svg'"></ion-img>
       <ion-card-header mode="ios">
-        <ion-card-title>Hola, ----</ion-card-title>
-        <ion-card-subtitle>Bienvenido y gracias por confiar en nosotros</ion-card-subtitle>
-        <ion-card-subtitle>en proximos pasos vamos a completar su información de perfil</ion-card-subtitle>
+        <ion-card-title>OK ----</ion-card-title>
+        <ion-card-subtitle>recuerde que su informacion es vital para que podamos prestar un excelente serivico</ion-card-subtitle>
+        <ion-card-subtitle class="card-content">
+          <ion-label>Si esta usted de acuerdo acepte nuestros </ion-label>
+          <ion-text class="ion-margin" color="orange">terminos y servicios</ion-text>
+          <ion-checkbox (ionChange)="checkboxConditions.value = !checkboxConditions.value" #checkboxConditions id="condition&terms"></ion-checkbox>
+        </ion-card-subtitle>
       </ion-card-header>
       <ion-grid fixed>
         <ion-row style="flex-direction: row; justify-content: center;">
           <ion-col sizeSm="6" sizeXs="12">
-            <ion-button id="btnSlide1" autofocus="false" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
-              <ion-label>siguiente</ion-label>
-              <ion-icon slot="end" name="chevron-forward"></ion-icon>
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ng-template>
-
-    <ng-template id="slide1" swiperSlide>
-      <ion-img class="intro" [src]="'../../../../assets/svg/undraw_order_delivered_re_v4ab.svg'"></ion-img>
-      <ion-card-header mode="ios">
-        <ion-card-subtitle>Ingresa el nombre de tu negocio</ion-card-subtitle>
-        <ion-card-title>¿Como se llama tu negocio? 🏪</ion-card-title>
-        <ion-item   class="ion-margin item-round-shape" mode="md">
-          <ion-label color="dark" position="floating">Nombre del Negocio</ion-label>
-          <ion-input formControlName="name" type="text" ></ion-input>
-        </ion-item>
-      </ion-card-header>
-      <ion-grid fixed>
-        <ion-row style="flex-direction: row; justify-content: center;">
-          <ion-col sizeSm="6" sizeXs="12">
-            <ion-button  [disabled]="this.stepsForm.get('business').get('name').invalid" id="btnSlide2" autofocus="false" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
+            <ion-button [disabled]="checkboxConditions.value" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
               <ion-label>siguiente</ion-label>
               <ion-icon slot="end" name="chevron-forward"></ion-icon>
             </ion-button>
@@ -45,8 +25,43 @@
     </ng-template>
 
     <ng-template swiperSlide>
+      <ion-content>
+        <ion-card-header>
+          <ion-card-subtitle>Bienvenido y gracias por confiar en nosotros</ion-card-subtitle>
+          <ion-card-subtitle>en proximos pasos vamos a completar su información de perfil</ion-card-subtitle>
+        </ion-card-header>
+        <ion-item-group>
+          <ion-item>
+            <ion-label>Marca</ion-label>
+            <ion-input formControlName="maker" type="text" placeholder="ejemplo: kawasaki"></ion-input>
+            <ion-icon slot="start" name="add"></ion-icon>
+          </ion-item>
+          <ion-item>
+            <ion-label>Modelo</ion-label>
+            <ion-input formControlName="model" type="text" placeholder="ejemplo: KLR-650"></ion-input>
+            <ion-icon slot="start" name="add"></ion-icon>
+          </ion-item>
+          <ion-item>
+            <ion-label>Año</ion-label>
+            <ion-input formControlName="year" class="input-number" type="number" placeholder="ejemplo: 2019"></ion-input>
+            <ion-icon slot="start" name="add"></ion-icon>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Color <i>( Ingrese color Predominante )</i></ion-label>
+            <ion-input formControlName="color" type="text" placeholder="ejemplo: negro"></ion-input>
+            <ion-icon slot="start" name="add"></ion-icon>
+          </ion-item>
+        </ion-item-group>
+        <ion-button [disabled]="this.stepsForm.invalid" shape="round" color="orange" (click)="this.nextSlider()"class="ion-margin">
+          <ion-icon slot="start" name="add"></ion-icon>
+          <ion-label>siguiente</ion-label>
+        </ion-button>
+      </ion-content>
+    </ng-template>
+
+    <ng-template swiperSlide>
       <ion-card-header mode="ios">
-        <ion-card-subtitle>Ingresa una imagen horizontal y nítida de tu documento de identidad o Registro Único de Contribuyente (RUC) de tu negocio</ion-card-subtitle>
+        <ion-card-subtitle>Ingresa una imagen horizontal y nítida de tu documento de identidad y/o licencia</ion-card-subtitle>
         <ion-card-title>¿Nos permites tu Identificación? 📸</ion-card-title>
       </ion-card-header>
       <ion-card-content class="card-content">
@@ -76,17 +91,17 @@
 
     <ng-template swiperSlide>
       <ion-card-header mode="ios">
-        <ion-card-subtitle>Ingresa el logo de tu negocio</ion-card-subtitle>
-        <ion-card-title>¿Cual es tu logo? 🌎</ion-card-title>
+        <ion-card-subtitle>Ingresa una imagen horizontal y nítida de tu documento de identidad</ion-card-subtitle>
+        <ion-card-title>Ingresar Foto de la Placa 📸</ion-card-title>
       </ion-card-header>
-      <ion-card-content class="card-content" >
-        <img class="logo" #imgViewPortLogo button (click)="fileLogo.click();" [src]="''" alt=""  onerror="this.src=`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'></svg>`;">
-        <input formControlName="logoImg" (change)="imgHandler($event,imgViewPortLogo)" style="display: none;" id="image_logo" #fileLogo type="file" accept="image/*">
-        <ion-button class="ion-margin" color="orange" (click)="fileLogo.click();" shape="round">
+      <ion-card-content class="card-content">
+        <img class="dni" #imgViewPortDni button (click)="fileDni.click();" [src]="' '" alt=""  onerror="this.src=`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'></svg>`;">
+        <input formControlName="documentImg" (change)="imgHandler($event,imgViewPortDni)" style="display: none;" id="image_dni" #fileDni type="file" accept="image/*">
+        <ion-button class="ion-margin" color="orange" (click)="fileDni.click();" shape="round">
           <ion-label>Buscar</ion-label>
         </ion-button>
         <ion-grid fixed>
-          <ion-row>
+          <ion-row style="flex-direction: row; justify-content: center;">
             <ion-col sizeSm="6" sizeXs="12">
               <ion-button expand="block" class="ion-margin" color="orange" (click)="this.backSlider()" shape="round">
                 <ion-label>Atras</ion-label>
@@ -94,7 +109,7 @@
               </ion-button>
             </ion-col>
             <ion-col sizeSm="6" sizeXs="12">
-              <ion-button  [disabled]="this.stepsForm.get('business').get('logoImg').invalid" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
+              <ion-button [disabled]="this.stepsForm.get('business').get('documentImg').invalid" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
                 <ion-label>siguiente</ion-label>
                 <ion-icon slot="end" name="chevron-forward"></ion-icon>
               </ion-button>
@@ -102,89 +117,6 @@
           </ion-row>
         </ion-grid>
       </ion-card-content>
-    </ng-template>
-
-    <ng-template swiperSlide>
-      <div style="height: 100%; width: 100%;">
-        <ion-img style="height: 40%;" class="intro" [src]="'../../../../assets/svg/undraw_my_location_re_r52x.svg'"></ion-img>
-        <ion-card-header style="display: flex; flex-direction: column; justify-content: center; align-items: center;" mode="ios">
-          <ion-card-title>¿ Donde se ubica tu negocio ?</ion-card-title>
-          <h6>Abre el mapa y busca la ubicacion de tu negocio</h6>
-          <ion-card-subtitle>( Usamos tecnologias de Google y es suceptible a fallos y errores de ubicación )</ion-card-subtitle>
-          <ion-fab-button (click)="this.showMap()" color="orange">
-            <ion-icon name="map"></ion-icon>
-          </ion-fab-button>
-        </ion-card-header>
-      </div>
-    </ng-template>
-
-    <ng-template swiperSlide>
-      <ng-container >
-        <ion-header>
-          <ion-searchbar  (ionCancel)="searchAddresCancel(addressList)" (ionChange)="searchAddresChange($event)" [value]="this.myUbication.address" enterkeyhint="search" animated="true" placeholder="Buscar Ubicación" inputmode="search" type="search"  [debounce]="500" showCancelButton="focus"></ion-searchbar>
-        </ion-header>
-        <ion-item-group [ngStyle]="{'display': this.autocompletePredictions.length > 1 ? 'block': 'none'}" #addressList id="address-list">
-        <ion-item button (click)="selectAddress(prediction)" *ngFor="let prediction of this.autocompletePredictions">
-          <ion-icon slot="start" name="pin"></ion-icon>
-          <ion-label style="white-space: normal">
-            <p>{{ prediction.structured_formatting.main_text }}</p>
-            <h2>{{ prediction.structured_formatting.secondary_text }}</h2>
-          </ion-label>
-        </ion-item>
-      </ion-item-group>
-      <div style="height: 100%; width: 100%;">
-        <google-map [zoom]="this.mapOptions.zoom" *ngIf="this.apiMap$ | async; else loadingMap" (mapDragend)="mapDragend()" (mapDrag)="mapDrag()" #googleMap [options]="this.mapOptions" width="100%" height="100%">
-          <map-marker [position]="markerOptions.position" [options]="markerOptions"></map-marker>
-        </google-map>
-        <ng-template #loadingMap>
-          <div style="height: 100%; width: 100%;">
-            cargando
-          </div>
-        </ng-template>
-      </div>
-      <ion-footer>
-        <ion-toolbar>
-          <ion-grid fixed>
-            <ion-row>
-              <ion-col>
-                <ion-chip class="ion-text-center" (click)="selectUbication()">
-                  <ion-icon name="location" color="dark"></ion-icon>
-                  <ion-label>Seleccionar ubicación actual</ion-label>
-                </ion-chip>
-              </ion-col>
-              <ion-col size="3">
-                <ion-fab-button (click)="centerMyUbication()">
-                  <ion-icon name="locate"></ion-icon>
-                </ion-fab-button>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-toolbar>
-      </ion-footer>
-    </ng-container>
-    </ng-template>
-
-    <ng-template swiperSlide>
-      <ion-img class="intro" [src]="'../../../../assets/svg/undraw_letter_re_8m03.svg'"></ion-img>
-      <ion-card-header mode="ios">
-        <ion-card-title>OK ----</ion-card-title>
-        <ion-card-subtitle>recuerde que su informacion es vital para que podamos prestar un excelente serivico</ion-card-subtitle>
-        <ion-card-subtitle class="card-content">
-          <ion-label>Si esta usted de acuerdo acepte nuestros </ion-label>
-          <ion-text class="ion-margin" color="orange">terminos y servicios</ion-text>
-          <ion-checkbox (ionChange)="checkboxConditions.value = !checkboxConditions.value" #checkboxConditions id="condition&terms"></ion-checkbox>
-        </ion-card-subtitle>
-      </ion-card-header>
-      <ion-grid fixed>
-        <ion-row style="flex-direction: row; justify-content: center;">
-          <ion-col sizeSm="6" sizeXs="12">
-            <ion-button [disabled]="checkboxConditions.value" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
-              <ion-label>siguiente</ion-label>
-              <ion-icon slot="end" name="chevron-forward"></ion-icon>
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
     </ng-template>
 
     <ng-template swiperSlide>
@@ -197,7 +129,5 @@
       </ion-button>
     </ng-template>
 
-  </swiper>
-</ng-container>
-
+</swiper>
 </ion-content>
