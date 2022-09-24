@@ -46,7 +46,7 @@ export class SlidesLoginStepsComponent implements OnInit {
       },
     }
   }
-  
+
   public async ngOnInit(){
     let apiLoaded = this.toolsService.showLoading('Cargando Recursos..');
     this.stepsForm = this.formBuilder.nonNullable.group({
@@ -100,6 +100,7 @@ export class SlidesLoginStepsComponent implements OnInit {
   async buildPost() {
     let data = this.stepsForm.value;
     let form = new FormData();
+    console.log(data)
     this.uploadFiles.forEach(({ name, file }) => {
       form.append(`files.${name.replace('image_', '')}`, file, file.name);
     });
