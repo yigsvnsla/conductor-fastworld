@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   cookie_tag: 'fastworld-token',
-  user_tag: 'fastworld-user'
+  user_tag: 'fastworld-driver'
 };
 
 /*
