@@ -16,7 +16,7 @@ import { es } from 'date-fns/locale';
 })
 export class ActivasEncomiendasComponent implements OnInit {
 
-  public source = new Source('client/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:ASC&',this.conectionsService)
+  public source = new Source('driver/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:ASC&',this.conectionsService)
 
   constructor(
     private storageService: StorageService,
@@ -30,7 +30,7 @@ export class ActivasEncomiendasComponent implements OnInit {
 
 
   public selectPackage(_id) {
-    
+
   }
 
   public sharePackage(_id: number) {
