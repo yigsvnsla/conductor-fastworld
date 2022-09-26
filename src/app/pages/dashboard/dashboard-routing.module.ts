@@ -1,6 +1,5 @@
 import { AutoLoginGuard } from './../../guards/auto-login.guard';
 import { ActivasEncomiendasComponent } from './components/activas-encomiendas/activas-encomiendas.component';
-import { CrearEncomiendaComponent } from './components/crear-encomienda/crear-encomienda.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
@@ -8,6 +7,7 @@ import { HomeComponent } from './components/home/home.component';
 import { DashboardPage } from './dashboard.page';
 import { HistorialEncomiendaComponent } from './components/historial-encomienda/historial-encomienda.component';
 import { CompleteStepsGuard } from 'src/app/guards/complete-steps.guard';
+import { EntregasEncomiendaComponent } from './components/entregas-encomienda/entregas-encomieda.component';
 
 const routes: Routes = [{
   path: '',
@@ -26,8 +26,8 @@ const routes: Routes = [{
       path: 'encomienda',
       children: [
         {
-          path: 'crear',
-          component: CrearEncomiendaComponent
+          path: 'entregas',
+          component: EntregasEncomiendaComponent
         }, 
         {
           path: 'activas',

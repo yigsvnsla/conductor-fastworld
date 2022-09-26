@@ -25,8 +25,8 @@ export class DashboardPage implements OnInit {
       title: 'Encomiendas',
       url: 'encomienda',
       options: [{
-        title: 'Crear',
-        url: 'crear',
+        title: 'Entregas',
+        url: 'entregas',
         icon: 'cube',
       }, {
         title: 'Activas',

@@ -1,4 +1,3 @@
-import { EncomiendaComponent } from './components/encomienda/encomienda.component';
 import { ActivasEncomiendasComponent } from './components/activas-encomiendas/activas-encomiendas.component';
 import { NgModule } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
@@ -13,8 +12,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './components/home/home.component';
 import { GenericComponentsModule } from '../generic-components/generic-components.module';
 import { HistorialEncomiendaComponent } from './components/historial-encomienda/historial-encomienda.component';
-import { CrearEncomiendaComponent } from './components/crear-encomienda/crear-encomienda.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { EntregasEncomiendaComponent } from './components/entregas-encomienda/entregas-encomieda.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -30,9 +29,9 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     DashboardPage,
     HomeComponent,
     HistorialEncomiendaComponent,
-    CrearEncomiendaComponent,
     ActivasEncomiendasComponent,
-    EncomiendaComponent
+    EntregasEncomiendaComponent
+    
   ],
   providers:[CurrencyPipe]
 })
