@@ -5,29 +5,49 @@ import { ToolsService } from "src/app/services/tools.service";
 import { Clipboard } from '@capacitor/clipboard';
 
 @Component({
-    selector:'app-entregas-encomienda',
-    templateUrl:'./entregas-encomieda.component.html',
-    styleUrls:['./entregas-encomieda.component.scss']
+  selector: 'app-entregas-encomienda',
+  templateUrl: './entregas-encomieda.component.html',
+  styleUrls: ['./entregas-encomieda.component.scss']
 })
-export class EntregasEncomiendaComponent implements OnInit{
+export class EntregasEncomiendaComponent implements OnInit {
 
-    public source = new Source('packages?filters[shipping_status][$contains]=pendiente&sort=id:ASC&populate=*',this.conectionsService)
+  public source = new Source('packages?filters[shipping_status][$contains]=pendiente&sort=id:ASC&populate=*', this.conectionsService)
 
-    constructor(
-      private storageService: StorageService,
-      private conectionsService: ConectionsService,
-      private toolsService: ToolsService
-    ) { }
+  constructor(
+    private storageService: StorageService,
+    private conectionsService: ConectionsService,
+    private toolsService: ToolsService
+  ) { }
 
-    ngOnInit() {
-      this.storageService;
+  ngOnInit() {
+    this.storageService;
+  }
+  public selectPackage(_id: number) {
+    this.toolsService.showAlert({
+      header: 'Agregar Ruta',
+      subHeader: '¿Desea agregar esta encomienda a sus lista de rutas de envios?',
+      buttons: ['Cancelar', {
+        text: 'Agregar', role: 'success', handler: () => {
+          this.pickup(_id)
+        }
+      }]
+    })
+  }
+
+
+  async pickup(id) {
+    let loading = await this.toolsService.showLoading("Obteniendo encomienda...");
+
+    try {
+      let response = await this.conectionsService.post('package/pickup', {
+        id
+      }).toPromise()
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      loading.dismiss()
     }
-    public selectPackage(_id:number) {
-        this.toolsService.showAlert({
-            header:'Agregar Ruta',
-            subHeader:'¿Desea agregar esta encomienda a sus lista de rutas de envios?',
-            buttons:['Cancelar',{text:'Agregar',role:'success',handler:()=>{}}]
-        })
-    }
+  }
 
 }
