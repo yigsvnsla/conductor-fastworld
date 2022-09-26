@@ -11,7 +11,7 @@ import { Clipboard } from '@capacitor/clipboard';
 })
 export class EntregasEncomiendaComponent implements OnInit{
 
-    public source = new Source('driver/packages?filters[shipping_status][$contains]=pendiente&sort=id:ASC&populate=*',this.conectionsService)
+    public source = new Source('packages?filters[shipping_status][$contains]=pendiente&sort=id:ASC&populate=*',this.conectionsService)
 
     constructor(
       private storageService: StorageService,
