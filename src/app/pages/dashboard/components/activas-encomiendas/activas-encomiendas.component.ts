@@ -28,12 +28,9 @@ export class ActivasEncomiendasComponent implements OnInit {
     this.storageService;
   }
 
-  ionViewDidEnter() {
+
+  public selectPackage(_id) {
     
-  }
-
-  public selectPackage(item, i) {
-
   }
 
   public sharePackage(_id: number) {
