@@ -1,5 +1,5 @@
 
- // custom Alerts 
+ // custom Alerts
 .alert-warn {
     .alert-wrapper{
         .alert-head{
@@ -132,7 +132,7 @@ ion-chip{
         &>ion-icon{
             color:white !important;
         }
-        
+
     }
     &.warning{
         --background:var(--ion-color-warning);
@@ -161,7 +161,7 @@ ion-chip{
     &.dark{
         --background:var(--ion-color-dark);
         --color:black
-        
+
     }
 }
 
@@ -203,7 +203,7 @@ ion-input{
     // custom autocomplete background
     &.input-autocomplete{
         input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:hover,
         input:-webkit-autofill:focus,
         textarea:-webkit-autofill,
         textarea:-webkit-autofill:hover,
@@ -230,10 +230,10 @@ ion-segment {
             --color-hover: var(--ion-color-orange);
             --indicator-color: var(--ion-color-orange);
         }
-    } 
+    }
 }
 
-// Swiper 
+// Swiper
 
 swiper{
     .swiper-slide{

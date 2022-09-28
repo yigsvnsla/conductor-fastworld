@@ -3,8 +3,8 @@ import { ConectionsService, Source } from 'src/app/services/connections.service'
 import { StorageService } from './../../../../services/storage.service';
 import { Component, OnInit } from '@angular/core';
 import { Clipboard } from '@capacitor/clipboard';
-import { map, tap,delay, } from 'rxjs/operators';
-import { Observable, timer,  } from 'rxjs';
+import { map, tap, delay, } from 'rxjs/operators';
+import { Observable, timer, } from 'rxjs';
 import { formatDistanceToNowStrict, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -16,7 +16,7 @@ import { es } from 'date-fns/locale';
 })
 export class ActivasEncomiendasComponent implements OnInit {
 
-  public source = new Source('driver/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:ASC&',this.conectionsService)
+  public source = new Source('driver/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:ASC&', this.conectionsService)
 
   constructor(
     private storageService: StorageService,
@@ -30,10 +30,44 @@ export class ActivasEncomiendasComponent implements OnInit {
 
 
   public selectPackage(_id) {
-
+    this.toolsService.showAlert({
+      backdropDismiss: false,
+      cssClass: 'alert-danger',
+      header: 'Traspasar 📦',
+      subHeader: 'Ingresa el codigo del motorizado que recibira este paquete',
+      inputs: [{
+        type: 'number',
+        name: 'id',
+        placeholder: 'Codigo del conductor',
+        cssClass:'input-number'
+      }],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+        },
+        {
+          text: 'Transferir',
+          handler: async ({ id }) => {
+            let loading = await this.toolsService.showLoading('Transfiriendo...')
+            try {
+              await this.conectionsService.post('package/transfer', {
+                driver: id,
+                package: _id
+              }).toPromise()
+            } catch (error) {
+              console.log(error);
+            } finally {
+              loading.dismiss()
+            }
+          }
+        }
+      ]
+    })
   }
 
-  public updateStatusPackage(_id: number, status:string) {
+  public updateStatusPackage(_id: number, status: string) {
     // this.toolsService.showLoading()
     //   .then(async loading => {
     //     const { id } = await this.conectionsService.get<any>(`ticket/generate/${_id}`).toPromise()
