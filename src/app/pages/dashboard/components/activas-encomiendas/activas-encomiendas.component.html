@@ -23,13 +23,9 @@
             <ng-template>
               <ion-content>
                 <ion-item-group>
-                  <ion-item [detail]="false" [button]="true" *ngIf="item.attributes.receiver == null" (click)="this.sharePackage(item.id)">
+                  <ion-item [detail]="false" [button]="true"  (click)="this.selectPackage(item.id)">
                     <ion-icon color="orange" name="link" slot="start"></ion-icon>
-                    <ion-label>Generar Confirmación</ion-label>
-                  </ion-item>
-                  <ion-item [button]="true" [detail]="false" (click)="selectPackage(item,i)">
-                    <ion-label>Seleccionar</ion-label>
-                    <ion-icon color="orange" slot="start" name="add"></ion-icon>
+                    <ion-label>Traspasar</ion-label>
                   </ion-item>
                   <ion-item *ngIf="item.attributes.receiver != null" [href]="'https://www.google.com/maps/dir/' + item.attributes.location.position.lat + ',' + item.attributes.location.position.lng + '/' + item.attributes.receiver.direction.position.lat + ',' + item.attributes.receiver.direction.position.lng " target="_blank" rel="noreferrer external" [button]="true" [detail]="false">
                     <ion-label>Ver Ruta en Mapas </ion-label>
@@ -125,27 +121,30 @@
             </ion-label>
           </ng-template>
         </ion-item>
-        <ion-item>
-          <ion-icon name="bicycle" slot="start"></ion-icon>
-          <ng-template *ngIf="item.attributes.driver != null; else notConductor">
-            <ion-label>
-              <p>Conductor</p>
-              <h4>item.driver [sin asignar]</h4>
-            </ion-label>
-            <ion-fab-button href="tel:{{item.attributes.receiver.phone}}" size="small">
-              <ion-icon name="call"></ion-icon>
-            </ion-fab-button>
-            <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + item.attributes.receiver.phone.replace('+','')" target="_blank" rel="noopener noreferrer" color="success" size="small">
-              <ion-icon name="logo-whatsapp"></ion-icon>
-            </ion-fab-button>
-          </ng-template>
-          <ng-template #notConductor>
-            <ion-label>
-              <p>Conductor</p>
-              <h4>Sin asignar</h4>
-            </ion-label>
-          </ng-template>
-        </ion-item>
+
+        <ion-grid fixed>
+          <ion-row>
+            <ng-container *ngIf="item.attributes.shipping_status === 'aceptado' ">
+              <ion-col  offset="3" size="6">
+                <ion-button color="primary" (click)="this.updateStatusPackage(item.id,'')" expand="block" fill="solid" shape="round" size="small">
+                  <ion-label>Recibir</ion-label>
+                </ion-button>
+              </ion-col>
+            </ng-container>
+            <ng-container *ngIf="item.attributes.shipping_status == 'recibido'">
+              <ion-col size="6">
+                <ion-button color="success" (click)="this.updateStatusPackage(item.id,'')" expand="block" fill="solid" shape="round" size="small">
+                  <ion-label>Entregar</ion-label>
+                </ion-button>
+              </ion-col>
+              <ion-col size="6">
+                <ion-button color="danger" (click)="this.updateStatusPackage(item.id,'')" expand="block" fill="solid" shape="round" size="small">
+                  <ion-label>Rechazar</ion-label>
+                </ion-button>
+              </ion-col>
+            </ng-container>
+          </ion-row>
+        </ion-grid>
         <ion-card-header class="ion-no-padding">
           <ion-accordion-group>
             <ion-accordion>

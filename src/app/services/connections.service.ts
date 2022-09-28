@@ -70,7 +70,7 @@ export class ConectionsService {
         subHeader: httpErrorResponse.error.error.message,
         message: JSON.stringify(httpErrorResponse.error.error.details),
         buttons: ['ok'],
-        backdropDismiss:false
+        backdropDismiss: false
       });
     }
     // return an observable with a user-facing error message
@@ -78,18 +78,18 @@ export class ConectionsService {
   }
 
   // Methods
-  public get<t>(path: string, addHeaders=true) {
+  public get<t>(path: string, addHeaders = true) {
     return this.httpClient
-      .get<t>(`${this.api}/${path}`, addHeaders ? this.httpHeaders(): {} )
+      .get<t>(`${this.api}/${path}`, addHeaders ? this.httpHeaders() : {})
       .pipe(
         retry(2),
         catchError((err) => this.errorHandler(err))
       );
   }
 
-  public post(path: string, body: any, addHeaders=true) {
+  public post(path: string, body: any, addHeaders = true) {
     return this.httpClient
-      .post<any>(`${this.api}/${path}`, body, addHeaders ? this.httpHeaders(): {})
+      .post<any>(`${this.api}/${path}`, body, addHeaders ? this.httpHeaders() : {})
       .pipe(
         retry(2),
         catchError((err) => this.errorHandler(err))
@@ -137,7 +137,7 @@ export class ConectionsService {
         tap(async res => {
           this.cookiesService.set(environment['cookie_tag'], res.jwt);
           (await this.localStorageService.remove(environment['user_tag']));
-          (await this.localStorageService.set(environment['user_tag'], res.user));          
+          (await this.localStorageService.set(environment['user_tag'], res.user));
           this.router.navigateByUrl('dashboard');
         }),
         catchError((err) => this.errorHandler(err))
@@ -274,18 +274,18 @@ export class ConectionsService {
 
 export class Source extends DataSource<any | undefined>{
   public source: any[] = Array.from<any>({ length: 0 });
-  private itemsChanges$: BehaviorSubject<any> 
+  private itemsChanges$: BehaviorSubject<any>
   private destroy$: Subject<boolean> = new Subject();
 
-  private path: string 
-  private pagination : {
-    page:number
-    pageSize?:number
-    pageCount?:number
-    total?:number
+  private path: string
+  private pagination: {
+    page: number
+    pageSize?: number
+    pageCount?: number
+    total?: number
   }
 
-  public loading : BehaviorSubject<boolean>
+  public loading: BehaviorSubject<boolean>
 
   constructor(
     public _path: string,
@@ -295,7 +295,7 @@ export class Source extends DataSource<any | undefined>{
     super()
     this.itemsChanges$ = new BehaviorSubject<(string | undefined)[]>(this.source);
     this.setPath = _path
-    this.setPagination = { page:1 }
+    this.setPagination = { page: 1 }
     this.loading = new BehaviorSubject<boolean>(false)
     this.getInformation()
   }
@@ -306,35 +306,42 @@ export class Source extends DataSource<any | undefined>{
       .pipe(delay(1000))
       .toPromise()
   }
-  
-  public get getPagination() : {
-    page:number
-    pageSize?:number
-    pageCount?:number
-    total?:number
-  }{ return this.pagination }
 
-  public set setPagination(v : {
-    page:number
-    pageSize?:number
-    pageCount?:number
-    total?:number
+  public get getPagination(): {
+    page: number
+    pageSize?: number
+    pageCount?: number
+    total?: number
+  } { return this.pagination }
+
+  public set setPagination(v: {
+    page: number
+    pageSize?: number
+    pageCount?: number
+    total?: number
   }) {
     this.pagination = v;
   }
 
-  public set setPath(v : string) {
+  public set setPath(v: string) {
     this.path = v;
   }
-  
-  private async getInformation(){
+
+  public updateSource(item: number) {
+    let index = this.source.lastIndexOf(item);
+    let substract = this.source.splice(item, 1);
+    if (index == -1 && !substract.length) console.error('error update source');
+    else this.itemsChanges$.next(this.source);
+  }
+
+  private async getInformation() {
     this.loading.next(true)
-    const {data, meta} = await this.getData(this.path)
+    const { data, meta } = await this.getData(this.path)
     const { page, pageSize, pageCount, total } = meta.pagination
-    this.pagination = meta.pagination    
+    this.pagination = meta.pagination
     this.source.splice(page * pageSize, pageSize, ...data);
     console.log(data);
-    
+
     this.itemsChanges$.next(this.source);
     this.loading.next(false)
   }
@@ -344,7 +351,7 @@ export class Source extends DataSource<any | undefined>{
       .pipe(takeUntil(this.destroy$))
       .subscribe((range) => {
         const currentPage = Math.floor(range.end / this.pagination.pageSize) + 1;
-        if (currentPage > this.pagination.page){
+        if (currentPage > this.pagination.page) {
           this.pagination.page = currentPage;
           this.getInformation()
         }
