@@ -126,14 +126,14 @@
           <ion-row>
             <ng-container *ngIf="item.attributes.shipping_status === 'aceptado' ">
               <ion-col  offset="3" size="6">
-                <ion-button color="primary" (click)="this.updateStatusPackage(item.id,'')" expand="block" fill="solid" shape="round" size="small">
+                <ion-button color="primary" (click)="this.updateStatusPackage(item.id,'recibido')" expand="block" fill="solid" shape="round" size="small">
                   <ion-label>Recibir</ion-label>
                 </ion-button>
               </ion-col>
             </ng-container>
             <ng-container *ngIf="item.attributes.shipping_status == 'recibido'">
               <ion-col size="6">
-                <ion-button color="success" (click)="this.updateStatusPackage(item.id,'')" expand="block" fill="solid" shape="round" size="small">
+                <ion-button color="success" (click)="this.updateStatusPackage(item.id,'entregado')" expand="block" fill="solid" shape="round" size="small">
                   <ion-label>Entregar</ion-label>
                 </ion-button>
               </ion-col>

@@ -39,7 +39,7 @@ export class ActivasEncomiendasComponent implements OnInit {
         type: 'number',
         name: 'id',
         placeholder: 'Codigo del conductor',
-        cssClass:'input-number'
+        cssClass: 'input-number'
       }],
       buttons: [
         {
@@ -67,38 +67,19 @@ export class ActivasEncomiendasComponent implements OnInit {
     })
   }
 
-  public updateStatusPackage(_id: number, status: string) {
-    // this.toolsService.showLoading()
-    //   .then(async loading => {
-    //     const { id } = await this.conectionsService.get<any>(`ticket/generate/${_id}`).toPromise()
-    //     loading.dismiss();
-    //     (await this.toolsService.showAlert({
-    //       backdropDismiss: false,
-    //       header: 'Enlace Generado 🌎',
-    //       subHeader: 'Comparta este elace a su cliente para validar los datos de entrega',
-    //       keyboardClose: true,
-    //       mode: 'ios',
-    //       cssClass: 'alert-primary',
-    //       inputs: [{
-    //         type: 'text',
-    //         value: 'https://fastworld.app/ticket/' + id,
-    //         name: 'url'
-    //       }],
-    //       buttons: [{
-    //         text: 'copiar',
-    //         role: 'success',
-    //         handler: async (data) => {
-    //           await Clipboard.write({ url: data.url })
-    //           await this.toolsService.showToast({
-    //             message: 'Enlace copiado',
-    //             icon: 'copy',
-    //             mode: 'ios',
-    //             buttons: ['Aceptar']
-    //           })
-    //         }
-    //       }]
-    //     }))
-    //   })
+  public async updateStatusPackage(_id: number, status: string) {
+    let loading = await this.toolsService.showLoading('Actualizando...');
+    try {
+      let response = await this.conectionsService.post(`packages/shipping/${_id}`, {
+        comment: "No sabo que poner here",
+        status
+      }).toPromise()
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      loading.dismiss()
+    }
   }
 }
 
