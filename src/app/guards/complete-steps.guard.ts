@@ -32,9 +32,7 @@ export class CompleteStepsGuard implements CanActivate {
             this.conectionsService
               .get(`user/driver/${userStoraged.id}?populate=*`)
               .subscribe(
-                async (res:any) => {
-                  console.log(res);
-                  
+                async (res:any) => {               
                   const business = res;
                   const basic = res.basic;
                   delete business.basic;

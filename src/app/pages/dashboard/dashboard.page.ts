@@ -1,6 +1,9 @@
+import { CookiesService } from 'src/app/services/cookies.service';
+import { SocketService } from './../../services/socket.service';
 import { Component, OnInit } from '@angular/core';
 import { ConectionsService } from 'src/app/services/connections.service';
 import { ToolsService } from 'src/app/services/tools.service';
+import { environment } from 'src/environments/environment';
 interface SectionMenu {
   title: string,
   url: string,
@@ -18,8 +21,18 @@ export class DashboardPage implements OnInit {
   constructor(
     private toolsService: ToolsService,
     private conectionsService: ConectionsService,
+    private socketService:SocketService,
+    private cookiesService:CookiesService
   ) { }
   async ngOnInit() {
+
+    this.socketService.setAuth = this.cookiesService.get(environment['cookie_tag']).replace(/"/g,'')
+    this.socketService.connect()
+    
+    this.socketService.on('connect',(arg, callback) =>{
+      console.log('Socket connected');
+      
+    })
     
     this.sectionMenu = [{
       title: 'Encomiendas',
@@ -36,6 +49,10 @@ export class DashboardPage implements OnInit {
         title: 'Historial',
         url: 'historial',
         icon: 'list',
+      },{
+        title: 'Perfil',
+        url: 'perfil',
+        icon: 'person',
       }]
     }]
   }

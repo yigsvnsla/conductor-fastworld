@@ -80,7 +80,7 @@
                     <ion-text *ngSwitchCase="'recibido'" color="primary">
                       <p>{{ item.attributes.shipping_status | titlecase}}</p>
                     </ion-text>
-                    <ion-text *ngSwitchCase="'reportado'" color="danger">
+                    <ion-text *ngSwitchCase="'rechazado'" color="danger">
                       <p>{{ item.attributes.shipping_status | titlecase}}</p>
                     </ion-text>
                     <ion-text *ngSwitchDefault color="dark">
@@ -126,25 +126,125 @@
           <ion-row>
             <ng-container *ngIf="item.attributes.shipping_status === 'aceptado' ">
               <ion-col  offset="3" size="6">
-                <ion-button color="primary" (click)="this.updateStatusPackage(item.id,'recibido')" expand="block" fill="solid" shape="round" size="small">
+                <ion-button id="{{'btn-status-recibed-message-modal' + i}}" color="primary"  expand="block" fill="solid" shape="round" size="small">
                   <ion-label>Recibir</ion-label>
                 </ion-button>
+                <!-- modal -->
+                <ion-modal (willPresent)="modalOnWillPresent($event)" class="modal-dialogs" id="status-recibed-message-modal" #modal trigger="{{'btn-status-recibed-message-modal' + i}}">
+                  <ng-template>
+                    <div class="wrapper">
+                      <ion-header>
+                        <ion-toolbar color="primary">
+                          <ion-title>Recibir</ion-title>
+                        </ion-toolbar>
+                      </ion-header>
+
+                      <ion-item-group [formGroup]="this.dialogForm">
+                        <ion-item-divider style="margin-right: 16px;">
+                          <ion-label>Ingresar descripción y valor recibidos</ion-label>
+                        </ion-item-divider>
+                        <ion-item>
+                          <ion-label position="stacked">Valor Recibido</ion-label>
+                          <ion-input (ionChange)="ionChangesInputCurrency($event)" (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="money_catch" placeholder="$0.00"></ion-input>
+                        </ion-item>
+                        <ion-item>
+                          <ion-label position="stacked">Descripción </ion-label>
+                          <ion-textarea formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
+                        </ion-item>
+                      </ion-item-group>
+
+                      <ion-footer>
+                        <ion-toolbar class="ion-text-center">
+                          <ion-button [disabled]="this.dialogForm.invalid" (click)="this.updateStatusPackage(i, item.id, 'recibido')" color="primary"  fill="solid" shape="round">
+                            <ion-label>Recibir</ion-label>
+                          </ion-button>
+                        </ion-toolbar>
+                      </ion-footer>
+                    </div>
+                  </ng-template>
+                </ion-modal>
+                <!--  ---  -->
               </ion-col>
             </ng-container>
             <ng-container *ngIf="item.attributes.shipping_status == 'recibido'">
               <ion-col size="6">
-                <ion-button color="success" (click)="this.updateStatusPackage(item.id,'entregado')" expand="block" fill="solid" shape="round" size="small">
+                <ion-button id="{{'btn-status-delivered-message-modal' + i}}" color="success" expand="block" fill="solid" shape="round" size="small">
                   <ion-label>Entregar</ion-label>
                 </ion-button>
+                <!-- modal -->
+                <ion-modal (ionChange)="ionChangesInputCurrency($event)" class="modal-dialogs" id="status-delivered-message-modal" #modal trigger="{{'btn-status-delivered-message-modal' + i}}">
+                  <ng-template>
+                    <div class="wrapper">
+                      <ion-header>
+                        <ion-toolbar color="success">
+                          <ion-title>Entregar</ion-title>
+                        </ion-toolbar>
+                      </ion-header>
+
+                      <ion-item-group [formGroup]="this.dialogForm">
+                        <ion-item-divider style="margin-right: 16px;">
+                          <ion-label>Ingresar descripción y valor recibidos</ion-label>
+                        </ion-item-divider>
+                        <ion-item>
+                          <ion-label position="stacked">Valor Recibido</ion-label>
+                          <ion-input (ionChange)="ionChangesInputCurrency($event)" (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="money_catch" placeholder="$0.00"></ion-input>
+                        </ion-item>
+                        <ion-item>
+                          <ion-label position="stacked">Descripción </ion-label>
+                          <ion-textarea formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
+                        </ion-item>
+                      </ion-item-group>
+
+                      <ion-footer>
+                        <ion-toolbar class="ion-text-center">
+                          <ion-button [disabled]="this.dialogForm.invalid" color="success" (click)="this.updateStatusPackage(i, item.id, 'entregado')" fill="solid" shape="round">
+                            <ion-label>Entregar</ion-label>
+                          </ion-button>
+                        </ion-toolbar>
+                      </ion-footer>
+                    </div>
+                  </ng-template>
+                </ion-modal>
+                <!--  ---  -->
               </ion-col>
               <ion-col size="6">
-                <ion-button color="danger" (click)="this.updateStatusPackage(item.id,'')" expand="block" fill="solid" shape="round" size="small">
+                <ion-button id="{{'btn-status-decline-message-modal' + i}}" color="danger"  expand="block" fill="solid" shape="round" size="small">
                   <ion-label>Rechazar</ion-label>
                 </ion-button>
+                <!-- modal -->
+                <ion-modal (ionChange)="ionChangesInputCurrency($event)" class="modal-dialogs" id="example-modal" #modal trigger="{{'btn-status-decline-message-modal' + i}}">
+                  <ng-template>
+                    <div class="wrapper">
+                      <ion-header>
+                        <ion-toolbar color="danger">
+                          <ion-title>Rechazar</ion-title>
+                        </ion-toolbar>
+                      </ion-header>
+                      <ion-item-group [formGroup]="this.dialogForm">
+                        <ion-item-divider style="margin-right: 16px;">
+                          <ion-label>Ingresar descripción y valor recibidos</ion-label>
+                        </ion-item-divider>
+                        <ion-item>
+                          <ion-label position="stacked">Descripción </ion-label>
+                          <ion-textarea #declineTextarea (ionFocus)="declineTextarea.value = ''" formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
+                        </ion-item>
+                      </ion-item-group>
+                      <ion-footer>
+                        <ion-toolbar class="ion-text-center">
+                          <ion-button [disabled]="this.dialogForm.invalid" color="danger" (click)="this.updateStatusPackage(i, item.id, 'rechazado')" fill="solid" shape="round">
+                            <ion-label>Rechazar</ion-label>
+                          </ion-button>
+                        </ion-toolbar>
+                      </ion-footer>
+                    </div>
+                  </ng-template>
+                </ion-modal>
+                <!--  ---  -->
               </ion-col>
             </ng-container>
           </ion-row>
         </ion-grid>
+
         <ion-card-header class="ion-no-padding">
           <ion-accordion-group>
             <ion-accordion>

@@ -37,6 +37,7 @@
     "date-fns": "^2.28.0",
     "libphonenumber-js": "^1.10.10",
     "ngx-cookie-service": "^14.0.1",
+    "ngx-socket-io": "^4.3.1",
     "rxjs": "~6.6.0",
     "swiper": "^8.3.2",
     "tslib": "^2.2.0",

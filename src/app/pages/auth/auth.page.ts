@@ -22,7 +22,6 @@ export class AuthPage implements OnInit {
     
 
     this.loginPane = new CupertinoPane('app-login', {
-      parentElement:'ion-content',
       fitHeight: true,
       backdrop: true,
       fastSwipeClose:true,

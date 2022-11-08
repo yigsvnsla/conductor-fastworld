@@ -307,14 +307,14 @@ export class Source extends DataSource<any | undefined>{
       .toPromise()
   }
 
-  public get getPagination(): {
+  private get getPagination(): {
     page: number
     pageSize?: number
     pageCount?: number
     total?: number
   } { return this.pagination }
 
-  public set setPagination(v: {
+  private set setPagination(v: {
     page: number
     pageSize?: number
     pageCount?: number
@@ -327,11 +327,35 @@ export class Source extends DataSource<any | undefined>{
     this.path = v;
   }
 
-  public updateSource(item: number) {
-    let index = this.source.lastIndexOf(item);
-    let substract = this.source.splice(item, 1);
-    if (index == -1 && !substract.length) console.error('error update source');
-    else this.itemsChanges$.next(this.source);
+  private async binarySearch(vector: any[], dato: number): Promise<number> {
+    let mid = 0
+    let left = 0;
+    let rigth = vector.length - 1
+    while (left <= rigth) {
+      mid = Math.round((left + rigth) / 2)
+      if (vector[mid] == undefined) return -1;
+      if (vector[mid].id == dato) { return mid; }
+      if (dato > vector[mid].id) { rigth = mid - 1 }
+      if (dato < vector[mid].id) { left = mid + 1 }
+    }
+    return -1;
+  }
+
+  public async addItemToSource(item: any) {
+    if (item.id > this.source[0].id || this.source.length == 0) {
+      this.source.unshift(item)
+    }
+    if (item.id < this.source[0].id) {
+      this.source[await this.binarySearch(this.source, item.id)] = item
+    }
+    this.itemsChanges$.next(this.source);
+  }
+
+  public async deleteItemToSource(id: number) {
+    let find =await this.binarySearch(this.source, id);
+    let substract = this.source.splice(find, 1);
+    if (id == -1 && !substract.length) console.error('error update source');
+    else this.itemsChanges$.next(this.source)
   }
 
   private async getInformation() {
@@ -340,7 +364,7 @@ export class Source extends DataSource<any | undefined>{
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
     this.source.splice(page * pageSize, pageSize, ...data);
-    console.log(data);
+    // console.log(data);
 
     this.itemsChanges$.next(this.source);
     this.loading.next(false)

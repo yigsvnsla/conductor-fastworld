@@ -1,3 +1,4 @@
+import { PerfilComponent } from './components/perfil/perfil.component';
 import { AutoLoginGuard } from './../../guards/auto-login.guard';
 import { ActivasEncomiendasComponent } from './components/activas-encomiendas/activas-encomiendas.component';
 import { NgModule } from '@angular/core';
@@ -16,12 +17,12 @@ const routes: Routes = [{
     {
       path: '',
       pathMatch: 'full',
-      redirectTo: 'home'
+      redirectTo: 'encomienda/activas'
     }, 
-    {
-      path: 'home',
-      component: HomeComponent,
-    }, 
+    // {
+    //   path: 'home',
+    //   component: HomeComponent,
+    // }, 
     {
       path: 'encomienda',
       children: [
@@ -36,6 +37,10 @@ const routes: Routes = [{
         {
         path: 'historial',
         component: HistorialEncomiendaComponent
+        },
+        {
+          path:'perfil',
+          component:PerfilComponent
         }
       ]
     }
