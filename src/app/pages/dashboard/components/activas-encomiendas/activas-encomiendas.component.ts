@@ -66,7 +66,7 @@ export class ActivasEncomiendasComponent implements OnInit {
     parts[0] = parseInt(parts[0]).toString();
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousand);
     value = parts.join(decimal);
-    this.dialogForm.get(['money_catch']).setValue('$' + value)    
+    this.dialogForm.get(['money_catch']).setValue('$' + value)
   }
 
 
@@ -122,7 +122,7 @@ export class ActivasEncomiendasComponent implements OnInit {
         status
       }).toPromise()
       if ( status == 'recibido' ){
-        this.source.addItemToSource(response);
+        this.source.addItemToSource(response.data);
       }
       if ( status != 'recibido' ){
         this.source.deleteItemToSource(_id)

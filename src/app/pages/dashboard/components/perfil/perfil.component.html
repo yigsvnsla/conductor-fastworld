@@ -1,11 +1,7 @@
 <ion-header>
-  <ion-toolbar mode="md">
-      <ion-buttons slot="start">
-          <ion-button color="orange" (click)="this.onExit()">
-              <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
-          </ion-button>
-      </ion-buttons>
-      <ion-title>Información Detallada</ion-title>
+  <ion-toolbar>
+    <app-btn-menu slot="start"></app-btn-menu>
+    <ion-title>Encomiendas Activas</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -45,7 +41,7 @@
                                   <ion-label position="stacked">Año</ion-label>
                                   <ion-input formControlName="year" type="text" placeholder="Awesome Input"></ion-input>
                                   <ion-icon slot="start" name="add"></ion-icon>
-                              </ion-item>                                
+                              </ion-item>
                           </ion-item-group>
                       </ion-card-content>
                   </ion-card>
@@ -54,7 +50,7 @@
                   <ion-card>
                       <ion-card-header>
                           <ion-card-subtitle>Awesome Subtitle</ion-card-subtitle>
-                          <ion-card-title>Awesome Title</ion-card-title>
+                          <ion-card-title>-fotos-</ion-card-title>
                       </ion-card-header>
                       <ion-card-content>
                           Awesome content

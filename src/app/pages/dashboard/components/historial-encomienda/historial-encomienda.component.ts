@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HistorialEncomiendaComponent implements OnInit {
 
-  public source = new Source('driver/packages?populate=*&sort=id:ASC&',this.conectionsService)
+  public source = new Source('driver/packages?populate=*&sort=id:DESC&',this.conectionsService)
 
   constructor(private conectionsService:ConectionsService, private toolsService:ToolsService) {
 

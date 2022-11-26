@@ -80,7 +80,7 @@
                     <ion-text *ngSwitchCase="'recibido'" color="primary">
                       <p>{{ item.attributes.shipping_status | titlecase}}</p>
                     </ion-text>
-                    <ion-text *ngSwitchCase="'rechazado'" color="danger">
+                    <ion-text *ngSwitchCase="'rechazadoionic '" color="danger">
                       <p>{{ item.attributes.shipping_status | titlecase}}</p>
                     </ion-text>
                     <ion-text *ngSwitchDefault color="dark">
@@ -143,10 +143,7 @@
                         <ion-item-divider style="margin-right: 16px;">
                           <ion-label>Ingresar descripción y valor recibidos</ion-label>
                         </ion-item-divider>
-                        <ion-item>
-                          <ion-label position="stacked">Valor Recibido</ion-label>
-                          <ion-input (ionChange)="ionChangesInputCurrency($event)" (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="money_catch" placeholder="$0.00"></ion-input>
-                        </ion-item>
+
                         <ion-item>
                           <ion-label position="stacked">Descripción </ion-label>
                           <ion-textarea formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
@@ -231,7 +228,7 @@
                       </ion-item-group>
                       <ion-footer>
                         <ion-toolbar class="ion-text-center">
-                          <ion-button [disabled]="this.dialogForm.invalid" color="danger" (click)="this.updateStatusPackage(i, item.id, 'rechazado')" fill="solid" shape="round">
+                          <ion-button [disabled]="this.dialogForm.invalid" color="danger" (click)="this.updateStatusPackage(i, item.id, 'rechazado'); modal.dismiss()" fill="solid" shape="round">
                             <ion-label>Rechazar</ion-label>
                           </ion-button>
                         </ion-toolbar>

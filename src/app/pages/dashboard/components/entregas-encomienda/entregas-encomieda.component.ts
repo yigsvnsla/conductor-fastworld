@@ -66,28 +66,12 @@ export class EntregasEncomiendaComponent implements OnInit, OnDestroy {
       if (!condition) {
         this.source.deleteItemToSource(product.data.attributes.id)
       }
-      // if (Array.isArray(product)) {
-      //         product.forEach((value) => {
-      //             if (value.attributes.shipping_status == 'pendiente') {
-      //                 this.source.addItemToSource(product)
-      //             }
-      //             if (value.attributes.shipping_status != 'pendiente') {
-      //                 this.source.deleteItemToSource(value.attributes.id)
-      //             }
-      //         })
-      //     }
-      //     if (!Array.isArray(product)) {
-      //         if (product.attributes.shipping_status == 'pendiente') {
-      //             this.source.addItemToSource(product)
-      //         }
-      //         if (product.attributes.shipping_status != 'pendiente') {
-      //             this.source.deleteItemToSource(product.attributes.id)
-      //         }
-      //     }
-      //     console.log(product);
     })
 
   }
+
+
+
   ionViewWillLeave() {
     /**
      * Important, remove all listener of the events used.
