@@ -28,17 +28,17 @@ export class DashboardPage implements OnInit {
 
     this.socketService.setAuth = this.cookiesService.get(environment['cookie_tag']).replace(/"/g,'')
     this.socketService.connect()
-    
+
     this.socketService.on('connect',(arg, callback) =>{
       console.log('Socket connected');
-      
+
     })
-    
+
     this.sectionMenu = [{
       title: 'Encomiendas',
       url: 'encomienda',
       options: [{
-        title: 'Entregas',
+        title: 'Encomiendas',
         url: 'entregas',
         icon: 'cube',
       }, {

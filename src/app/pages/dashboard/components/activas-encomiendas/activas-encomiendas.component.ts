@@ -73,7 +73,7 @@ export class ActivasEncomiendasComponent implements OnInit {
   public selectPackage(_id) {
     this.toolsService.showAlert({
       backdropDismiss: false,
-      cssClass: 'alert-danger',
+      cssClass: 'alert-primary',
       header: 'Traspasar 📦',
       subHeader: 'Ingresa el codigo del motorizado que recibira este paquete',
       inputs: [{
