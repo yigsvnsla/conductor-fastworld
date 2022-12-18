@@ -19,6 +19,7 @@
             <ion-label>Cobrar: {{(item.attributes.value | currency )}}</ion-label>
           </ion-chip>
         </ion-item>
+
         <ion-grid fixed>
           <ion-row>
             <ion-col size="6">
@@ -39,6 +40,7 @@
             </ion-col>
           </ion-row>
         </ion-grid>
+
         <ion-grid fixed>
           <ion-row>
             <ng-container *ngIf="item.attributes.shipping_status === 'aceptado' ">
@@ -47,7 +49,7 @@
                   <ion-label>Recibir</ion-label>
                 </ion-button>
                 <!-- modal -->
-                <ion-modal (willPresent)="modalOnWillPresent($event)" class="modal-dialogs" id="status-recibed-message-modal" #modal trigger="{{'btn-status-recibed-message-modal' + i}}">
+                <ion-modal (willPresent)="modalOnWillPresent($event)" class="modal-dialogs" id="{{'status-recibed-message-modal' + i}}" #modal trigger="{{'btn-status-recibed-message-modal' + i}}">
                   <ng-template>
                     <div class="wrapper">
                       <ion-header>
@@ -125,7 +127,7 @@
                   <ion-label>Rechazar</ion-label>
                 </ion-button>
                 <!-- modal -->
-                <ion-modal (ionChange)="ionChangesInputCurrency($event)" class="modal-dialogs" id="example-modal" #modal trigger="{{'btn-status-decline-message-modal' + i}}">
+                <ion-modal  class="modal-dialogs" id="example-modal" #modal trigger="{{'btn-status-decline-message-modal' + i}}">
                   <ng-template>
                     <div class="wrapper">
                       <ion-header>

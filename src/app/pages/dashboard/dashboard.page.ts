@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConectionsService } from 'src/app/services/connections.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { environment } from 'src/environments/environment';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 interface SectionMenu {
   title: string,
   url: string,
@@ -18,13 +19,17 @@ interface SectionMenu {
 })
 export class DashboardPage implements OnInit {
   public sectionMenu: SectionMenu[]
+  user: any
   constructor(
     private toolsService: ToolsService,
     private conectionsService: ConectionsService,
     private socketService:SocketService,
-    private cookiesService:CookiesService
+    private cookiesService:CookiesService,
+    private localStorageService:LocalStorageService
+
   ) { }
   async ngOnInit() {
+    this.user =  await this.localStorageService.get(environment['user_tag'])
 
     this.socketService.setAuth = this.cookiesService.get(environment['cookie_tag']).replace(/"/g,'')
     this.socketService.connect()
@@ -42,7 +47,7 @@ export class DashboardPage implements OnInit {
         url: 'entregas',
         icon: 'cube',
       }, {
-        title: 'Activas',
+        title: 'Mis Rutas',
         url: 'activas',
         icon: 'list-circle',
       }, {
@@ -53,6 +58,10 @@ export class DashboardPage implements OnInit {
         title: 'Perfil',
         url: 'perfil',
         icon: 'person',
+      },{
+        title: 'Reportes',
+        url: 'reportes',
+        icon: 'bar-chart',
       }]
     }]
   }

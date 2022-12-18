@@ -16,6 +16,7 @@ import { HistorialEncomiendaComponent } from './components/historial-encomienda/
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { EntregasEncomiendaComponent } from './components/entregas-encomienda/entregas-encomieda.component';
 import { SocketIoModule } from 'ngx-socket-io';
+import { ReportsEncomiendaComponent } from "./components/reports-encomienda/reports-encomienda.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -26,7 +27,7 @@ import { SocketIoModule } from 'ngx-socket-io';
     HttpClientModule,
     GenericComponentsModule,
     ScrollingModule,
-    SocketIoModule
+    SocketIoModule,
   ],
   declarations: [
     DashboardPage,
@@ -34,7 +35,8 @@ import { SocketIoModule } from 'ngx-socket-io';
     HistorialEncomiendaComponent,
     ActivasEncomiendasComponent,
     EntregasEncomiendaComponent,
-    PerfilComponent
+    PerfilComponent,
+    ReportsEncomiendaComponent
   ],
   providers:[CurrencyPipe]
 })

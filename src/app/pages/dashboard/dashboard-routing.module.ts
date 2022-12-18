@@ -9,6 +9,7 @@ import { DashboardPage } from './dashboard.page';
 import { HistorialEncomiendaComponent } from './components/historial-encomienda/historial-encomienda.component';
 import { CompleteStepsGuard } from 'src/app/guards/complete-steps.guard';
 import { EntregasEncomiendaComponent } from './components/entregas-encomienda/entregas-encomieda.component';
+import { ReportsEncomiendaComponent } from './components/reports-encomienda/reports-encomienda.component';
 
 const routes: Routes = [{
   path: '',
@@ -18,30 +19,33 @@ const routes: Routes = [{
       path: '',
       pathMatch: 'full',
       redirectTo: 'encomienda/activas'
-    }, 
+    },
     // {
     //   path: 'home',
     //   component: HomeComponent,
-    // }, 
+    // },
     {
       path: 'encomienda',
       children: [
         {
           path: 'entregas',
           component: EntregasEncomiendaComponent
-        }, 
+        },
         {
           path: 'activas',
           component: ActivasEncomiendasComponent
-        }, 
+        },
         {
         path: 'historial',
         component: HistorialEncomiendaComponent
+        },{
+          path:'reportes',
+          component:ReportsEncomiendaComponent
         },
         {
           path:'perfil',
           component:PerfilComponent
-        }
+        },
       ]
     }
   ],

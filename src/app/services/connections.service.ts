@@ -234,6 +234,20 @@ export class ConectionsService {
       )
   }
 
+  public postStream(path: string, obj) {
+    return this.httpClient
+        .post(`${this.api}/${path}`,obj, {
+            headers: {
+              'Authorization': `Bearer ${(this.cookiesService.get(environment['cookie_tag']))}`
+            },
+            responseType: 'arraybuffer'
+        })
+        .pipe(
+            retry(2),
+            catchError((err) => this.errorHandler(err))
+        )
+}
+
   public geolocation(geolocationCallback: (x: GeolocationPosition | undefined) => any) {
     if (navigator.geolocation) {
       navigator.geolocation

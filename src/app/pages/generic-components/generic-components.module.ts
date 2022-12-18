@@ -25,7 +25,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
     BtnMenuComponent,
     ModalMapComponent,
     SlidesLoginStepsComponent,
-    DetailsPackageComponent
+    DetailsPackageComponent,
 
   ],
   exports:[

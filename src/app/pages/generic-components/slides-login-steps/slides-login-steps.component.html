@@ -70,6 +70,12 @@
         <ion-button class="ion-margin" color="orange" (click)="fileDni.click();" shape="round">
           <ion-label>Buscar</ion-label>
         </ion-button>
+
+        <ion-item formControlName="licence_id" >
+          <ion-label position="stacked">Ingresar Numero de Licencia</ion-label>
+          <ion-input></ion-input>
+        </ion-item>
+
         <ion-grid fixed>
           <ion-row style="flex-direction: row; justify-content: center;">
             <ion-col sizeSm="6" sizeXs="12">
@@ -91,7 +97,7 @@
 
     <ng-template swiperSlide>
       <ion-card-header mode="ios">
-        <ion-card-subtitle>Ingresa una imagen horizontal y nítida de tu documento de identidad</ion-card-subtitle>
+        <ion-card-subtitle>Ingresa una imagen horizontal y nítida </ion-card-subtitle>
         <ion-card-title>Ingresar Foto de la Placa 📸</ion-card-title>
       </ion-card-header>
       <ion-card-content class="card-content">
@@ -100,6 +106,12 @@
         <ion-button class="ion-margin" color="orange" (click)="filePlaca.click();" shape="round">
           <ion-label>Buscar</ion-label>
         </ion-button>
+
+        <ion-item formControlName="plate_id">
+          <ion-label position="stacked">Ingresar Codigo de Placa</ion-label>
+          <ion-input type="text"></ion-input>
+        </ion-item>
+
         <ion-grid fixed>
           <ion-row style="flex-direction: row; justify-content: center;">
             <ion-col sizeSm="6" sizeXs="12">

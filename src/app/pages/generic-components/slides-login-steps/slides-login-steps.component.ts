@@ -53,7 +53,9 @@ export class SlidesLoginStepsComponent implements OnInit {
       maker: ['',[Validators.required,Validators.pattern(/([a-zA-Z])/g),]],
       model: ['',[Validators.required,Validators.pattern(/([a-zA-Z0-9])/g),]],
       year: ['',[Validators.required,Validators.pattern(/([0-9]{4})/g),]],
-      color: ['',[Validators.required,Validators.pattern(/([a-zA-Z])/g),]]
+      color: ['',[Validators.required,Validators.pattern(/([a-zA-Z])/g),]],
+      plate_id:['',Validators.required,],
+      licence_id:['',Validators.required,]
     },);
     this.localUser = (await this.localStorageService.get(environment.user_tag));
     (await apiLoaded).dismiss();

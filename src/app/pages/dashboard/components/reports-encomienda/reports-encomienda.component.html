@@ -1,0 +1,133 @@
+<ion-header>
+  <ion-toolbar>
+    <app-btn-menu slot="start"></app-btn-menu>
+    <ion-title slot="start">Reportes</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid [formGroup]="reportForm" style="height: 100%;" fixed>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-label class="ion-text-wrap">Filtros de busqueda</ion-label>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <ion-label position="stacked">Opciones</ion-label>
+              <ion-select interface="popover" #datePreferences placeholder="Seleccionar" (ionChange)="selectChange($event)">
+                <ion-select-option value="1">Hoy</ion-select-option>
+                <ion-select-option value="2">Esta semana</ion-select-option>
+                <ion-select-option value="3">Del mes actual</ion-select-option>
+                <ion-select-option value="4">Personalizado</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-card-content>
+          <ion-card-content *ngIf="datePreferences.value == 4">
+            <ion-row>
+              <ion-col>
+                <ion-item button id="item-date-start">
+                  <ion-label position="stacked">Fecha de inicio</ion-label>
+                  <ion-input type="date" formControlName="start" readonly></ion-input>
+                  <ion-modal #modal [backdropDismiss]="false" id="modal-date-range" trigger="item-date-start">
+                    <ng-template>
+                      <div class="wrapper">
+                        <ion-datetime #dateTimeRange hour-cycle="h12" color="orange" locale="es" [firstDayOfWeek]="1"
+                          [showDefaultTitle]="true" [presentation]="'date'">
+                          <section style="display: flex; align-items: center; justify-content: space-between;" slot="title">
+                            <ion-label slot="start">Selecciona fecha</ion-label>
+                            <ion-buttons>
+                              <ion-button style="border: solid rgb(0,0,0,0.2); border-radius: 50%;"
+                                (click)="modal.dismiss()">
+                                <ion-icon slot="icon-only" name="close"></ion-icon>
+                              </ion-button>
+                            </ion-buttons>
+                          </section>
+                          <ion-buttons slot="buttons">
+                            <ion-button color="success" (click)="dateClose(dateTimeRange, 'start')">Aceptar</ion-button>
+                          </ion-buttons>
+                        </ion-datetime>
+                      </div>
+                    </ng-template>
+                  </ion-modal>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item button id="item-date-end">
+                  <ion-label position="stacked">Fecha de final</ion-label>
+                  <ion-input type="date" formControlName="end"></ion-input>
+                  <ion-modal #modal [backdropDismiss]="false" id="modal-date-range" trigger="item-date-end">
+                    <ng-template>
+                      <div class="wrapper">
+                        <ion-datetime #dateTimeRange hour-cycle="h12" color="orange" locale="es" [firstDayOfWeek]="1"
+                          [showDefaultTitle]="true" [presentation]="'date'">
+                          <section style="display: flex; align-items: center; justify-content: space-between;" slot="title">
+                            <ion-label slot="start">Selecciona fecha</ion-label>
+                            <ion-buttons>
+                              <ion-button style="border: solid rgb(0,0,0,0.2); border-radius: 50%;"
+                                (click)="modal.dismiss()">
+                                <ion-icon slot="icon-only" name="close"></ion-icon>
+                              </ion-button>
+                            </ion-buttons>
+                          </section>
+                          <ion-buttons slot="buttons">
+                            <ion-button color="success" (click)="dateClose(dateTimeRange, 'end')">Aceptar</ion-button>
+                          </ion-buttons>
+                        </ion-datetime>
+                      </div>
+                    </ng-template>
+                  </ion-modal>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-radio-group #rg name="auto" formControlName="type">
+      <ion-row>
+        <ion-col size="6">
+          <ion-card disabled="true" button (click)="rg.value = 'pdf'">
+            <ion-card-header>
+              <ion-card-subtitle>
+                <i>(En Mantenimiento)</i>
+              </ion-card-subtitle>
+              <ion-card-title style="display: flex; align-items: center; justify-content: space-between;">
+                <ion-text color="danger">PDF</ion-text>
+                <ion-radio value="pdf"></ion-radio>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              Exporta tus datos en archivos PDF
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card button (click)="rg.value = 'xlsl'">
+            <ion-card-header>
+              <ion-card-subtitle>Reporte</ion-card-subtitle>
+              <ion-card-title style="display: flex; align-items: center; justify-content: space-between;">
+                <ion-text color="success">Excel</ion-text>
+                <ion-radio value="xlsl"></ion-radio>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              Exporta tus datos en archivos xlsl
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-radio-group>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-button [disabled]="this.reportForm.invalid" color="orange" (click)="onSubmit()" expand="block" fill="solid"
+          shape="round">
+          <ion-label>Generar</ion-label>
+          <ion-icon slot="end" name="cloud"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
