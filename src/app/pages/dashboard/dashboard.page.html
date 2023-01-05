@@ -13,7 +13,15 @@
             <h1>{{this.user?.name | titlecase }} {{this.user?.lastname | titlecase}}</h1>
           </ion-label>
         </ion-item>
-
+        <ion-item>
+          <ion-icon name="logo-usd" slot="start"></ion-icon>
+          <ion-label>
+            <p>Valor Acumulado</p>
+            <h1>
+              <b>$0.00</b>
+            </h1>
+          </ion-label>
+        </ion-item>
         <ng-container *ngFor="let item of this.sectionMenu">
           <ion-item-divider>
             <ion-label>{{item.title}}</ion-label>
