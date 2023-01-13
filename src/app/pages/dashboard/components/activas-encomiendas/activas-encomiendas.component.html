@@ -88,7 +88,7 @@
                   <ion-label>Entregar</ion-label>
                 </ion-button>
                 <!-- modal -->
-                <ion-modal  class="modal-dialogs" id="{{'status-delivered-message-modal' + i}}" #modal trigger="{{'btn-status-delivered-message-modal' + i}}">
+                <ion-modal [backdropDismiss]="true" class="modal-dialogs" id="{{'status-delivered-message-modal' + i}}" #modal trigger="{{'btn-status-delivered-message-modal' + i}}">
                   <ng-template>
                     <div class="wrapper">
                       <ion-header>
@@ -124,7 +124,7 @@
               </ion-col>
               <ion-col size="6">
                 <ion-button id="{{'btn-status-decline-message-modal' + i}}" color="danger"  expand="block" fill="solid" shape="round" size="small">
-                  <ion-label>Rechazar</ion-label>
+                  <ion-label>Reportar</ion-label>
                 </ion-button>
                 <!-- modal -->
                 <ion-modal  class="modal-dialogs" id="example-modal" #modal trigger="{{'btn-status-decline-message-modal' + i}}">
@@ -132,7 +132,7 @@
                     <div class="wrapper">
                       <ion-header>
                         <ion-toolbar color="danger">
-                          <ion-title>Rechazar</ion-title>
+                          <ion-title>Reportar</ion-title>
                         </ion-toolbar>
                       </ion-header>
                       <ion-item-group [formGroup]="this.dialogForm">
@@ -147,7 +147,7 @@
                       <ion-footer>
                         <ion-toolbar class="ion-text-center">
                           <ion-button [disabled]="this.dialogForm.invalid" color="danger" (click)="this.updateStatusPackage(i, item.id, 'rechazado'); modal.dismiss()" fill="solid" shape="round">
-                            <ion-label>Rechazar</ion-label>
+                            <ion-label>Reportar</ion-label>
                           </ion-button>
                         </ion-toolbar>
                       </ion-footer>
@@ -269,7 +269,7 @@
 
                   <ion-item>
                     <ion-icon slot="start" name="person"></ion-icon>
-                    <ng-container *ngIf="item.attributes.sender.data != null; else notSender">
+                    <!-- <ng-container *ngIf="item.attributes.sender.data != null; else notSender">
                       <ion-label>
                         <p>Usuario</p>
                         <h4>{{(item.attributes.sender.data.attributes.business.name | titlecase) }}</h4>
@@ -286,7 +286,7 @@
                         <p>Usuario</p>
                         <h4>Esperando confirmnación</h4>
                       </ion-label>
-                    </ng-template>
+                    </ng-template> -->
                   </ion-item>
                   <ion-item>
                     <ion-icon slot="start" name="person"></ion-icon>

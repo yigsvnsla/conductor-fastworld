@@ -8,7 +8,8 @@ import { map, tap, delay, } from 'rxjs/operators';
 import { Observable, timer, } from 'rxjs';
 import { formatDistanceToNowStrict, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { InputCustomEvent, IonModal } from '@ionic/angular';
+import { InputCustomEvent, IonModal, ModalController } from '@ionic/angular';
+import * as qs from 'qs';
 
 
 @Component({
@@ -20,13 +21,30 @@ export class ActivasEncomiendasComponent implements OnInit {
 
   @ViewChild('modal') modal: IonModal
 
-  public source = new Source('driver/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:DESC&', this.conectionsService)
+  _qs = qs.stringify({
+    filters:{
+      $or:[
+        {
+          shipping_status:{
+            $containsi:'aceptado'
+          },
+        },        {
+          shipping_status:{
+            $containsi:'recibido'
+          },
+        }
+      ]
+    }
+  })
+  public source = new Source (`driver/packages?populate=*&${this._qs}&sort=id:DESC`,this.conectionsService)
+  // public source = new Source('driver/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:DESC&', this.conectionsService)
   public dialogForm: FormGroup;
   private value: number = 0
   constructor(
     private conectionsService: ConectionsService,
     private toolsService: ToolsService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private modalcontroller:ModalController,
   ) {
     this.dialogForm = this.formBuilder.nonNullable.group({
       money_catch: ['$0.00', [Validators.required]],
@@ -37,6 +55,7 @@ export class ActivasEncomiendasComponent implements OnInit {
 
 
   ngOnInit() {
+    console.log(this._qs);
 
   }
 
@@ -133,8 +152,7 @@ export class ActivasEncomiendasComponent implements OnInit {
       console.log(error)
     } finally {
       this
-      loading.dismiss()
-      this.modal.dismiss()
+      loading.dismiss();(await this.modalcontroller.getTop()).dismiss()
     }
   }
 }
