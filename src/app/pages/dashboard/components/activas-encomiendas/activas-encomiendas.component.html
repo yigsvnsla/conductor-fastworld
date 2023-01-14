@@ -6,7 +6,7 @@
 </ion-header>
 
 <ion-content [scrollY]="false">
-  <cdk-virtual-scroll-viewport itemSize="370" minBufferPx="900" maxBufferPx="1350" class="ion-content-scroll-host">
+  <cdk-virtual-scroll-viewport itemSize="235" minBufferPx="900" maxBufferPx="1350" class="ion-content-scroll-host">
     <ng-container *ngIf="this.source as Source">
       <ion-card *cdkVirtualFor="let item of Source ; let i = index">
         <ion-item>

@@ -55,7 +55,7 @@ export class ActivasEncomiendasComponent implements OnInit {
 
 
   ngOnInit() {
-    console.log(this._qs);
+    // console.log(this._qs);
 
   }
 
@@ -135,24 +135,19 @@ export class ActivasEncomiendasComponent implements OnInit {
     const { money_catch, comment } = this.dialogForm.value
 
     try {
-      let response = await this.conectionsService.post(`packages/shipping/${_id}`, {
-        money_catch,
-        comment,
-        status
-      }).toPromise()
+      let response = await this.conectionsService.post(`packages/shipping/${_id}`, { money_catch, comment, status }).toPromise()
       if ( status == 'recibido' ){
-        this.source.addItemToSource(response.data);
+        this.source.updateItemToSource(_id,response.data);
       }
       if ( status != 'recibido' ){
-        this.source.deleteItemToSource(_id)
+        this.source.deleteItemToSource(_id);
       }
-
       console.log('response', response)
     } catch (error) {
       console.log(error)
     } finally {
-      this
-      loading.dismiss();(await this.modalcontroller.getTop()).dismiss()
+      loading.dismiss();
+      (await this.modalcontroller.getTop()).dismiss()
     }
   }
 }

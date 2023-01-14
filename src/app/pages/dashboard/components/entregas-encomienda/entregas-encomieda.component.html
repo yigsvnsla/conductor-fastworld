@@ -8,7 +8,7 @@
   </ion-header>
 
   <ion-content>
-    <cdk-virtual-scroll-viewport itemSize="189" minBufferPx="900" maxBufferPx="1350" class="ion-content-scroll-host">
+    <cdk-virtual-scroll-viewport itemSize="188" minBufferPx="900" maxBufferPx="1350" class="ion-content-scroll-host">
       <ng-container *ngIf="this.source as Source">
         <ion-accordion-group>
         <ion-card  *cdkVirtualFor="let item of Source ; let i = index">
@@ -54,7 +54,7 @@
                 </p>
                 <h4>Jesus Augusto Guzman Martinez</h4>
               </ion-label>
-                <ion-fab-button (click)="selectPackage(item.id)"  color="orange" size="small">
+                <ion-fab-button (click)="selectPackage(item,i)"  color="orange" size="small">
                   <ion-icon name="add"></ion-icon>
                 </ion-fab-button>
             </ng-container>

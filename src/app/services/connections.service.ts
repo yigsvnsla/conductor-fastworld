@@ -355,22 +355,29 @@ export class Source extends DataSource<any | undefined>{
     return -1;
   }
 
-  public async addItemToSource(item: any) {
-    if (item.id > this.source[0].id || this.source.length == 0) {
-      this.source.unshift(item)
-    }
-    if (item.id < this.source[0].id) {
-      this.source[await this.binarySearch(this.source, item.id)] = item
-    }
-    this.itemsChanges$.next(this.source);
+  public async updateItemToSource(id:number,value:any){
+    let index = await this.binarySearch(this.source, id);
+    this.source[index] = value
+    this.itemsChanges$.next(this.source)
   }
 
-  public async deleteItemToSource(id: number) {
-    let find =await this.binarySearch(this.source, id);
-    let substract = this.source.splice(find, 1);
-    if (id == -1 && !substract.length) console.error('error update source');
-    else this.itemsChanges$.next(this.source)
+  public varRef:any = {}
+
+  // encolar
+  public async addItemToSource(item?: any) {
+    // this.varRef.id = this.varRef.id + 1;
+    this.source.unshift({...item})
+    this.itemsChanges$.next(this.source)
   }
+
+  // desencolar :check:
+  public async deleteItemToSource(id: number, index?:number) {
+    let find = await this.binarySearch(this.source, id);
+    let substract = this.source.splice(index?index:find, 1);
+    if (id == -1 && !substract.length) console.error('error update source');
+    this.itemsChanges$.next(this.source)
+  }
+
 
   private async getInformation() {
     this.loading.next(true)
@@ -378,7 +385,9 @@ export class Source extends DataSource<any | undefined>{
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
     this.source.splice(page * pageSize, pageSize, ...data);
-    console.log(data);
+    this.varRef = {...data[0]}
+    // console.log(this.varRef);
+    // console.log(data);
 
     this.itemsChanges$.next(this.source);
     this.loading.next(false)

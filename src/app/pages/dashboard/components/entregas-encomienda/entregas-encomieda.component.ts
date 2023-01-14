@@ -31,41 +31,35 @@ export class EntregasEncomiendaComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.socketService.on('product-created', (product: any | any[]) => {
-      console.log(product);            // if (Array.isArray(product)) {
       product['data'].forEach((value) => {
+
+        console.log(value);
+
         if (value.attributes.shipping_status == 'pendiente') {
           this.source.addItemToSource(value)
         };
-        if (value.attributes.shipping_status != 'pendiente') {
-          this.source.deleteItemToSource(value.id)
-        }
+        // if (value.attributes.shipping_status != 'pendiente') {
+        //   this.source.deleteItemToSource(value.id)
+        // }
       })
-      // }
-      // if (!Array.isArray(product)) {
-
-      //     console.log(product);
-
-      //     if (product.attributes.shipping_status == 'pendiente') {
-      //         this.source.addItemToSource(product)
-      //     }
-      //     if (product.attributes.shipping_status != 'pendiente') {
-      //         this.source.deleteItemToSource(product.attributes.id)
-      //     }
-      // }
-
     })
 
     this.socketService.on('product-updated', (product: any | any[]) => {
       const condition = (product.data.attributes.shipping_status == 'aceptado' || product.data.attributes.shipping_status == 'pendiente')
       console.log(product);
 
-      if (condition) {
+      if (product.data.attributes.shipping_status == 'pendiente') {
         this.source.addItemToSource(product.data)
+        return
+      }
+      if (product.data.attributes.shipping_status != 'pendiente'){
+
+        this.source.deleteItemToSource(product.data.id)
       }
 
-      if (!condition) {
-        this.source.deleteItemToSource(product.data.attributes.id)
-      }
+      // if (!condition) {
+      //
+      // }
     })
 
   }
@@ -81,7 +75,7 @@ export class EntregasEncomiendaComponent implements OnInit, OnDestroy {
   }
 
 
-  public selectPackage(id: number) {
+  public selectPackage({id},i) {
     this.toolsService.showAlert({
       header: 'Agregar Ruta',
       subHeader: '¿Desea agregar esta encomienda a sus lista de rutas de envios?',
@@ -91,7 +85,13 @@ export class EntregasEncomiendaComponent implements OnInit, OnDestroy {
           let loading = await this.toolsService.showLoading("Obteniendo encomienda...");
           this.conectionsService.post('package/pickup', { id })
             .toPromise()
-            .then(res => this.source.deleteItemToSource(id))
+            .then(res => {
+              this.source.deleteItemToSource(id,i)
+              // console.log(this.source);
+
+              console.log(res);
+
+            })
             .finally(() => loading.dismiss())
         }
       }]
