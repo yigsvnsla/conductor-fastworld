@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'client-fastworld',
+  appId: 'app.fastworld.conductor',
+  appName: 'Fastworld Conductores',
   webDir: 'www',
   bundledWebRuntime: false
 };
