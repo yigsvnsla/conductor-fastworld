@@ -10,6 +10,7 @@ import { formatDistanceToNowStrict, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { InputCustomEvent, IonModal, ModalController } from '@ionic/angular';
 import * as qs from 'qs';
+import { SocketService } from 'src/app/services/socket.service';
 
 
 @Component({
@@ -45,6 +46,8 @@ export class ActivasEncomiendasComponent implements OnInit {
     private toolsService: ToolsService,
     private formBuilder: FormBuilder,
     private modalcontroller:ModalController,
+    private socketService: SocketService,
+
   ) {
     this.dialogForm = this.formBuilder.nonNullable.group({
       money_catch: ['$0.00', [Validators.required]],
@@ -55,7 +58,37 @@ export class ActivasEncomiendasComponent implements OnInit {
 
 
   ngOnInit() {
-    // console.log(this._qs);
+    // this.socketService.on('product-created', (product: any | any[]) => {
+    //   product['data'].forEach((value) => {
+
+    //     console.log(value);
+
+    //     if (value.attributes.shipping_status == 'pendiente') {
+    //       this.source.addItemToSource(value)
+    //     };
+    //     // if (value.attributes.shipping_status != 'pendiente') {
+    //     //   this.source.deleteItemToSource(value.id)
+    //     // }
+    //   })
+    // })
+
+    this.socketService.on('product-updated', (product: any | any[]) => {
+      const condition = (product.data.attributes.shipping_status == 'aceptado' || product.data.attributes.shipping_status == 'pendiente')
+      console.log(product);
+
+      if (product.data.attributes.shipping_status == 'aceptado') {
+        this.source.addItemToSource(product.data)
+        return
+      }
+      if (product.data.attributes.shipping_status != 'aceptado'){
+        // this.source.updateItemToSource()
+        this.source.deleteItemToSource(product.data.id)
+      }
+
+      // if (!condition) {
+      //
+      // }
+    })
 
   }
 
@@ -63,9 +96,18 @@ export class ActivasEncomiendasComponent implements OnInit {
 
   }
 
+  ionViewWillLeave() {
+    /**
+     * Important, remove all listener of the events used.
+     */
+    this.socketService.removeAllListeners('product-updated')
+    // this.socketService.removeAllListeners('product-created')
+  }
+
+
   modalOnWillPresent($event) {
     this.dialogForm.reset()
-    // console.log('dasdasdasdas');
+    console.log('dasdasdasdas');
 
   }
 
@@ -121,6 +163,10 @@ export class ActivasEncomiendasComponent implements OnInit {
             } catch (error) {
               console.log(error);
             } finally {
+              this.dialogForm = this.formBuilder.nonNullable.group({
+                money_catch: ['$0.00', [Validators.required]],
+                comment: ['Sin Novedad', [Validators.required]]
+              })
               this.modal.dismiss()
               loading.dismiss()
             }
@@ -146,6 +192,10 @@ export class ActivasEncomiendasComponent implements OnInit {
     } catch (error) {
       console.log(error)
     } finally {
+      this.dialogForm = this.formBuilder.nonNullable.group({
+        money_catch: ['$0.00', [Validators.required]],
+        comment: ['Sin Novedad', [Validators.required]]
+      })
       loading.dismiss();
       (await this.modalcontroller.getTop()).dismiss()
     }

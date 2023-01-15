@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  cookie_tag: 'fastworld-token',
-  user_tag: 'fastworld-user'
+  cookie_tag: 'fastworld-token-driver',
+  user_tag: 'fastworld-driver'
 };
