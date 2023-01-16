@@ -14,50 +14,50 @@ import { ToolsService } from '../services/tools.service';
 export class CompleteStepsGuard implements CanActivate {
 
   constructor(
-    private localStorageService:LocalStorageService,
-    private router:Router,
+    private localStorageService: LocalStorageService,
+    private router: Router,
     private conectionsService: ConectionsService,
     private toolsService: ToolsService,
-  ){
+  ) {
 
   }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      return new Promise<boolean>( async (resolve, reject) => {
-        this.localStorageService
-          .get(environment['user_tag'])
-          .then(userStoraged => {               
-            this.conectionsService
-              .get(`user/driver/${userStoraged.id}?populate=*`)
-              .subscribe(
-                async (res:any) => {               
-                  const business = res;
-                  const basic = res.basic;
-                  delete business.basic;
-                  (await this.localStorageService.update(environment.user_tag,{...basic,business:business}))                  
-                  resolve(true)                  
-                },
-                async (err: HttpErrorResponse) => {
-                  if (err['error'].error.details) {
-                    const modalValue = await this.toolsService.showModal({
-                      component: SlidesLoginStepsComponent,
-                      backdropDismiss: false,
-                      keyboardClose: false,
-                      cssClass: ['modal-fullscreen'],
-                    })
-                    console.log(modalValue);
-                    
-                    if (modalValue) resolve(true);
-                    else  this.router.navigateByUrl('auth');resolve(false);
-                  }else{
-                    this.router.navigateByUrl('auth')
-                    reject(false)
-                  }
+    return new Promise<boolean>(async (resolve, reject) => {
+      this.localStorageService
+        .get(environment['user_tag'])
+        .then(userStoraged => {
+          this.conectionsService
+            .get(`user/driver/${userStoraged.id}?populate=*`)
+            .subscribe(
+              async (res: any) => {
+                const business = res;
+                const basic = res.basic;
+                delete business.basic;
+                (await this.localStorageService.update(environment.user_tag, { ...basic, business: business }))
+                resolve(true)
+              },
+              async (err: HttpErrorResponse) => {
+                if (err['error'].error.details) {
+                  const modalValue = await this.toolsService.showModal({
+                    component: SlidesLoginStepsComponent,
+                    backdropDismiss: false,
+                    keyboardClose: false,
+                    cssClass: ['modal-fullscreen'],
+                  })
+                  console.log(modalValue);
+
+                  if (modalValue) resolve(true);
+                  else this.router.navigateByUrl('auth'); resolve(false);
+                } else {
+                  this.router.navigateByUrl('auth')
+                  reject(false)
                 }
-              )
-          })
-      })
-    }
+              }
+            )
+        })
+    })
+  }
 }

@@ -24,7 +24,7 @@
       </ion-grid>
     </ng-template>
 
-    <ng-template swiperSlide>
+    <ng-template swiperSlide  >
       <ion-content>
         <ion-card-header>
           <ion-card-subtitle>Bienvenido y gracias por confiar en nosotros</ion-card-subtitle>
@@ -51,10 +51,18 @@
             <ion-input formControlName="color" type="text" placeholder="ejemplo: negro"></ion-input>
             <ion-icon slot="start" name="add"></ion-icon>
           </ion-item>
+          <ion-item >
+            <ion-label position="stacked">Ingresar Numero de Licencia</ion-label>
+            <ion-input type="tel" #licenceId formControlName="licence_id" ></ion-input>
+          </ion-item>
+          <ion-item >
+            <ion-label position="stacked">Ingresar Codigo de Placa</ion-label>
+            <ion-input formControlName="plate_id" type="text"></ion-input>
+          </ion-item>
         </ion-item-group>
         <ion-button [disabled]="this.stepsForm.invalid" shape="round" color="orange" (click)="this.nextSlider()"class="ion-margin">
           <ion-icon slot="start" name="add"></ion-icon>
-          <ion-label>siguiente</ion-label>
+          <ion-label>Siguiente</ion-label>
         </ion-button>
       </ion-content>
     </ng-template>
@@ -71,10 +79,7 @@
           <ion-label>Buscar</ion-label>
         </ion-button>
 
-        <ion-item formControlName="licence_id" >
-          <ion-label position="stacked">Ingresar Numero de Licencia</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
+
 
         <ion-grid fixed>
           <ion-row style="flex-direction: row; justify-content: center;">
@@ -85,7 +90,7 @@
               </ion-button>
             </ion-col>
             <ion-col sizeSm="6" sizeXs="12">
-              <ion-button [disabled]="this.uploadFiles.length <= 0" expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
+              <ion-button [disabled]="(this.uploadFiles.length <= 0) " expand="block" class="ion-margin" color="orange" (click)="this.nextSlider()" shape="round">
                 <ion-label>siguiente</ion-label>
                 <ion-icon slot="end" name="chevron-forward"></ion-icon>
               </ion-button>
@@ -107,10 +112,7 @@
           <ion-label>Buscar</ion-label>
         </ion-button>
 
-        <ion-item formControlName="plate_id">
-          <ion-label position="stacked">Ingresar Codigo de Placa</ion-label>
-          <ion-input type="text"></ion-input>
-        </ion-item>
+
 
         <ion-grid fixed>
           <ion-row style="flex-direction: row; justify-content: center;">

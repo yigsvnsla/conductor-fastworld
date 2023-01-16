@@ -4,7 +4,7 @@ import { ToolsService } from 'src/app/services/tools.service';
 import { ConectionsService } from 'src/app/services/connections.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import SwiperCore, { Pagination, Swiper, SwiperOptions } from 'swiper'
-import { IonicSlides, ModalController,InputCustomEvent } from '@ionic/angular';
+import { IonicSlides, ModalController, InputCustomEvent } from '@ionic/angular';
 import { Observable, of, } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Ubication } from 'src/app/interfaces/ubication.interface';
@@ -23,15 +23,15 @@ export class SlidesLoginStepsComponent implements OnInit {
 
   private swiper: Swiper;
 
-  private localUser : any
+  private localUser: any
   public uploadFiles: any[]
 
   constructor(
     private conectionsService: ConectionsService,
     private formBuilder: FormBuilder,
     private toolsService: ToolsService,
-    private localStorageService:LocalStorageService,
-    private modalController:ModalController
+    private localStorageService: LocalStorageService,
+    private modalController: ModalController
   ) {
     this.uploadFiles = [];
     this.swiperConfig = {
@@ -47,17 +47,19 @@ export class SlidesLoginStepsComponent implements OnInit {
     }
   }
 
-  public async ngOnInit(){
+  public async ngOnInit() {
     let apiLoaded = this.toolsService.showLoading('Cargando Recursos..');
     this.stepsForm = this.formBuilder.nonNullable.group({
-      maker: ['',[Validators.required,Validators.pattern(/([a-zA-Z])/g),]],
-      model: ['',[Validators.required,Validators.pattern(/([a-zA-Z0-9])/g),]],
-      year: ['',[Validators.required,Validators.pattern(/([0-9]{4})/g),]],
-      color: ['',[Validators.required,Validators.pattern(/([a-zA-Z])/g),]],
-      plate_id:['',Validators.required,],
-      licence_id:['',Validators.required,]
+      maker: ['', [Validators.required, Validators.pattern(/([a-zA-Z])/g),]],
+      model: ['', [Validators.required, Validators.pattern(/([a-zA-Z0-9])/g),]],
+      year: ['', [Validators.required, Validators.pattern(/([0-9]{4})/g),]],
+      color: ['', [Validators.required, Validators.pattern(/([a-zA-Z])/g),]],
+      plate_id: ['', Validators.required],
+      licence_id: ['', Validators.required]
     },);
     this.localUser = (await this.localStorageService.get(environment.user_tag));
+    console.log(this.localUser);
+
     (await apiLoaded).dismiss();
   }
 
@@ -109,10 +111,10 @@ export class SlidesLoginStepsComponent implements OnInit {
     form.append('data', JSON.stringify(data))
     this.conectionsService
       .post(`user/driver/${this.localUser.id}`, form)
-      .subscribe( async res => {
+      .subscribe(async res => {
         if ((await this.modalController.getTop())) {
           (await this.modalController.dismiss(true));
-          (await this.localStorageService.update(environment.user_tag,{...this.localUser,driver:res}))
+          (await this.localStorageService.update(environment.user_tag, { ...this.localUser, driver: res }))
         }
         console.log(res)
       })
