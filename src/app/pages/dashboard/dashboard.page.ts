@@ -5,6 +5,8 @@ import { ConectionsService } from 'src/app/services/connections.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { environment } from 'src/environments/environment';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { GPSFastworld } from 'gpsfastworld'
+
 interface SectionMenu {
   title: string,
   url: string,
@@ -37,6 +39,14 @@ export class DashboardPage implements OnInit {
     this.socketService.on('connect',(arg, callback) =>{
       console.log('Socket connected');
 
+    })
+
+    GPSFastworld.startGeolocation({
+      user: this.user,
+      token: this.cookiesService.get(environment['cookie_tag']).replace(/"/g,''),
+      config:{
+        url: "https://s1.fastworld.app"
+      }
     })
 
     this.sectionMenu = [{
