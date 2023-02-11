@@ -3,8 +3,6 @@
 
 /** Ionic CSS Variables **/
 :root {
-
-  
   /** cupertino dark **/
   --cupertino-pane-icon-close-color: #a8a7ae;
   --cupertino-pane-background: #1c1c1d;
@@ -18,7 +16,7 @@
   --custom-color-warn: rgb(205, 150, 10);
   --custom-color-danger: rgb(190, 45, 45);
   --custom-color-success: rgb(35, 170, 35);
-  
+
   /** orange **/
   --ion-color-orange: #CB6120;
   --ion-color-orange-rgb: 203,97,32;
@@ -107,7 +105,7 @@
   --ion-color-contrast-rgb: var(--ion-color-orange-contrast-rgb);
   --ion-color-shade: var(--ion-color-orange-shade);
   --ion-color-tint: var(--ion-color-orange-tint);
-} 
+}
 
 
 /*

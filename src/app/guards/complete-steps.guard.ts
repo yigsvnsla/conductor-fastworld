@@ -30,13 +30,13 @@ export class CompleteStepsGuard implements CanActivate {
         .get(environment['user_tag'])
         .then(userStoraged => {
           this.conectionsService
-            .get(`user/driver/${userStoraged.id}?populate=*`)
+            /* .get(`user/driver/${userStoraged.id}?populate=*`) */
+            .get(`driver/user/me`)
             .subscribe(
               async (res: any) => {
-                const business = res;
-                const basic = res.basic;
-                delete business.basic;
-                (await this.localStorageService.update(environment.user_tag, { ...basic, business: business }))
+                /* let business = {...res.driver};
+                delete res['driver']; */
+                (await this.localStorageService.update(environment.user_tag,  res))
                 resolve(true)
               },
               async (err: HttpErrorResponse) => {

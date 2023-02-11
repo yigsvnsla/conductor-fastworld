@@ -60,7 +60,7 @@ export class PerfilComponent implements OnInit {
           header: 'Membrecia',
           buttons: ['Cancelar', { text: 'Aceptar', handler: () => send  }]
         })
-    
+
       }
 
     private instanceForm(data: any) {
@@ -72,7 +72,7 @@ export class PerfilComponent implements OnInit {
             color:[data.driver.color,[Validators.required]],
             maker:[data.driver.maker,[Validators.required]],
             model:[data.driver.model,[Validators.required]],
-            year:[data.driver.year,[Validators.required]]            
+            year:[data.driver.year,[Validators.required]]
         })
 
         this.formDriver.disable()
@@ -89,7 +89,7 @@ export class PerfilComponent implements OnInit {
                         if (val != '') {
                             // if ( val.length == 9 ) this.formBasic.get('documents').get('type').setValue('dni');
                             // if ( val.length == 13 ) this.formBasic.get('documents').get('type').setValue('ruc');
-                            if (!(RegExp(/(^\d{9}$|^\d{13}$)/).test(val))) this.formBasic.get('documents').get('type').reset();
+                            // if (!(RegExp(/(^\d{9}$|^\d{13}$)/).test(val))) this.formBasic.get('documents').get('type').reset();
                             return null
                         }
                     }
@@ -111,7 +111,7 @@ export class PerfilComponent implements OnInit {
             ]],
             user: this.formBuilder.nonNullable.group({
                 password: [null, [Validators.required, Validators.nullValidator]],
-                mail: [data.user?.email, [
+                mail: [data.mail, [
                     Validators.required,
                     Validators.nullValidator,
                     Validators.email,
