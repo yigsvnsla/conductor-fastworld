@@ -81,7 +81,10 @@ export class DashboardPage implements OnInit {
       cssClass: 'alert-danger',
       header: '🛑 Cerrar Sesion',
       subHeader: '¿Desea cerrar su sesion actual?',
-      buttons: ['Cancelar', { text: 'Aceptar', handler: () => { this.conectionsService.logOut() } }]
+      buttons: ['Cancelar', { text: 'Aceptar', handler: () => {
+        this.conectionsService.logOut()
+        GPSFastworld.stopGeolocation();
+       } }]
     })
   }
 
