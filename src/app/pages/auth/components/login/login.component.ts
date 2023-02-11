@@ -5,11 +5,9 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonItemGroup } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { debounceTime, delay, tap } from 'rxjs/operators';
 import { Route, Router } from '@angular/router';
 import { CookiesService } from 'src/app/services/cookies.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -28,7 +26,7 @@ export class LoginComponent implements OnInit {
     private cookiesService: CookiesService,
     private localStorageService:LocalStorageService
 
-  ) { 
+  ) {
     this.loading = false
   }
 
@@ -58,7 +56,7 @@ export class LoginComponent implements OnInit {
     if ( !this.formLogin['valid'] ) {
       // intentamos buscar los elementos hijos del formRef desde el template
       for (const key in this.formLoginRef["el"].children) {
-        // validamos que dicha propiedad exista 
+        // validamos que dicha propiedad exista
         if (Object.prototype.hasOwnProperty.call(this.formLoginRef["el"].children, key)) {
           // hacemos scope a los "ion-items, para buscar en sus propiedades hijas los inputs"
           if (this.formLoginRef["el"].children[key].localName == 'ion-item') {
@@ -66,7 +64,7 @@ export class LoginComponent implements OnInit {
             for (const cKey in this.formLoginRef["el"].children[key].children) {
               // validamos que las propiedades exista
               if (Object.prototype.hasOwnProperty.call(this.formLoginRef["el"].children[key].children, cKey)) {
-                // hacemos scope a los inputs 
+                // hacemos scope a los inputs
                 if (this.formLoginRef["el"].children[key].children[cKey].localName == 'ion-input') {
                   // si el valor valor es vacio...
                   if ((this.formLoginRef["el"].children[key].children[cKey] as HTMLIonInputElement).value == '') {
@@ -88,7 +86,7 @@ export class LoginComponent implements OnInit {
   onLogin() {
     this.loading = true
     this.conectionsService.signIn(this.formLogin['value'])
-      .subscribe((response)=>{        
+      .subscribe((response)=>{
         // this.router.navigateByUrl('dashboard');
       },(error)=>{
         console.error(error);

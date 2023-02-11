@@ -22,8 +22,7 @@ export class SocketService extends Socket {
     });
   }
 
-
-  public set setAuth(token: string) {        
+  public set setAuth(token: string) {
     this.ioSocket.auth={token: token }
   }
 
