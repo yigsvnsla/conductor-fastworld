@@ -139,7 +139,7 @@ export class ConectionsService {
           (await this.localStorageService.remove(environment['user_tag']));
 
           // temp
-          const foundUser = (await this.get(`client/user/me`).toPromise() as any)
+          const foundUser = (await this.get(`driver/user/me`).toPromise() as any)
           //
           await this.localStorageService.set(environment['user_tag'], foundUser);
           this.router.navigateByUrl('dashboard');

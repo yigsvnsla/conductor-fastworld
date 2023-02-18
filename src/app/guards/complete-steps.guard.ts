@@ -48,7 +48,7 @@ export class CompleteStepsGuard implements CanActivate {
           console.log(modal);
           const { data, role } = await modal.onWillDismiss();
           if (data) resolve(true);
-          else this.router.navigateByUrl('auth'); resolve(false);
+          else this.router.navigateByUrl('auth', {replaceUrl: true}); resolve(false);
 
           //  else {
           //   this.router.navigateByUrl('auth')

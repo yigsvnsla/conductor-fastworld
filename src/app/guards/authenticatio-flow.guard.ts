@@ -8,28 +8,32 @@ import { LocalStorageService } from '../services/local-storage.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AutoLoginGuard implements CanActivate {
+export class AuthenticatioFlowGuard implements CanActivate {
 
   constructor(
-    private localStorageService:LocalStorageService,
-    private router:Router,
-    private cookieService:CookiesService
-  ){
+    private localStorageService: LocalStorageService,
+    private router: Router,
+    private cookieService: CookiesService
+  ) {
 
   }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      return new Promise<boolean>( async (resolve, reject) => {
+    return new Promise<boolean>(async (resolve, reject) => {
 
-        const checkUser = (await this.localStorageService.check(environment['user_tag']))
-        const checkCookie = this.cookieService.check(environment.cookie_tag)
+      const checkUser = (await this.localStorageService.check(environment['user_tag']))
+      const checkCookie = this.cookieService.check(environment.cookie_tag)
 
-        if ( checkUser && checkCookie) resolve(true);
-        else  this.router.navigateByUrl('auth', {replaceUrl: true}); reject(false);
-
-      })
+      if (checkUser && checkCookie) {
+        reject(false);
+        this.router.navigateByUrl('dashboard', {replaceUrl: true})
+      }
+      else {
+        resolve(true)
+      }
+    })
   }
 
 }
