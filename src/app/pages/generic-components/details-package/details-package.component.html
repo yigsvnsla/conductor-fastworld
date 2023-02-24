@@ -119,7 +119,7 @@
                           <ion-icon style="margin: 8px" name="footsteps"></ion-icon>
                           <ion-text color="orange">Indicaciones</ion-text>
                         </p>
-                        <h2>{{item.attributes.location.description}}</h2>
+                        <h2>{{item.attributes.location.description || 'Sin descripción'}}</h2>
                       </ion-label>
                     </ion-item>
                   </ion-col>
@@ -146,7 +146,7 @@
                             <ion-icon style="margin: 8px" name="footsteps"></ion-icon>
                             <ion-text color="orange">Indicaciones</ion-text>
                           </p>
-                          <h2>{{item.attributes.receiver.direction.description}}</h2>
+                          <h2>{{item.attributes.receiver.description || 'Sin descripción'}}</h2>
                         </ion-label>
                       </ion-item>
                     </ng-container>

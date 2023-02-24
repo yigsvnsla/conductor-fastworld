@@ -76,14 +76,20 @@ export class ActivasEncomiendasComponent implements OnInit {
       const condition = (product.data.attributes.shipping_status == 'aceptado' || product.data.attributes.shipping_status == 'pendiente')
       console.log(product);
 
-      if (product.data.attributes.shipping_status == 'aceptado') {
-        this.source.addItemToSource(product.data)
+      if (product.data.attributes.shipping_status == 'entregado') {
+        this.source.deleteItemToSource(product.data.id)
         return
       }
-      if (product.data.attributes.shipping_status != 'aceptado'){
-        // this.source.updateItemToSource()
-        this.source.deleteItemToSource(product.data.id)
-      }
+
+      /* if (product.data.attributes.shipping_status == 'aceptado') {
+        this.source.addItemToSource(product.data)
+        return
+      } */
+      this.source.addItemToSource(product.data)
+
+
+      //this.source.updateItemToSource()
+
 
       // if (!condition) {
       //

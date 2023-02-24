@@ -8,7 +8,7 @@
       <ion-button  [hidden]="searchInput.value == '' " (click)="searchInput.value = ''" expand="block" fill="clear" shape="round">
         <ion-icon color="orange" slot="icon-only" name="close"></ion-icon>
       </ion-button>
-    </ion-item> 
+    </ion-item>
     <ion-buttons slot="end">
       <ion-menu-button menu="menu-historial"></ion-menu-button>
     </ion-buttons>
@@ -39,7 +39,7 @@
       </ion-item>
     </ion-item-group>
 
-    <ion-item-group class="ion-text-center"> 
+    <ion-item-group class="ion-text-center">
       <ion-item-divider>
         <ion-label>Seleccionar rango de busqueda </ion-label>
       </ion-item-divider>
@@ -137,9 +137,9 @@
             <ion-label>
               <p style="display: flex; align-items: center;" class="ion-text-wrap">
                 <ion-icon style="margin: 6px;" name="person"></ion-icon>
-                <ion-text> Cliente</ion-text>
+                <ion-text>Empresa</ion-text>
               </p>
-              <h4>Jesus Augusto Guzman Martinez</h4>
+              <h4>{{(item.attributes.sender.data.attributes.business.data.attributes.name | titlecase) }}</h4>
             </ion-label>
               <ion-fab-button href="tel:{{item.attributes.receiver.phone}}" size="small">
                 <ion-icon name="call"></ion-icon>
