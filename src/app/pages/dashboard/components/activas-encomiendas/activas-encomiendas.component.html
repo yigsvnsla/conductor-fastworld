@@ -269,10 +269,10 @@
 
                   <ion-item>
                     <ion-icon slot="start" name="person"></ion-icon>
-                    <!-- <ng-container *ngIf="item.attributes.sender.data != null; else notSender">
+                    <ng-container *ngIf="item.attributes.sender.data != null; else notSender">
                       <ion-label>
                         <p>Usuario</p>
-                        <h4>{{(item.attributes.sender.data.attributes.business.name | titlecase) }}</h4>
+                        <h4>{{(item.attributes.sender.data.attributes.business.data.attributes.name | titlecase) }}</h4>
                       </ion-label>
                       <ion-fab-button href="tel:{{item.attributes.sender.data.attributes.phone}}" size="small">
                         <ion-icon name="call"></ion-icon>
@@ -286,7 +286,7 @@
                         <p>Usuario</p>
                         <h4>Esperando confirmnación</h4>
                       </ion-label>
-                    </ng-template> -->
+                    </ng-template>
                   </ion-item>
                   <ion-item>
                     <ion-icon slot="start" name="person"></ion-icon>

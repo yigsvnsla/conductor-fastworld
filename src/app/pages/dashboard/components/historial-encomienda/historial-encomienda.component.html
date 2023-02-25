@@ -137,9 +137,9 @@
             <ion-label>
               <p style="display: flex; align-items: center;" class="ion-text-wrap">
                 <ion-icon style="margin: 6px;" name="person"></ion-icon>
-                <ion-text> Cliente</ion-text>
+                <ion-text>Empresa</ion-text>
               </p>
-              <h4>{{item.attributes.receiver.name}}</h4>
+              <h4>{{(item.attributes.sender.data.attributes.business.data.attributes.name | titlecase) }}</h4>
             </ion-label>
               <ion-fab-button href="tel:{{item.attributes.receiver.phone}}" size="small">
                 <ion-icon name="call"></ion-icon>
@@ -189,7 +189,7 @@
                           <ion-icon name="logo-usd"></ion-icon>
                           <ion-text color="orange">Valor de encomienda</ion-text>
                         </p>
-                        <h2>{{ (item.attributes.money_catch | currency) }}</h2>
+                        <h2>{{ (item.attributes.value | currency) }}</h2>
                       </ion-label>
                     </ion-item>
                   </ion-col>
