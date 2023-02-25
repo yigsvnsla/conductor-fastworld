@@ -5,7 +5,7 @@ import { ConectionsService } from 'src/app/services/connections.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { environment } from 'src/environments/environment';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { GPSFastworld } from 'gpsfastworld'
+import { GPSFastworld } from '@manjorstreep/gpsfastworld'
 
 interface SectionMenu {
   title: string,
