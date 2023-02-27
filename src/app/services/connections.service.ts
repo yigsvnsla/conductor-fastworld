@@ -292,7 +292,7 @@ export class ConectionsService {
 
 export class Source extends DataSource<any | undefined>{
   public source: any[] = Array.from<any>({ length: 0 });
-  private itemsChanges$: BehaviorSubject<any>
+  public itemsChanges$: BehaviorSubject<any>
   private destroy$: Subject<boolean> = new Subject();
 
   private path: string

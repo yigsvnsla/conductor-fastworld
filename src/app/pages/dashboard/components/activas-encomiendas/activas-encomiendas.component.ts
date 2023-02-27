@@ -73,27 +73,22 @@ export class ActivasEncomiendasComponent implements OnInit {
     // })
 
     this.socketService.on('product-updated', (product: any | any[]) => {
-      const condition = (product.data.attributes.shipping_status == 'aceptado' || product.data.attributes.shipping_status == 'pendiente')
-      console.log(product);
-
-      if (product.data.attributes.shipping_status == 'entregado') {
-        this.source.deleteItemToSource(product.data.id)
-        return
-      }
-
-      /* if (product.data.attributes.shipping_status == 'aceptado') {
-        this.source.addItemToSource(product.data)
-        return
-      } */
-      this.source.addItemToSource(product.data)
-
-
-      //this.source.updateItemToSource()
-
-
-      // if (!condition) {
-      //
-      // }
+      let _id = product.data.id
+      let tempArr = this.source.itemsChanges$.value.map((value, index, arr) => {
+        let _refValue: any = value
+        if ( _refValue.id == _id ) {
+          if (product.data.attributes.shipping_status != 'pendiente'){
+            // delete
+            _refValue = product.data
+          }
+          if (product.data.attributes.shipping_status == 'pendiente'){
+            // add
+            _refValue = value
+          }
+        }
+        return _refValue
+      })
+      this.source.itemsChanges$.next([...tempArr])
     })
 
   }

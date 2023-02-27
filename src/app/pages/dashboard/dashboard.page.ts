@@ -5,7 +5,7 @@ import { ConectionsService } from 'src/app/services/connections.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { environment } from 'src/environments/environment';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { GPSFastworld } from '@manjorstreep/gpsfastworld'
+// import { GPSFastworld } from '@manjorstreep/gpsfastworld'
 
 interface SectionMenu {
   title: string,
@@ -41,13 +41,13 @@ export class DashboardPage implements OnInit {
 
     })
 
-    GPSFastworld.startGeolocation({
-      user: this.user,
-      token: this.cookiesService.get(environment['cookie_tag']).replace(/"/g,''),
-      config:{
-        url: "https://s1.fastworld.app"
-      }
-    })
+    // GPSFastworld.startGeolocation({
+    //   user: this.user,
+    //   token: this.cookiesService.get(environment['cookie_tag']).replace(/"/g,''),
+    //   config:{
+    //     url: "https://s1.fastworld.app"
+    //   }
+    // })
 
     this.sectionMenu = [{
       title: 'Encomiendas',
@@ -83,7 +83,7 @@ export class DashboardPage implements OnInit {
       subHeader: '¿Desea cerrar su sesion actual?',
       buttons: ['Cancelar', { text: 'Aceptar', handler: () => {
         this.conectionsService.logOut()
-        GPSFastworld.stopGeolocation();
+        // GPSFastworld.stopGeolocation();
        } }]
     })
   }
