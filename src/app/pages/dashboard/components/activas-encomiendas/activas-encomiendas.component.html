@@ -27,8 +27,32 @@
             <ion-icon name="cash"></ion-icon>
             <ion-label>Cobrar: {{(item.attributes.value | currency )}}</ion-label>
           </ion-chip>
+          <!-- <ion-chip color="	primary" mode="ios" outline="true">
+            <ion-icon name="pin"></ion-icon>
+            <ion-label>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate optio exercitationem, iure omnis fugit nesciunt vel non dolores aut voluptatum veniam! Obcaecati laboriosam ullam nisi qui dolore tempore voluptates sunt?</ion-label>
+          </ion-chip> -->
         </ion-item>
-
+        <ion-item>
+          <ion-icon slot="start" name="person"></ion-icon>
+          <ng-container *ngIf="item.attributes.sender.data != null; else notSender">
+            <ion-label>
+              <p>Proveedor</p>
+              <h4>{{(item.attributes.sender.data.attributes.business.data.attributes.name | titlecase) }}</h4>
+            </ion-label>
+            <!-- <ion-fab-button href="tel:{{item.attributes.sender.data.attributes.phone}}" size="small">
+              <ion-icon name="call"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + item.attributes.sender.data.attributes.phone.replace('+','')" target="_blank" rel="noopener noreferrer" color="success" size="small">
+              <ion-icon name="logo-whatsapp"></ion-icon>
+            </ion-fab-button> -->
+          </ng-container>
+          <ng-template #notSender>
+            <ion-label>
+              <p>Proveedor</p>
+              <h4>Esperando confirmnación</h4>
+            </ion-label>
+          </ng-template>
+        </ion-item>
         <ion-grid fixed>
           <ion-row>
             <ion-col size="6">
@@ -207,11 +231,19 @@
                   </ion-buttons>
                 </ion-toolbar>
                 <ion-item-group>
-                  <ion-chip color="success" mode="ios" outline="true">
-                    <ion-icon name="cash"></ion-icon>
-                    <ion-label>Cobrar: {{(item.attributes.value | currency )}}</ion-label>
-                  </ion-chip>
-                  <ion-grid class="ion-no-padding">
+                  <ion-item-divider>
+                    <ion-label>Informacion General</ion-label>
+                    <ion-chip style="margin-right: 16px;" slot="end" color="success" mode="ios" outline="true">
+                      <ion-icon name="cash"></ion-icon>
+                      <ion-label>Cobrar: {{(item.attributes.value | currency )}}</ion-label>
+                    </ion-chip>
+                  </ion-item-divider>
+                  <!-- <ion-chip color="	primary" mode="ios" outline="true">
+                    <ion-icon name="pin"></ion-icon>
+                    <ion-label>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate optio exercitationem, iure omnis fugit nesciunt vel non dolores aut voluptatum veniam! Obcaecati laboriosam ullam nisi qui dolore tempore voluptates sunt?</ion-label>
+                  </ion-chip> -->
+
+                  <ion-grid >
                     <ion-row>
                       <ion-col size="6">
                         <ion-item lines="none">
@@ -224,10 +256,16 @@
                       <ion-col size="6">
                         <ion-item lines="none">
                           <ion-label>
+                            <p>Tiempo de Retiro:</p>
+                            <h2>{{(item.attributes.pickup | date:'short') || 'Esperando Confirmación'}}</h2>
+                          </ion-label>
+                        </ion-item>
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-item >
+                          <ion-label>
                             <p>
-                              <ion-text color="orange">
-                                <ion-icon name="flag"></ion-icon> Estado
-                              </ion-text>
+                              <ion-text color="orange">Estado </ion-text>
                             </p>
                             <h2 [ngSwitch]="item.attributes.shipping_status">
                               <ion-text *ngSwitchCase="'aceptado'" color="tertiary">
@@ -255,25 +293,16 @@
                           </ion-label>
                         </ion-item>
                       </ion-col>
-                    </ion-row>
-                    <ion-row>
                       <ion-col size="6">
-                        <ion-item lines="none">
-                          <ion-label>
-                            <p>Tiempo de Retiro:</p>
-                            <h2>{{(item.attributes.pickup | date:'short') || 'Esperando Confirmación'}}</h2>
-                          </ion-label>
-                        </ion-item>
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-item lines="none">
+                        <ion-item >
                           <ion-label>
                             <p>Tipo de Encomienda</p>
-                            <h2 style="color: var(--ion-color-orange);">{{ (item.attributes.category |titlecase) }}</h2>
+                            <h2 style="color: var(--ion-color-orange);"><p>{{ (item.attributes.category |titlecase) }}</p></h2>
                           </ion-label>
                         </ion-item>
                       </ion-col>
                     </ion-row>
+
                   </ion-grid>
 
                   <ion-item>
@@ -318,9 +347,16 @@
                       </ion-label>
                     </ng-template>
                   </ion-item>
+
                   <ion-item-divider>
-                    <ion-label>Información de </ion-label>
+                    <ion-label>Información de Retiro</ion-label>
                   </ion-item-divider>
+                  <ion-item>
+                    <ion-label>
+                      <p>Manzana/villa/ casa | apartamento</p>
+                      <h2>sin especificar</h2>
+                    </ion-label>
+                  </ion-item>
                   <ion-item button [href]="'https://maps.google.com/?q=' + item.attributes.location.position.lat + ',' + item.attributes.location.position.lng" target="_blank" rel="noreferrer external">
                     <ion-label class="ion-text-wrap">
                       <p>Dirección de Retiro</p>
@@ -331,6 +367,7 @@
                     </ion-label>
                     <ion-icon slot="start" name="map"></ion-icon>
                   </ion-item>
+
                   <ion-item-divider>
                     <ion-label>Indicaciones de Entrega</ion-label>
                   </ion-item-divider>

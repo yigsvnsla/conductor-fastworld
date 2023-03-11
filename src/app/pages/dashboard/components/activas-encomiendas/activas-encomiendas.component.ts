@@ -90,7 +90,6 @@ export class ActivasEncomiendasComponent implements OnInit {
       })
       this.source.itemsChanges$.next([...tempArr])
     })
-
   }
 
   ionViewDidEnter() {
