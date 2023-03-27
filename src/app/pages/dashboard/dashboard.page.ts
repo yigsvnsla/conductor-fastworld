@@ -5,7 +5,7 @@ import { ConectionsService } from 'src/app/services/connections.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { environment } from 'src/environments/environment';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-// import { GPSFastworld } from '@manjorstreep/gpsfastworld'
+import { GPSFastworld } from '@manjorstreep/gpsfastworld'
 
 interface SectionMenu {
   title: string,
@@ -25,29 +25,29 @@ export class DashboardPage implements OnInit {
   constructor(
     private toolsService: ToolsService,
     private conectionsService: ConectionsService,
-    private socketService:SocketService,
-    private cookiesService:CookiesService,
-    private localStorageService:LocalStorageService
+    private socketService: SocketService,
+    private cookiesService: CookiesService,
+    private localStorageService: LocalStorageService
 
   ) { }
   async ngOnInit() {
-    this.user =  await this.localStorageService.get(environment['user_tag'])
+    this.user = await this.localStorageService.get(environment['user_tag'])
 
-    this.socketService.setAuth = this.cookiesService.get(environment['cookie_tag']).replace(/"/g,'')
+    this.socketService.setAuth = this.cookiesService.get(environment['cookie_tag']).replace(/"/g, '')
     this.socketService.connect()
 
-    this.socketService.on('connect',(arg, callback) =>{
+    this.socketService.on('connect', (arg, callback) => {
       console.log('Socket connected');
 
     })
 
-    // GPSFastworld.startGeolocation({
-    //   user: this.user,
-    //   token: this.cookiesService.get(environment['cookie_tag']).replace(/"/g,''),
-    //   config:{
-    //     url: "https://s1.fastworld.app"
-    //   }
-    // })
+    GPSFastworld.startGeolocation({
+      user: this.user,
+      token: this.cookiesService.get(environment['cookie_tag']).replace(/"/g, ''),
+      config: {
+        url: "https://s1.fastworld.app"
+      }
+    })
 
     this.sectionMenu = [{
       title: 'Encomiendas',
@@ -64,11 +64,11 @@ export class DashboardPage implements OnInit {
         title: 'Historial',
         url: 'historial',
         icon: 'list',
-      },{
+      }, {
         title: 'Perfil',
         url: 'perfil',
         icon: 'person',
-      },{
+      }, {
         title: 'Reportes',
         url: 'reportes',
         icon: 'bar-chart',
@@ -81,10 +81,12 @@ export class DashboardPage implements OnInit {
       cssClass: 'alert-danger',
       header: '🛑 Cerrar Sesion',
       subHeader: '¿Desea cerrar su sesion actual?',
-      buttons: ['Cancelar', { text: 'Aceptar', handler: () => {
-        this.conectionsService.logOut()
-        // GPSFastworld.stopGeolocation();
-       } }]
+      buttons: ['Cancelar', {
+        text: 'Aceptar', handler: () => {
+          this.conectionsService.logOut()
+           GPSFastworld.stopGeolocation();
+        }
+      }]
     })
   }
 

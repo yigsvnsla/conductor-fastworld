@@ -60,6 +60,11 @@ export class ConectionsService {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
 
+      if (httpErrorResponse.status) {
+        this.logOut()
+        return throwError(httpErrorResponse);
+      }
+
       console.error(
         `Backend returned code ${httpErrorResponse.status},
         body was: ${JSON.stringify(httpErrorResponse.error)}`
@@ -240,17 +245,17 @@ export class ConectionsService {
 
   public postStream(path: string, obj) {
     return this.httpClient
-        .post(`${this.api}/${path}`,obj, {
-            headers: {
-              'Authorization': `Bearer ${(this.cookiesService.get(environment['cookie_tag']))}`
-            },
-            responseType: 'arraybuffer'
-        })
-        .pipe(
-            retry(2),
-            catchError((err) => this.errorHandler(err))
-        )
-}
+      .post(`${this.api}/${path}`, obj, {
+        headers: {
+          'Authorization': `Bearer ${(this.cookiesService.get(environment['cookie_tag']))}`
+        },
+        responseType: 'arraybuffer'
+      })
+      .pipe(
+        retry(2),
+        catchError((err) => this.errorHandler(err))
+      )
+  }
 
   public geolocation(geolocationCallback: (x: GeolocationPosition | undefined) => any) {
     if (navigator.geolocation) {
@@ -359,25 +364,25 @@ export class Source extends DataSource<any | undefined>{
     return -1;
   }
 
-  public async updateItemToSource(id:number,value:any){
+  public async updateItemToSource(id: number, value: any) {
     let index = await this.binarySearch(this.source, id);
     this.source[index] = value
     this.itemsChanges$.next(this.source)
   }
 
-  public varRef:any = {}
+  public varRef: any = {}
 
   // encolar
   public async addItemToSource(item?: any) {
     // this.varRef.id = this.varRef.id + 1;
-    this.source.unshift({...item})
+    this.source.unshift({ ...item })
     this.itemsChanges$.next(this.source)
   }
 
   // desencolar :check:
-  public async deleteItemToSource(id: number, index?:number) {
+  public async deleteItemToSource(id: number, index?: number) {
     let find = await this.binarySearch(this.source, id);
-    let substract = this.source.splice(index?index:find, 1);
+    let substract = this.source.splice(index ? index : find, 1);
     if (id == -1 && !substract.length) console.error('error update source');
     this.itemsChanges$.next(this.source)
   }
@@ -389,7 +394,7 @@ export class Source extends DataSource<any | undefined>{
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
     this.source.splice(page * pageSize, pageSize, ...data);
-    this.varRef = {...data[0]}
+    this.varRef = { ...data[0] }
     // console.log(this.varRef);
     // console.log(data);
 
@@ -422,7 +427,7 @@ export class Source extends DataSource<any | undefined>{
  * @author Yigsvnsla <https://github.com/yigsvnsla>
  * @version 0.1
  */
- export class Queue<T extends { [key: string]: any }> {
+export class Queue<T extends { [key: string]: any }> {
   /**
    * @protected  Array donde se almaceran los objetos para la cola
    */
@@ -465,59 +470,59 @@ export class Source extends DataSource<any | undefined>{
    */
   constructor(_arg1: T[] | config) {
 
-      // Inicializamos los valores iniciales de la cola
-      this._queue = []
-      this._front = 0
-      this._rear = 0
-      this._length = 0
-      // si es un arreglo usa una funcion propia para meter a la cola cada elemento
-      if (Array.isArray(_arg1)) {
-          this._length = undefined
-          this.enqueue('front', _arg1)
-      }
-      // en caso contrario si es un objeto de configuracion
-      // establece los valores del mismo
-      else if (!Array.isArray(_arg1) && typeof _arg1 == 'object') {
-          this._length = _arg1.length
-          this._queue = Array.from({ length: (_arg1.length != null) ? _arg1.length : 0 })
-      }
+    // Inicializamos los valores iniciales de la cola
+    this._queue = []
+    this._front = 0
+    this._rear = 0
+    this._length = 0
+    // si es un arreglo usa una funcion propia para meter a la cola cada elemento
+    if (Array.isArray(_arg1)) {
+      this._length = undefined
+      this.enqueue('front', _arg1)
+    }
+    // en caso contrario si es un objeto de configuracion
+    // establece los valores del mismo
+    else if (!Array.isArray(_arg1) && typeof _arg1 == 'object') {
+      this._length = _arg1.length
+      this._queue = Array.from({ length: (_arg1.length != null) ? _arg1.length : 0 })
+    }
   }
 
   /**
    * @return {T} Obtiene el elemento al principio de la cola sin eliminarlo
    */
   public get peek(): T {
-      return this._queue[this._front]
+    return this._queue[this._front]
   }
 
   /**
    * @returns {T[]} Obtener inmutable de la cola
    */
   public get values(): T[] {
-      return this._queue
+    return this._queue
   }
 
   /**
    * @returns {number} Obtener largo de la cola
    */
   public get size(): number | undefined {
-      return this._length
+    return this._length
   }
 
   /**
    * @param {T} _data Meter al final de la cola
    */
   private set _rearEnqueue(_data: T) {
-      this._queue[this._rear] = _data;
-      this._rear += 1
+    this._queue[this._rear] = _data;
+    this._rear += 1
   }
 
   /**
    * @param {T} _data Meter al inicio de la cola
    */
   private set _frontEnqueue(_data: T) {
-      this._queue[this._rear] = _data;
-      this._rear += 1
+    this._queue[this._rear] = _data;
+    this._rear += 1
   }
 
   /**
@@ -525,10 +530,10 @@ export class Source extends DataSource<any | undefined>{
    * @returns {T} extrae y elimina el elemento del puntero _front_
    */
   private get _frontDequeue(): T {
-      const data = this._queue[this._front]
-      delete this._queue[this._front]
-      this._front += 1
-      return data
+    const data = this._queue[this._front]
+    delete this._queue[this._front]
+    this._front += 1
+    return data
   }
 
   /**
@@ -536,17 +541,17 @@ export class Source extends DataSource<any | undefined>{
    * @returns {T} extrae y elimina el elemento del puntero _rear_
    */
   private get _rearDequeue(): T {
-      const data = this._queue[this._rear - 1]
-      delete this._queue[this._rear - 1]
-      this._rear -= 1
-      return data
+    const data = this._queue[this._rear - 1]
+    delete this._queue[this._rear - 1]
+    this._rear -= 1
+    return data
   }
 
   /**
    * @returns {T} Obtiene una referencia inmutable del elemento a salir de la cola
    */
   public peekByIndex(number: number): T {
-      return this._queue[number]
+    return this._queue[number]
   }
 
   /**
@@ -555,10 +560,10 @@ export class Source extends DataSource<any | undefined>{
    * @returns {T} extrae y elimina el elemento del puntero _front_
    */
   public dequeueByIndex(index: number): T {
-      const data = this._queue[index]
-      delete this._queue[index]
-      this._rear -= 1
-      return data
+    const data = this._queue[index]
+    delete this._queue[index]
+    this._rear -= 1
+    return data
   }
 
   /**
@@ -584,19 +589,19 @@ export class Source extends DataSource<any | undefined>{
    *
    */
   public enqueue(position: 'rear' | 'front', data: T | T[]): void {
-      try {
-          if (this.isfull()) throw new Error(`<enqueue> Cola llena, intento de desbordamiento \n <value> ${data}`);
-          if (position == 'front') {
-              if (Array.isArray(data)) { data.forEach((value) => this._frontEnqueue = value); return }
-              if (!Array.isArray(data)) { this._frontEnqueue = data; return }
-          }
-          if (position == 'rear') {
-              if (Array.isArray(data)) { data.forEach((value) => this._rearEnqueue = value); return }
-              if (!Array.isArray(data)) { this._rearEnqueue = data; return }
-          }
-      } catch (error) {
-          console.log(error);
+    try {
+      if (this.isfull()) throw new Error(`<enqueue> Cola llena, intento de desbordamiento \n <value> ${data}`);
+      if (position == 'front') {
+        if (Array.isArray(data)) { data.forEach((value) => this._frontEnqueue = value); return }
+        if (!Array.isArray(data)) { this._frontEnqueue = data; return }
       }
+      if (position == 'rear') {
+        if (Array.isArray(data)) { data.forEach((value) => this._rearEnqueue = value); return }
+        if (!Array.isArray(data)) { this._rearEnqueue = data; return }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   /**
@@ -609,37 +614,37 @@ export class Source extends DataSource<any | undefined>{
    * source.enqueue('rear', 5 )
   */
   public dequeue(position: 'rear' | 'front', _cant: number = 0): T | T[] | null {
-      try {
-          if (this.isempty()) throw new Error(`<enqueue> Cola Vacia, intento de subDesbordamiento`);
-          if (_cant < 0) throw new Error("cantidad de posiciones invalidas ( solo numeros positivos )");
-          if (position == 'front') {
-              if (_cant > 0) { return Array.from({ length: _cant }).map(value => this._frontDequeue) }
-              if (_cant == 0) { return this._frontDequeue }
-          }
-          if (position == 'rear') {
-              if (_cant > 0) { return Array.from({ length: _cant }).map(value => this._rearDequeue) }
-              if (_cant == 0) { return this._rearDequeue }
-          }
-      } catch (error) {
-          console.log(error);
+    try {
+      if (this.isempty()) throw new Error(`<enqueue> Cola Vacia, intento de subDesbordamiento`);
+      if (_cant < 0) throw new Error("cantidad de posiciones invalidas ( solo numeros positivos )");
+      if (position == 'front') {
+        if (_cant > 0) { return Array.from({ length: _cant }).map(value => this._frontDequeue) }
+        if (_cant == 0) { return this._frontDequeue }
       }
-      return null
+      if (position == 'rear') {
+        if (_cant > 0) { return Array.from({ length: _cant }).map(value => this._rearDequeue) }
+        if (_cant == 0) { return this._rearDequeue }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return null
   }
 
   /**
    * @returns {boolean} comprueba si la cola está llena.
    */
   public isfull(): boolean {
-      if (this._length == null) return false;
-      if (this._length != null) return (this._rear == this._length);
-      return false
+    if (this._length == null) return false;
+    if (this._length != null) return (this._rear == this._length);
+    return false
   }
 
   /**
    * @returns {boolean} comprueba si la cola está vacía.
    */
   public isempty(): boolean {
-      return ((this._rear <= 0))
+    return ((this._rear <= 0))
   }
 
   /**
@@ -648,10 +653,10 @@ export class Source extends DataSource<any | undefined>{
    * @param {T} value Vaalor a actualizar en el elemento
    */
   public updateByIndex(index: number, value: T) {
-      if (index >= 0 && index <= this._queue.length) {
-          this._queue[index] = value
-      }
-      else console.error('error upddatebyIndex')
+    if (index >= 0 && index <= this._queue.length) {
+      this._queue[index] = value
+    }
+    else console.error('error upddatebyIndex')
   }
 
   /**
@@ -684,108 +689,108 @@ export class Source extends DataSource<any | undefined>{
    *
    */
   public updateByFind(_arg1: string[] | { [key: string]: any }, updateValue: { [key: string]: any }): void {
-      try {
-          /**
-           * Función recursiva para filtrar y devolver elementos
-           * cuyas propiedades hagan match con la llave (Key) asignada como argumento
-           * @param {string} key Llave con la que hacer match
-           * @param {any[]} arr  Arreglo de objetos a filtrar
-           * @returns {any[]} Retorna un arreglo de referencias filtradas para hacer match con la _key_
-           */
-          const findToArray = (key: string, arr: any[]): any[] => {
-              //creamos una lista de referencias
-              let returned: any[] = [];
-              // iteramos sobre el argumento a filtrar
-              for (let index = 0; index < arr.length; index++) {
-                  const element = arr[index];
-                  // si este elemento existe returna un objeto
-                  // con el indice y el valor de esta posicion de la cola
-                  if (element.hasOwnProperty.call(element.value, key)) {
-                      returned.push({ index: element.index, value: element.value[key] })
-                  }
-              }
-              return returned;
+    try {
+      /**
+       * Función recursiva para filtrar y devolver elementos
+       * cuyas propiedades hagan match con la llave (Key) asignada como argumento
+       * @param {string} key Llave con la que hacer match
+       * @param {any[]} arr  Arreglo de objetos a filtrar
+       * @returns {any[]} Retorna un arreglo de referencias filtradas para hacer match con la _key_
+       */
+      const findToArray = (key: string, arr: any[]): any[] => {
+        //creamos una lista de referencias
+        let returned: any[] = [];
+        // iteramos sobre el argumento a filtrar
+        for (let index = 0; index < arr.length; index++) {
+          const element = arr[index];
+          // si este elemento existe returna un objeto
+          // con el indice y el valor de esta posicion de la cola
+          if (element.hasOwnProperty.call(element.value, key)) {
+            returned.push({ index: element.index, value: element.value[key] })
           }
+        }
+        return returned;
+      }
 
-          /**
-           * Funcion recursiva para comparar objetos de manera profunda en sus propiedades
-           * @param {{[key:string]:any}} objet_base Objeto con la cual tener una referencia
-           * @param {{[key:string]:any}} objet_compare Objeto con la cual comparar segun la referencia
-           * @returns {boolean} si encuentra una coincidencia en las propiedades retorna `true`, en caso contrario `false`
-           */
-          const compareObjets = (objet_base: { [key: string]: any }, objet_compare: { [key: string]: any }): boolean => {
-              for (let [key, val] of Object.entries(objet_base)) {
-                  // si esta propiedad existe
-                  if (objet_compare.hasOwnProperty(key)) {
-                      // si el valor de la llave en el objeto comparador es diferente
-                      if (objet_compare[key] !== val) {
-                          // si el valor de la llave es de tipo objeto,
-                          // aplicar recursividad a la funcion, asi hacemos un sondeo profundo a las propiedades
-                          if (typeof objet_compare[key] == 'object') {
-                              return compareObjets(objet_compare[key], val)
-                          }
-                          // Propiedad ${key}: El valor ${objet_compare[key]} no es equivalente a ${val}
-                          return false;
-                      }
-                  }
-                  // esta propiedad no existe en el objeto comparador;
-                  else return false;
+      /**
+       * Funcion recursiva para comparar objetos de manera profunda en sus propiedades
+       * @param {{[key:string]:any}} objet_base Objeto con la cual tener una referencia
+       * @param {{[key:string]:any}} objet_compare Objeto con la cual comparar segun la referencia
+       * @returns {boolean} si encuentra una coincidencia en las propiedades retorna `true`, en caso contrario `false`
+       */
+      const compareObjets = (objet_base: { [key: string]: any }, objet_compare: { [key: string]: any }): boolean => {
+        for (let [key, val] of Object.entries(objet_base)) {
+          // si esta propiedad existe
+          if (objet_compare.hasOwnProperty(key)) {
+            // si el valor de la llave en el objeto comparador es diferente
+            if (objet_compare[key] !== val) {
+              // si el valor de la llave es de tipo objeto,
+              // aplicar recursividad a la funcion, asi hacemos un sondeo profundo a las propiedades
+              if (typeof objet_compare[key] == 'object') {
+                return compareObjets(objet_compare[key], val)
               }
-              return true
+              // Propiedad ${key}: El valor ${objet_compare[key]} no es equivalente a ${val}
+              return false;
+            }
           }
+          // esta propiedad no existe en el objeto comparador;
+          else return false;
+        }
+        return true
+      }
 
-          // si el argumento es un arreglo, busca todos los elementos de la cola que tengan como propiedades
-          // las mismas keys asignadas en el argumento __arg1_ y actualiza su valor a los establecidos en el argumento _updateValue_
-          if (Array.isArray(_arg1)) {
-              // creamos un diccionario de referencias
-              let matchList: { [key: string]: any }[] = []
-              // volcamos el diccionario las referencias
-              for (let _indexQueue = 0; _indexQueue < this._queue.length; _indexQueue++) {
-                  const value = this._queue[_indexQueue];
-                  const index = _indexQueue;
-                  matchList.push({ index, value })
-              }
-              // iteramos sobre el argumento pasandole como parametro
-              // a la funcion `findToArray` el valor de la posicion del arreglo _(Key)_
-              // y segun lo que retorne dicha funcion se actualiza el diccionario de referencias
-              for (let _indexArg1 = 0; _indexArg1 < _arg1.length; _indexArg1++) {
-                  const key = _arg1[_indexArg1];
-                  matchList = findToArray(key, matchList);
-              }
-              // iteramos una vez mas sobre el resultado sobrante en el diccionario de referecias
-              // `matchList`, y actualizamos el elemento de la cola con la que se hicieron match
-              for (let _indexmatchList = 0; _indexmatchList < matchList.length; _indexmatchList++) {
-                  const index = matchList[_indexmatchList].index;
-                  (this._queue[index] as any) = updateValue
-              }
-          }
-          else {
-              // si el argumento no es un arreglo, pero es un objeto... busca en la cola elementos que sean
-              // iguales el argumento para luego actualizar su valor
-              if (typeof _arg1 === 'object') {
-                  // iteramos sobre la cola tomando los elementos de cada ciclo en una varaible de referencia `item`
-                  for (let _queueIndex = 0; _queueIndex < this._queue.length; _queueIndex++) {
-                      const item = this._queue[_queueIndex];
-                      // iteramos sobre cada propiedad de la referencia, para luego iterar sobre las propiedades del argumento
-                      // y asi poder pasarlos por parametro a la funcion `compareObjets`
-                      for (let [key_base, val_base] of Object.entries(_arg1)) {
-                          for (let [key_compare, val_compare] of Object.entries(item)) {
-                              if (key_base === key_compare) {
-                                  if (typeof val_base == 'object' && typeof val_compare === 'object') {
-                                      // si la funcion hace `match` actualizamos la posicion del elemento en la cola
-                                      if (compareObjets(val_base, val_compare)) {
-                                          (this._queue[_queueIndex] as any) = updateValue
-                                      }
-                                  }
-                              }
-                          }
-                      }
+      // si el argumento es un arreglo, busca todos los elementos de la cola que tengan como propiedades
+      // las mismas keys asignadas en el argumento __arg1_ y actualiza su valor a los establecidos en el argumento _updateValue_
+      if (Array.isArray(_arg1)) {
+        // creamos un diccionario de referencias
+        let matchList: { [key: string]: any }[] = []
+        // volcamos el diccionario las referencias
+        for (let _indexQueue = 0; _indexQueue < this._queue.length; _indexQueue++) {
+          const value = this._queue[_indexQueue];
+          const index = _indexQueue;
+          matchList.push({ index, value })
+        }
+        // iteramos sobre el argumento pasandole como parametro
+        // a la funcion `findToArray` el valor de la posicion del arreglo _(Key)_
+        // y segun lo que retorne dicha funcion se actualiza el diccionario de referencias
+        for (let _indexArg1 = 0; _indexArg1 < _arg1.length; _indexArg1++) {
+          const key = _arg1[_indexArg1];
+          matchList = findToArray(key, matchList);
+        }
+        // iteramos una vez mas sobre el resultado sobrante en el diccionario de referecias
+        // `matchList`, y actualizamos el elemento de la cola con la que se hicieron match
+        for (let _indexmatchList = 0; _indexmatchList < matchList.length; _indexmatchList++) {
+          const index = matchList[_indexmatchList].index;
+          (this._queue[index] as any) = updateValue
+        }
+      }
+      else {
+        // si el argumento no es un arreglo, pero es un objeto... busca en la cola elementos que sean
+        // iguales el argumento para luego actualizar su valor
+        if (typeof _arg1 === 'object') {
+          // iteramos sobre la cola tomando los elementos de cada ciclo en una varaible de referencia `item`
+          for (let _queueIndex = 0; _queueIndex < this._queue.length; _queueIndex++) {
+            const item = this._queue[_queueIndex];
+            // iteramos sobre cada propiedad de la referencia, para luego iterar sobre las propiedades del argumento
+            // y asi poder pasarlos por parametro a la funcion `compareObjets`
+            for (let [key_base, val_base] of Object.entries(_arg1)) {
+              for (let [key_compare, val_compare] of Object.entries(item)) {
+                if (key_base === key_compare) {
+                  if (typeof val_base == 'object' && typeof val_compare === 'object') {
+                    // si la funcion hace `match` actualizamos la posicion del elemento en la cola
+                    if (compareObjets(val_base, val_compare)) {
+                      (this._queue[_queueIndex] as any) = updateValue
+                    }
                   }
+                }
               }
-              else throw new Error("Tipos de datos invalidos, esta funcion solo recibe Arreglos u objetos como parametros");
-
+            }
           }
-      } catch (error) { console.error(error); }
+        }
+        else throw new Error("Tipos de datos invalidos, esta funcion solo recibe Arreglos u objetos como parametros");
+
+      }
+    } catch (error) { console.error(error); }
 
   }
 
@@ -816,115 +821,115 @@ export class Source extends DataSource<any | undefined>{
    *
    */
   public find(_arg1: string[] | { [key: string]: any }): unknown {
-      try {
-          /**
-           * Función recursiva para filtrar y devolver elementos
-           * cuyas propiedades hagan match con la llave (Key) asignada como argumento
-           * @param {string} key Llave con la que hacer match
-           * @param {any[]} arr  Arreglo de objetos a filtrar
-           * @returns {any[]} Retorna un arreglo de referencias filtradas para hacer match con la _key_
-          */
-          const findToArray = (key: string, arr: any[]): any[] => {
-              let returned: any[] = [];
-              for (let index = 0; index < arr.length; index++) {
-                  const element = arr[index];
-                  if (element.hasOwnProperty.call(element.value, key)) {
-                      returned.push({
-                          index: element.index,
-                          value: element.value[key]
-                      })
-                  }
-              }
-              return returned;
+    try {
+      /**
+       * Función recursiva para filtrar y devolver elementos
+       * cuyas propiedades hagan match con la llave (Key) asignada como argumento
+       * @param {string} key Llave con la que hacer match
+       * @param {any[]} arr  Arreglo de objetos a filtrar
+       * @returns {any[]} Retorna un arreglo de referencias filtradas para hacer match con la _key_
+      */
+      const findToArray = (key: string, arr: any[]): any[] => {
+        let returned: any[] = [];
+        for (let index = 0; index < arr.length; index++) {
+          const element = arr[index];
+          if (element.hasOwnProperty.call(element.value, key)) {
+            returned.push({
+              index: element.index,
+              value: element.value[key]
+            })
           }
-          /**
-           * Funcion recursiva para comparar objetos de manera profunda en sus propiedades
-           * @param {{[key:string]:any}} objet_base Objeto con la cual tener una referencia
-           * @param {{[key:string]:any}} objet_compare Objeto con la cual comparar segun la referencia
-           * @returns {boolean} si encuentra una coincidencia en las propiedades retorna `true`, en caso contrario `false`
-          */
-          const compareObjets = (objet_base: { [key: string]: any }, objet_compare: { [key: string]: any }): boolean => {
-              for (let [key, val] of Object.entries(objet_base)) {
-                  // si esta propiedad existe
-                  if (objet_compare.hasOwnProperty(key)) {
-                      // si el valor de la llave en el objeto comparador es diferente
-                      if (objet_compare[key] !== val) {
-                          // si el valor de la llave es de tipo objeto,
-                          // aplicar recursividad a la funcion, asi hacemos un sondeo profundo a las propiedades
-                          if (typeof objet_compare[key] == 'object') {
-                              return compareObjets(objet_compare[key], val)
-                          }
-                          // console.error(`Propiedad ${key}: El valor ${objet_compare[key]} no es equivalente a ${val}`);
-                          return false;
-                      }
-                  }
-                  // si esta propiedad no existe
-                  else {
-                      // console.error(key, `propiedad no existe en el objeto comparador`);
-                      return false;
-                  }
+        }
+        return returned;
+      }
+      /**
+       * Funcion recursiva para comparar objetos de manera profunda en sus propiedades
+       * @param {{[key:string]:any}} objet_base Objeto con la cual tener una referencia
+       * @param {{[key:string]:any}} objet_compare Objeto con la cual comparar segun la referencia
+       * @returns {boolean} si encuentra una coincidencia en las propiedades retorna `true`, en caso contrario `false`
+      */
+      const compareObjets = (objet_base: { [key: string]: any }, objet_compare: { [key: string]: any }): boolean => {
+        for (let [key, val] of Object.entries(objet_base)) {
+          // si esta propiedad existe
+          if (objet_compare.hasOwnProperty(key)) {
+            // si el valor de la llave en el objeto comparador es diferente
+            if (objet_compare[key] !== val) {
+              // si el valor de la llave es de tipo objeto,
+              // aplicar recursividad a la funcion, asi hacemos un sondeo profundo a las propiedades
+              if (typeof objet_compare[key] == 'object') {
+                return compareObjets(objet_compare[key], val)
               }
-              return true
+              // console.error(`Propiedad ${key}: El valor ${objet_compare[key]} no es equivalente a ${val}`);
+              return false;
+            }
           }
-          // si el argumento es un arreglo, busca todos los elementos de la cola que tengan como propiedades
-          // las mismas keys asignadas en el argumento __arg1_ y actualiza su valor a los establecidos en el argumento _updateValue_
-          if (Array.isArray(_arg1)) {
-              // creamos un diccionario de referencias
-              let matchList: { [key: string]: any }[] = []
-              // volcamos el diccionario las referencias
-              for (let _indexQueue = 0; _indexQueue < this._queue.length; _indexQueue++) {
-                  const value = this._queue[_indexQueue];
-                  const index = _indexQueue;
-                  matchList.push({ index, value })
-              }
-              // iteramos sobre el argumento pasandole como parametro
-              // a la funcion `findToArray` el valor de la posicion del arreglo(Key)
-              // y segun lo que retorne dicha funcion se actualiza el diccionario de referencias
-              for (let _indexArg1 = 0; _indexArg1 < _arg1.length; _indexArg1++) {
-                  const key = _arg1[_indexArg1];
-                  matchList = findToArray(key, matchList);
-              }
-              // iteramos una vez mas sobre el resultado sobrante en el diccionario de referecias
-              // `matchList`, y actualizamos el elemento de la cola con la que se hicieron match
-              for (let _indexmatchList = 0; _indexmatchList < matchList.length; _indexmatchList++) {
-                  const index = matchList[_indexmatchList].index;
-                  matchList[_indexmatchList].value = this._queue[index];
-              }
-              return matchList
-          }
+          // si esta propiedad no existe
           else {
-              // si el argumento no es un arreglo, pero es un objeto... busca en la cola elementos que sean
-              // iguales el argumento para luego actualizar su valor
-              if (typeof _arg1 === 'object') {
-                  // incializamos un arreglo para convertirlo en un diccionario de referencias
-                  let matchList: any[] = []
-                  // iteramos sobre la cola tomando los elementos de cada ciclo en una varaible de referencia `item`
-                  for (let _queueIndex = 0; _queueIndex < this._queue.length; _queueIndex++) {
-                      const item = this._queue[_queueIndex];
-                      // iteramos sobre cada propiedad de la referencia, para luego iterar sobre las propiedades del argumento
-                      // y asi poder pasarlos por parametro a la funcion `compareObjets`
-                      for (let [key_base, val_base] of Object.entries(_arg1)) {
-                          for (let [key_compare, val_compare] of Object.entries(item)) {
-                              if (key_base === key_compare) {
-                                  // si la funcion hace `match` empujamos el elemento en la cola a el diccionario de referencias
-                                  if (typeof val_base == 'object' && typeof val_compare === 'object') {
-                                      if (compareObjets(val_base, val_compare)) {
-                                          matchList.push({
-                                              index: _queueIndex,
-                                              value: item
-                                          })
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  }
-                  return matchList
-              } else {
-                  throw new Error("Tipos de datos invalidos, esta funcion solo recibe Arreglos u objetos como parametros");
-              }
+            // console.error(key, `propiedad no existe en el objeto comparador`);
+            return false;
           }
-      } catch (error) { console.error(error); }
+        }
+        return true
+      }
+      // si el argumento es un arreglo, busca todos los elementos de la cola que tengan como propiedades
+      // las mismas keys asignadas en el argumento __arg1_ y actualiza su valor a los establecidos en el argumento _updateValue_
+      if (Array.isArray(_arg1)) {
+        // creamos un diccionario de referencias
+        let matchList: { [key: string]: any }[] = []
+        // volcamos el diccionario las referencias
+        for (let _indexQueue = 0; _indexQueue < this._queue.length; _indexQueue++) {
+          const value = this._queue[_indexQueue];
+          const index = _indexQueue;
+          matchList.push({ index, value })
+        }
+        // iteramos sobre el argumento pasandole como parametro
+        // a la funcion `findToArray` el valor de la posicion del arreglo(Key)
+        // y segun lo que retorne dicha funcion se actualiza el diccionario de referencias
+        for (let _indexArg1 = 0; _indexArg1 < _arg1.length; _indexArg1++) {
+          const key = _arg1[_indexArg1];
+          matchList = findToArray(key, matchList);
+        }
+        // iteramos una vez mas sobre el resultado sobrante en el diccionario de referecias
+        // `matchList`, y actualizamos el elemento de la cola con la que se hicieron match
+        for (let _indexmatchList = 0; _indexmatchList < matchList.length; _indexmatchList++) {
+          const index = matchList[_indexmatchList].index;
+          matchList[_indexmatchList].value = this._queue[index];
+        }
+        return matchList
+      }
+      else {
+        // si el argumento no es un arreglo, pero es un objeto... busca en la cola elementos que sean
+        // iguales el argumento para luego actualizar su valor
+        if (typeof _arg1 === 'object') {
+          // incializamos un arreglo para convertirlo en un diccionario de referencias
+          let matchList: any[] = []
+          // iteramos sobre la cola tomando los elementos de cada ciclo en una varaible de referencia `item`
+          for (let _queueIndex = 0; _queueIndex < this._queue.length; _queueIndex++) {
+            const item = this._queue[_queueIndex];
+            // iteramos sobre cada propiedad de la referencia, para luego iterar sobre las propiedades del argumento
+            // y asi poder pasarlos por parametro a la funcion `compareObjets`
+            for (let [key_base, val_base] of Object.entries(_arg1)) {
+              for (let [key_compare, val_compare] of Object.entries(item)) {
+                if (key_base === key_compare) {
+                  // si la funcion hace `match` empujamos el elemento en la cola a el diccionario de referencias
+                  if (typeof val_base == 'object' && typeof val_compare === 'object') {
+                    if (compareObjets(val_base, val_compare)) {
+                      matchList.push({
+                        index: _queueIndex,
+                        value: item
+                      })
+                    }
+                  }
+                }
+              }
+            }
+          }
+          return matchList
+        } else {
+          throw new Error("Tipos de datos invalidos, esta funcion solo recibe Arreglos u objetos como parametros");
+        }
+      }
+    } catch (error) { console.error(error); }
   }
 
 

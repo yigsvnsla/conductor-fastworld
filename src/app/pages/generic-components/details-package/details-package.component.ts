@@ -27,7 +27,7 @@ export class DetailsPackageComponent implements OnInit {
   }
 
   private async loadPackage(){
-    this.package = this.conectionsService.get<any>(`client/packages/${this.id}?populate=*`).pipe(delay(1000),map(res=>res.data),tap(console.log),)
+    this.package = this.conectionsService.get<any>(`driver/packages/${this.id}?populate=*`).pipe(delay(1000),map(res=>res.data),tap(console.log),)
     this.history = this.conectionsService.get<any>(`history/package/${this.id}?populate=*`).pipe(delay(1000),map(res=>res),tap(console.log))
   }
 
