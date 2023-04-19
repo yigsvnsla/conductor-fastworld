@@ -102,6 +102,7 @@
                 </ion-item>
               </ion-card>
             </ion-card-header>
+            <!--
             <ion-card-content>
               <ion-grid fixed>
                 <ion-row>
@@ -117,7 +118,7 @@
                           <ion-icon style="margin: 8px" name="grid"></ion-icon>
                           <ion-text color="orange">Ubicacion</ion-text>
                         </p>
-                        <h2>{{item.attributes.location.address}}</h2>
+                        <h2>{{item.attributes.location.address ?? 'sin direccion'}}</h2>
                       </ion-label>
                     </ion-item>
 
@@ -136,7 +137,7 @@
                       <ion-icon style="margin: 8px" name="flag"></ion-icon>
                       <ion-text color="orange">Ubicacion de Entrega</ion-text>
                     </ion-card-subtitle>
-                    <ng-container *ngIf="item.attributes.receiver != null; else notDirection">
+                    <ng-container *ngIf="item.attributes.receiver !== null; else notDirection">
                       <ion-item button detail-icon="map"
                         [href]="'https://maps.google.com/?q=' +  item.attributes.receiver.direction.position.lat + ',' +  item.attributes.receiver.direction.position.lng"
                         target="_blank" rel="noreferrer external">
@@ -174,6 +175,7 @@
                 </ion-row>
               </ion-grid>
             </ion-card-content>
+          -->
           </ion-card>
         </ion-col>
       </ion-row>
@@ -218,10 +220,10 @@
                       <ion-label>
                         <p>Estado</p>
                         <h2>
-                          <ion-text *ngIf="item.attributes.payment_status == 'pagado'"
+                          <ion-text *ngIf="item.attributes.payment_status === 'pagado'"
                             style="text-decoration: underline;" color="success">{{item.attributes.payment_status |
                             titlecase}}</ion-text>
-                          <ion-text *ngIf="item.attributes.payment_status == 'pendiente'"
+                          <ion-text *ngIf="item.attributes.payment_status === 'pendiente'"
                             style="text-decoration: underline;" color="danger">{{item.attributes.payment_status |
                             titlecase}}</ion-text>
                         </h2>

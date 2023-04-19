@@ -138,7 +138,7 @@
                           <ion-input (ionChange)="ionChangesInputCurrency($event)" (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="money_catch" placeholder="$0.00"></ion-input>
                         </ion-item>
                         <ion-item>
-                          <ion-label position="stacked">Descripción </ion-label>
+                          <ion-label position="stacked">(persona que entrega / descripción)</ion-label>
                           <ion-textarea formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
                         </ion-item>
                       </ion-item-group>
@@ -173,7 +173,7 @@
                           <ion-label>Ingresar descripción y valor recibidos</ion-label>
                         </ion-item-divider>
                         <ion-item>
-                          <ion-label position="stacked">Descripción </ion-label>
+                          <ion-label position="stacked">(persona que entrega / descripción) </ion-label>
                           <ion-textarea #declineTextarea (ionFocus)="declineTextarea.value = ''" formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
                         </ion-item>
                       </ion-item-group>
