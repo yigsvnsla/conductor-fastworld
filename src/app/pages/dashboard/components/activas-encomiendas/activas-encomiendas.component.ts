@@ -23,21 +23,21 @@ export class ActivasEncomiendasComponent implements OnInit {
   @ViewChild('modal') modal: IonModal
 
   _qs = qs.stringify({
-    filters:{
-      $or:[
+    filters: {
+      $or: [
         {
-          shipping_status:{
-            $containsi:'aceptado'
+          shipping_status: {
+            $containsi: 'aceptado'
           },
-        },        {
-          shipping_status:{
-            $containsi:'recibido'
+        }, {
+          shipping_status: {
+            $containsi: 'recibido'
           },
         }
       ]
     }
   })
-  public source = new Source (`driver/packages?populate=*&${this._qs}&sort=id:DESC`,this.conectionsService)
+  public source = new Source(`driver/packages?populate=*&${this._qs}&sort=id:DESC`, this.conectionsService)
   // public source = new Source('driver/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:DESC&', this.conectionsService)
   public dialogForm: FormGroup;
   private value: number = 0
@@ -45,7 +45,7 @@ export class ActivasEncomiendasComponent implements OnInit {
     private conectionsService: ConectionsService,
     private toolsService: ToolsService,
     private formBuilder: FormBuilder,
-    private modalcontroller:ModalController,
+    private modalcontroller: ModalController,
     private socketService: SocketService,
 
   ) {
@@ -76,12 +76,12 @@ export class ActivasEncomiendasComponent implements OnInit {
       let _id = product.data.id
       let tempArr = this.source.itemsChanges$.value.map((value, index, arr) => {
         let _refValue: any = value
-        if ( _refValue.id == _id ) {
-          if (product.data.attributes.shipping_status != 'pendiente'){
+        if (_refValue.id == _id) {
+          if (product.data.attributes.shipping_status != 'pendiente') {
             // delete
             _refValue = product.data
           }
-          if (product.data.attributes.shipping_status == 'pendiente'){
+          if (product.data.attributes.shipping_status == 'pendiente') {
             // add
             _refValue = value
           }
@@ -182,13 +182,16 @@ export class ActivasEncomiendasComponent implements OnInit {
 
     try {
       let response = await this.conectionsService.post(`packages/shipping/${_id}`, { money_catch, comment, status }).toPromise()
-      if ( status == 'recibido' ){
-        this.source.updateItemToSource(_id,response.data);
+      if (status == 'recibido') {
+        this.source.updateItemToSource(_id, response.data);
       }
-      if ( status != 'recibido' ){
+      if (status != 'recibido') {
         this.source.deleteItemToSource(_id);
       }
-      console.log('response', response)
+
+      if (status == 'entregado') {
+        this.chooseDownload(_id)
+      }
     } catch (error) {
       console.log(error)
     } finally {
@@ -200,5 +203,28 @@ export class ActivasEncomiendasComponent implements OnInit {
       (await this.modalcontroller.getTop()).dismiss()
     }
   }
+
+  chooseDownload(id) {
+    this.toolsService.showAlert({
+      backdropDismiss: false,
+      cssClass: 'alert-primary',
+      header: 'Descargas',
+      subHeader: '¿Deseas descargar un comprobante?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.conectionsService.downloadPDF(id)
+          }
+        }
+      ]
+    })
+  }
+
 }
 

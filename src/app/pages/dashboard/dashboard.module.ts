@@ -1,7 +1,7 @@
 import { PerfilComponent } from './components/perfil/perfil.component';
 import { ActivasEncomiendasComponent } from './components/activas-encomiendas/activas-encomiendas.component';
 import { NgModule } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CommonModule, CurrencyPipe, TitleCasePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
@@ -38,6 +38,6 @@ import { ReportsEncomiendaComponent } from "./components/reports-encomienda/repo
     PerfilComponent,
     ReportsEncomiendaComponent
   ],
-  providers:[CurrencyPipe]
+  providers:[CurrencyPipe, TitleCasePipe]
 })
 export class DashboardPageModule {}

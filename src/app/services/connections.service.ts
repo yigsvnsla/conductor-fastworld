@@ -293,6 +293,26 @@ export class ConectionsService {
     }
   }
 
+
+  async downloadPDF(id: any, name = new Date().toString()) {
+    const loading = await this.toolsService.showLoading('Cargando informacion...')
+    try {
+      let response = await this.postStream(`print/package/${id}`, {}).toPromise()
+      let file = new Blob([response], { type: 'application/pdf' })
+      var a = document.createElement("a"), url = URL.createObjectURL(file);
+      a.href = url;
+      a.download = `${name}.pdf`;
+      // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
+      if (response) {
+        a.click()
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.dismiss()
+    }
+  }
+
 }
 
 export class Source extends DataSource<any | undefined>{
@@ -931,6 +951,9 @@ export class Queue<T extends { [key: string]: any }> {
       }
     } catch (error) { console.error(error); }
   }
+
+
+
 
 
 }

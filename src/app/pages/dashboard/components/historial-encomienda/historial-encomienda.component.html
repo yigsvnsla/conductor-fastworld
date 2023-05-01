@@ -147,6 +147,9 @@
               <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + item.attributes.receiver.phone.replace('+','')" target="_blank" rel="noopener noreferrer" color="success" size="small">
                 <ion-icon name="logo-whatsapp"></ion-icon>
               </ion-fab-button>
+              <ion-fab-button color="danger" size="small" (click)="download(item)">
+                <ion-icon name="print-outline"></ion-icon>
+              </ion-fab-button>
           </ng-container>
           <ng-template #notReceiver>
             <ion-label>

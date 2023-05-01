@@ -2,6 +2,7 @@ import { DetailsPackageComponent } from '../../../generic-components/details-pac
 import { ToolsService } from 'src/app/services/tools.service';
 import { Source, ConectionsService } from 'src/app/services/connections.service';
 import { Component, OnInit } from '@angular/core';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-historial-encomienda',
@@ -10,30 +11,36 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HistorialEncomiendaComponent implements OnInit {
 
-  public source = new Source('driver/packages?populate=*&sort=id:DESC&',this.conectionsService)
+  public source = new Source('driver/packages?populate=*&sort=id:DESC&', this.conectionsService)
 
-  constructor(private conectionsService:ConectionsService, private toolsService:ToolsService) {
+  constructor(private conectionsService: ConectionsService, private toolsService: ToolsService,
+    private titlecasePipe: TitleCasePipe) {
 
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  public onSearchChange($event){
+  public onSearchChange($event) {
     console.log($event);
 
   }
 
-  public showModalDetailsPackages(_id:number){
+  public showModalDetailsPackages(_id: number) {
     this.toolsService.showModal({
-      component:DetailsPackageComponent,
-      cssClass:['modal-fullscreen'],
-      keyboardClose:true,
-      mode:'ios',
-      backdropDismiss:false,
-      componentProps:{
-        id:_id
+      component: DetailsPackageComponent,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        id: _id
       }
     })
+  }
+
+  download(pack: any) {
+    let name = this.titlecasePipe.transform(pack.attributes.sender.data.attributes.business.data.attributes.name);
+    this.conectionsService.downloadPDF(pack.id, `${name} #${pack.id}`)
   }
 
 }
