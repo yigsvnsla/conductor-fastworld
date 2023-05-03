@@ -11,6 +11,7 @@ import { es } from 'date-fns/locale';
 import { InputCustomEvent, IonModal, ModalController } from '@ionic/angular';
 import * as qs from 'qs';
 import { SocketService } from 'src/app/services/socket.service';
+import { TitleCasePipe } from '@angular/common';
 
 
 @Component({
@@ -47,6 +48,7 @@ export class ActivasEncomiendasComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalcontroller: ModalController,
     private socketService: SocketService,
+    private titlecasePipe: TitleCasePipe
 
   ) {
     this.dialogForm = this.formBuilder.nonNullable.group({
@@ -181,7 +183,7 @@ export class ActivasEncomiendasComponent implements OnInit {
     const { money_catch, comment } = this.dialogForm.value
 
     try {
-      let response = await this.conectionsService.post(`packages/shipping/${_id}`, { money_catch, comment, status }).toPromise()
+      let response = await this.conectionsService.post(`packages/shipping/${_id}?populate=*`, { money_catch, comment, status }).toPromise()
       if (status == 'recibido') {
         this.source.updateItemToSource(_id, response.data);
       }
@@ -219,7 +221,8 @@ export class ActivasEncomiendasComponent implements OnInit {
         {
           text: 'Aceptar',
           handler: () => {
-            this.conectionsService.downloadPDF(id)
+            console.log(id, 'id para imprimir')
+            this.conectionsService.downloadPDF(id, `Encomienda #${id}`)
           }
         }
       ]

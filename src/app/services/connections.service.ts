@@ -22,7 +22,9 @@ import {
 import { SigInResponseI, SingInRequestI, SingUpI, SingUpResponseI } from '../interfaces/auth.interface';
 import { MapDirectionsService, MapGeocoder } from '@angular/google-maps';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-
+import { Platform } from '@ionic/angular';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Direct } from 'protractor/built/driverProviders';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +41,7 @@ export class ConectionsService {
     private mapGeocoder: MapGeocoder,
     private localStorageService: LocalStorageService,
     private mapDirectionsService: MapDirectionsService,
+    private platform: Platform
   ) {
 
   }
@@ -303,9 +306,37 @@ export class ConectionsService {
       a.href = url;
       a.download = `${name}.pdf`;
       // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
-      if (response) {
+      if (response && !this.platform.is('android') || !this.platform.is('mobile')) {
         a.click()
+        return;
       }
+
+      const write = () => {
+        let reader = new FileReader()
+        reader.onloadend = async () => {
+          let base64 = reader.result as string
+          let dir = await Filesystem.writeFile({
+            path: `Fastworld/${name}.pdf`,
+            directory: Directory.Documents,
+            data: base64,
+            recursive: true
+          })
+          console.log(dir.uri)
+        }
+        reader.readAsDataURL(file)
+      }
+
+      Filesystem.checkPermissions().then(async res => {
+        if (res.publicStorage == 'granted') {
+          write()
+        } else {
+          let response = await Filesystem.requestPermissions()
+          if (response.publicStorage == 'granted') {
+            write()
+          }
+        }
+      })
+
     } catch (error) {
       console.error(error);
     } finally {
