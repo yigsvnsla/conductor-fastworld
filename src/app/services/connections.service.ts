@@ -25,6 +25,8 @@ import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Platform } from '@ionic/angular';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Direct } from 'protractor/built/driverProviders';
+import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
+
 
 @Injectable({
   providedIn: 'root',
@@ -41,7 +43,8 @@ export class ConectionsService {
     private mapGeocoder: MapGeocoder,
     private localStorageService: LocalStorageService,
     private mapDirectionsService: MapDirectionsService,
-    private platform: Platform
+    private platform: Platform,
+    private fileOpener: FileOpener
   ) {
 
   }
@@ -297,7 +300,7 @@ export class ConectionsService {
   }
 
 
-  async downloadPDF(id: any, name = new Date().toString()) {
+  async downloadPDF(id: any, name = new Date().toString(), open = false) {
     const loading = await this.toolsService.showLoading('Cargando informacion...')
     try {
       let response = await this.postStream(`print/package/${id}`, {}).toPromise()
@@ -321,7 +324,13 @@ export class ConectionsService {
             data: base64,
             recursive: true
           })
-          console.log(dir.uri)
+          this.toolsService.showToast({
+            color: 'success',
+            message: '¡Archivo guardado correctamente en Documentos!',
+          })
+          if(open){
+            await this.fileOpener.open(dir.uri, 'application/pdf')
+          }
         }
         reader.readAsDataURL(file)
       }

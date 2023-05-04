@@ -11,11 +11,12 @@ import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 
 @NgModule({
   declarations: [AppComponent,],
   imports: [
-    BrowserModule, 
+    BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     ReactiveFormsModule,
@@ -29,12 +30,14 @@ import { GoogleMapsModule } from '@angular/google-maps';
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
+
   ],
   providers: [
-    { 
-      provide: RouteReuseStrategy, 
-      useClass: IonicRouteStrategy 
-    }
+    {
+      provide: RouteReuseStrategy,
+      useClass: IonicRouteStrategy
+    },
+    FileOpener
   ],
   bootstrap: [AppComponent],
 })

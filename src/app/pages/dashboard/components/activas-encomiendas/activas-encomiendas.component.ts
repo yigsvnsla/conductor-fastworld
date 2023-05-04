@@ -222,7 +222,7 @@ export class ActivasEncomiendasComponent implements OnInit {
           text: 'Aceptar',
           handler: () => {
             console.log(id, 'id para imprimir')
-            this.conectionsService.downloadPDF(id, `Encomienda #${id}`)
+            this.conectionsService.downloadPDF(id, `Encomienda #${id}`, true)
           }
         }
       ]

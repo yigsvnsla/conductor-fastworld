@@ -17,6 +17,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { EntregasEncomiendaComponent } from './components/entregas-encomienda/entregas-encomieda.component';
 import { SocketIoModule } from 'ngx-socket-io';
 import { ReportsEncomiendaComponent } from "./components/reports-encomienda/reports-encomienda.component";
+import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 @NgModule({
   imports: [
     CommonModule,
@@ -38,6 +39,6 @@ import { ReportsEncomiendaComponent } from "./components/reports-encomienda/repo
     PerfilComponent,
     ReportsEncomiendaComponent
   ],
-  providers:[CurrencyPipe, TitleCasePipe]
+  providers:[CurrencyPipe, TitleCasePipe, FileOpener]
 })
 export class DashboardPageModule {}
