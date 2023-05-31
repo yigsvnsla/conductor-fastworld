@@ -231,5 +231,12 @@ export class ActivasEncomiendasComponent implements OnInit {
     })
   }
 
+  onChangeSelect(event: any) {
+    const { checked } = event.detail;
+    if (!checked) {
+      this.dialogForm.get('discharge').patchValue('$0.00')
+    }
+  }
+
 }
 

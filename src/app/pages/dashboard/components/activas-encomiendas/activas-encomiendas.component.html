@@ -142,7 +142,7 @@
                       <ion-item-group [formGroup]="this.dialogForm">
                         <ion-item-divider style="margin-right: 16px;">
                           <ion-label>¿Desea añadir gastos?</ion-label>
-                          <ion-toggle #gastos slot="end"></ion-toggle>
+                          <ion-toggle #gastos slot="end" (ionChange)="onChangeSelect($event)"></ion-toggle>
                         </ion-item-divider>
                         <ion-item>
                           <ion-label position="stacked">Valor Recibido</ion-label>
