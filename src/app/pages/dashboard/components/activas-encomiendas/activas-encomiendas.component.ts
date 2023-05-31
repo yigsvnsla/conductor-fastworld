@@ -53,6 +53,7 @@ export class ActivasEncomiendasComponent implements OnInit {
   ) {
     this.dialogForm = this.formBuilder.nonNullable.group({
       money_catch: ['$0.00', [Validators.required]],
+      discharge: ['$0.00'],
       comment: ['Sin Novedad', [Validators.required]]
     })
   }
@@ -113,13 +114,13 @@ export class ActivasEncomiendasComponent implements OnInit {
 
   }
 
-  public ionChangesInputCurrency(_$event: Event) {
+  public ionChangesInputCurrency(_$event: Event, target: string) {
     const $event = (_$event as InputCustomEvent)
     let value = $event.detail.value;
     const decimal: string = ',';
     const thousand: string = '.';
     if (RegExp(/$/g).test($event.detail.value)) $event.detail.value.replace('$', '');
-    if ($event.detail.value == '') this.dialogForm.get(['money_catch']).setValue(value = '0' + decimal + '00');
+    if ($event.detail.value == '') this.dialogForm.get([target]).setValue(value = '0' + decimal + '00');
     value = value + '';
     value = value.replace(/[\D]+/g, '');
     value = value + '';
@@ -129,7 +130,7 @@ export class ActivasEncomiendasComponent implements OnInit {
     parts[0] = parseInt(parts[0]).toString();
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousand);
     value = parts.join(decimal);
-    this.dialogForm.get(['money_catch']).setValue('$' + value)
+    this.dialogForm.get([target]).setValue('$' + value)
   }
 
 
@@ -180,10 +181,10 @@ export class ActivasEncomiendasComponent implements OnInit {
 
   public async updateStatusPackage(index: number, _id: number, status: string) {
     let loading = await this.toolsService.showLoading('Actualizando...');
-    const { money_catch, comment } = this.dialogForm.value
+    const { money_catch, comment, discharge } = this.dialogForm.value
 
     try {
-      let response = await this.conectionsService.post(`packages/shipping/${_id}?populate=*`, { money_catch, comment, status }).toPromise()
+      let response = await this.conectionsService.post(`packages/shipping/${_id}?populate=*`, { money_catch, comment, status, discharge }).toPromise()
       if (status == 'recibido') {
         this.source.updateItemToSource(_id, response.data);
       }
@@ -199,6 +200,7 @@ export class ActivasEncomiendasComponent implements OnInit {
     } finally {
       this.dialogForm = this.formBuilder.nonNullable.group({
         money_catch: ['$0.00', [Validators.required]],
+        discharge: ['$0.00'],
         comment: ['Sin Novedad', [Validators.required]]
       })
       loading.dismiss();
