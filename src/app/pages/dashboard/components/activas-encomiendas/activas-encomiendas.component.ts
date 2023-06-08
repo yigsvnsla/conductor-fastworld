@@ -184,7 +184,10 @@ export class ActivasEncomiendasComponent implements OnInit {
     const { money_catch, comment, discharge } = this.dialogForm.value
 
     try {
-      let response = await this.conectionsService.post(`packages/shipping/${_id}?populate=*`, { money_catch, comment, status, discharge }).toPromise()
+      let response = await this.conectionsService.post(`packages/shipping/${_id}?populate=*`, {
+        money_catch, comment, status, discharge,
+        time: this.toolsService.satinizeDate(new Date()).toISOString()
+      }).toPromise()
       if (status == 'recibido') {
         this.source.updateItemToSource(_id, response.data);
       }

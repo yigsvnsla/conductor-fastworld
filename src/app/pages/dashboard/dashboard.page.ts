@@ -52,11 +52,11 @@ export class DashboardPage implements OnInit {
     this.sectionMenu = [{
       title: 'Encomiendas',
       url: 'encomienda',
-      options: [{
+      options: [/* {
         title: 'Encomiendas',
         url: 'entregas',
         icon: 'cube',
-      }, {
+      }, */ {
         title: 'Mis Rutas',
         url: 'activas',
         icon: 'list-circle',

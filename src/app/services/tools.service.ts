@@ -116,4 +116,17 @@ export class ToolsService {
   typeOf(value:any,base:string){
     return typeof value == base ? true : false
   }
+
+  /**
+   * This funtion is transform the given date to new date with operation on OffsetTimeZone
+   * @param date Date to satinize with OffsetTimeZone
+   * @param sum Is a switch to add o remove OffsetTimeZone in the date
+   */
+   satinizeDate(date: Date, sum: boolean = false) {
+    let d = new Date(date)
+    let offSet = d.getTimezoneOffset() * 60000;
+    let time = d.getTime();
+    d.setTime(sum ? time + offSet : time - offSet)
+    return d;
+  }
 }
