@@ -136,10 +136,10 @@
           <ng-container *ngIf="item.attributes.receiver != null; else notReceiver">
             <ion-label>
               <p style="display: flex; align-items: center;" class="ion-text-wrap">
-                <ion-icon style="margin: 6px;" name="person"></ion-icon>
-                <ion-text>Empresa</ion-text>
+                <ion-icon style="margin: 6px;" name="person"  color="orange"></ion-icon>
+                <ion-text color="orange">Proveedor</ion-text>
               </p>
-              <h4>{{(item.attributes.sender.data.attributes.business.data.attributes.name | titlecase) }}</h4>
+              <h4><ion-text  color="orange">{{(item.attributes.sender.data.attributes.business.data.attributes.name | titlecase) }}</ion-text></h4>
             </ion-label>
               <ion-fab-button href="tel:{{item.attributes.receiver.phone}}" size="small">
                 <ion-icon name="call"></ion-icon>

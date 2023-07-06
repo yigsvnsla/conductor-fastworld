@@ -335,11 +335,17 @@
                   </ion-grid>
 
                   <ion-item>
-                    <ion-icon slot="start" name="person"></ion-icon>
+                    <ion-icon color="orange" slot="start" name="person"></ion-icon>
                     <ng-container *ngIf="item.attributes.sender.data != null; else notSender">
                       <ion-label>
-                        <p>Usuario</p>
-                        <h4>{{(item.attributes.sender.data.attributes.business.data.attributes.name | titlecase) }}</h4>
+                        <p>
+                          <ion-text color="orange">Proveedor</ion-text>
+                        </p>
+                        <h4>
+                          <ion-text color="orange">
+                            <b>{{(item.attributes.sender.data.attributes.business.data.attributes.name | titlecase)
+                              }}</b></ion-text>
+                        </h4>
                       </ion-label>
                       <ion-fab-button href="tel:{{item.attributes.sender.data.attributes.phone}}" size="small">
                         <ion-icon name="call"></ion-icon>
@@ -394,13 +400,13 @@
                     [href]="'https://maps.google.com/?q=' + item.attributes.location.position.lat + ',' + item.attributes.location.position.lng"
                     target="_blank" rel="noreferrer external">
                     <ion-label class="ion-text-wrap">
-                      <p>Dirección de Retiro</p>
+                      <p><ion-text color="orange">Dirección de Retiro</ion-text></p>
                       <h4>{{item.attributes.location.address}}</h4>
                       <br>
-                      <p>Indicaciones de Retiro</p>
+                      <p><ion-text color="orange" >Indicaciones de Retiro</ion-text></p>
                       <h4>{{item.attributes.location.description || 'Sin Descripcion'}}</h4>
                     </ion-label>
-                    <ion-icon slot="start" name="map"></ion-icon>
+                    <ion-icon color="orange" slot="start" name="map"></ion-icon>
                   </ion-item>
 
                   <ion-item-divider>

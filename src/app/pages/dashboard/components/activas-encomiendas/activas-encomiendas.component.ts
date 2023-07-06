@@ -61,19 +61,6 @@ export class ActivasEncomiendasComponent implements OnInit {
 
 
   ngOnInit() {
-    // this.socketService.on('product-created', (product: any | any[]) => {
-    //   product['data'].forEach((value) => {
-
-    //     console.log(value);
-
-    //     if (value.attributes.shipping_status == 'pendiente') {
-    //       this.source.addItemToSource(value)
-    //     };
-    //     // if (value.attributes.shipping_status != 'pendiente') {
-    //     //   this.source.deleteItemToSource(value.id)
-    //     // }
-    //   })
-    // })
 
     this.socketService.on('product-updated', (product: any | any[]) => {
       let _id = product.data.id
