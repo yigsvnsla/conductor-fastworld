@@ -2,30 +2,50 @@
   <ion-toolbar>
     <app-btn-menu slot="start"></app-btn-menu>
     <ion-title>Encomiendas Activas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onRefresh()">
+        <ion-icon name="refresh-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [scrollY]="false">
-  <cdk-virtual-scroll-viewport itemSize="235" minBufferPx="900" maxBufferPx="1350" class="ion-content-scroll-host">
+  <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <cdk-virtual-scroll-viewport
+    itemSize="235"
+    minBufferPx="900"
+    maxBufferPx="1350"
+    class="ion-content-scroll-host"
+  >
     <ng-container *ngIf="this.source as Source">
       <ion-card *ngIf="$any(Source).length == 0">
         <ion-card-header>
           <ion-card-subtitle></ion-card-subtitle>
           <ion-card-title>No tienes encomiendas activas</ion-card-title>
         </ion-card-header>
-        <ion-card-content>
-        </ion-card-content>
+        <ion-card-content> </ion-card-content>
+      </ion-card>
+      <ion-card *ngIf="source.loading | async">
+        <ion-card-header class="ion-text-center">
+          <ion-card-subtitle>Buscando Información</ion-card-subtitle>
+          <ion-spinner name="circular"></ion-spinner>
+        </ion-card-header>
       </ion-card>
 
-      <ion-card *cdkVirtualFor="let item of Source ; let i = index">
+      <ion-card *cdkVirtualFor="let item of Source; let i = index">
         <ion-item>
           <ion-icon slot="start" name="cube"></ion-icon>
           <ion-label>
-            Ticket <ion-text color="orange">#{{item.id}}</ion-text>
+            Ticket <ion-text color="orange">#{{ item.id }}</ion-text>
           </ion-label>
           <ion-chip slot="end" color="success" mode="ios" outline="true">
             <ion-icon name="cash"></ion-icon>
-            <ion-label>Cobrar: {{(item.attributes.value | currency )}}</ion-label>
+            <ion-label
+              >Cobrar: {{ item.attributes.value | currency }}</ion-label
+            >
           </ion-chip>
           <!-- <ion-chip color="	primary" mode="ios" outline="true">
             <ion-icon name="pin"></ion-icon>
@@ -34,10 +54,17 @@
         </ion-item>
         <ion-item>
           <ion-icon slot="start" name="person"></ion-icon>
-          <ng-container *ngIf="item.attributes.sender.data != null; else notSender">
+          <ng-container
+            *ngIf="item.attributes.sender.data != null; else notSender"
+          >
             <ion-label>
               <p>Proveedor</p>
-              <h4>{{(item.attributes.sender.data.attributes.business.data.attributes.name | titlecase) }}</h4>
+              <h4>
+                {{
+                  item.attributes.sender.data.attributes.business.data
+                    .attributes.name | titlecase
+                }}
+              </h4>
             </ion-label>
             <!-- <ion-fab-button href="tel:{{item.attributes.sender.data.attributes.phone}}" size="small">
               <ion-icon name="call"></ion-icon>
@@ -59,7 +86,7 @@
               <ion-item>
                 <ion-label>
                   <p>Fecha de Creación</p>
-                  <h2>{{item.attributes.createdAt | date:'short'}}</h2>
+                  <h2>{{ item.attributes.createdAt | date : "short" }}</h2>
                 </ion-label>
               </ion-item>
             </ion-col>
@@ -67,7 +94,12 @@
               <ion-item>
                 <ion-label>
                   <p>Tiempo de Retiro:</p>
-                  <h2>{{(item.attributes.pickup | date:'short') || 'Esperando Confirmación'}}</h2>
+                  <h2>
+                    {{
+                      (item.attributes.pickup | date : "short") ||
+                        "Esperando Confirmación"
+                    }}
+                  </h2>
                 </ion-label>
               </ion-item>
             </ion-col>
@@ -76,16 +108,28 @@
 
         <ion-grid fixed>
           <ion-row>
-            <ng-container *ngIf="item.attributes.shipping_status === 'aceptado' ">
+            <ng-container
+              *ngIf="item.attributes.shipping_status === 'aceptado'"
+            >
               <ion-col offset="3" size="6">
-                <ion-button id="{{'btn-status-recibed-message-modal' + i}}" color="primary" expand="block" fill="solid"
-                  shape="round" size="small">
+                <ion-button
+                  id="{{ 'btn-status-recibed-message-modal' + i }}"
+                  color="primary"
+                  expand="block"
+                  fill="solid"
+                  shape="round"
+                  size="small"
+                >
                   <ion-label>Recibir</ion-label>
                 </ion-button>
                 <!-- modal -->
-                <ion-modal (willPresent)="modalOnWillPresent($event)" class="modal-dialogs"
-                  id="{{'status-recibed-message-modal' + i}}" #modal
-                  trigger="{{'btn-status-recibed-message-modal' + i}}">
+                <ion-modal
+                  (willPresent)="modalOnWillPresent($event)"
+                  class="modal-dialogs"
+                  id="{{ 'status-recibed-message-modal' + i }}"
+                  #modal
+                  trigger="{{ 'btn-status-recibed-message-modal' + i }}"
+                >
                   <ng-template>
                     <div class="wrapper">
                       <ion-header>
@@ -95,21 +139,31 @@
                       </ion-header>
 
                       <ion-item-group [formGroup]="this.dialogForm">
-                        <ion-item-divider style="margin-right: 16px;">
+                        <ion-item-divider style="margin-right: 16px">
                           <ion-label>Comentarios</ion-label>
                         </ion-item-divider>
 
                         <ion-item>
                           <ion-label position="stacked">Comentario</ion-label>
-                          <ion-textarea formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
+                          <ion-textarea
+                            formControlName="comment"
+                            type="text"
+                            placeholder="Detalles"
+                          ></ion-textarea>
                         </ion-item>
                       </ion-item-group>
 
                       <ion-footer>
                         <ion-toolbar class="ion-text-center">
-                          <ion-button [disabled]="this.dialogForm.invalid"
-                            (click)="this.updateStatusPackage(i, item.id, 'recibido')" color="primary" fill="solid"
-                            shape="round">
+                          <ion-button
+                            [disabled]="this.dialogForm.invalid"
+                            (click)="
+                              this.updateStatusPackage(i, item.id, 'recibido')
+                            "
+                            color="primary"
+                            fill="solid"
+                            shape="round"
+                          >
                             <ion-label>Recibir</ion-label>
                           </ion-button>
                         </ion-toolbar>
@@ -122,50 +176,92 @@
             </ng-container>
             <ng-container *ngIf="item.attributes.shipping_status == 'recibido'">
               <ion-col size="6">
-                <ion-button id="{{'btn-status-delivered-message-modal' + i}}" color="success" expand="block"
-                  fill="solid" shape="round" size="small">
+                <ion-button
+                  id="{{ 'btn-status-delivered-message-modal' + i }}"
+                  color="success"
+                  expand="block"
+                  fill="solid"
+                  shape="round"
+                  size="small"
+                >
                   <ion-label>Entregar</ion-label>
                 </ion-button>
                 <!-- modal -->
-                <ion-modal [backdropDismiss]="true" class="modal-dialogs" id="{{'status-delivered-message-modal' + i}}"
-                  #modal trigger="{{'btn-status-delivered-message-modal' + i}}">
+                <ion-modal
+                  [backdropDismiss]="true"
+                  class="modal-dialogs"
+                  id="{{ 'status-delivered-message-modal' + i }}"
+                  #modal
+                  trigger="{{ 'btn-status-delivered-message-modal' + i }}"
+                >
                   <ng-template>
                     <div class="wrapper">
                       <ion-header>
                         <ion-toolbar color="success">
-                          <ion-title>
-                            Entrega
-                          </ion-title>
-
+                          <ion-title> Entrega </ion-title>
                         </ion-toolbar>
                       </ion-header>
                       <ion-item-group [formGroup]="this.dialogForm">
-                        <ion-item-divider style="margin-right: 16px;">
+                        <ion-item-divider style="margin-right: 16px">
                           <ion-label>¿Desea añadir gastos?</ion-label>
-                          <ion-toggle #gastos slot="end" (ionChange)="onChangeSelect($event)"></ion-toggle>
+                          <ion-toggle
+                            #gastos
+                            slot="end"
+                            (ionChange)="onChangeSelect($event)"
+                          ></ion-toggle>
                         </ion-item-divider>
                         <ion-item>
-                          <ion-label position="stacked">Valor Recibido</ion-label>
-                          <ion-input (ionChange)="ionChangesInputCurrency($event, 'money_catch')"
-                            (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="money_catch"
-                            placeholder="$0.00">
+                          <ion-label position="stacked"
+                            >Valor Recibido</ion-label
+                          >
+                          <ion-input
+                            (ionChange)="
+                              ionChangesInputCurrency($event, 'money_catch')
+                            "
+                            (keydown.space)="(false)"
+                            (keydown.enter)="(false)"
+                            type="tel"
+                            formControlName="money_catch"
+                            placeholder="$0.00"
+                          >
                           </ion-input>
                         </ion-item>
                         <ion-item *ngIf="gastos.checked">
                           <ion-label position="stacked">Gastos</ion-label>
-                          <ion-input (ionChange)="ionChangesInputCurrency($event, 'discharge')" (keydown.space)="false"
-                            (keydown.enter)="false" type="tel" placeholder="$0.00" formControlName="discharge">
+                          <ion-input
+                            (ionChange)="
+                              ionChangesInputCurrency($event, 'discharge')
+                            "
+                            (keydown.space)="(false)"
+                            (keydown.enter)="(false)"
+                            type="tel"
+                            placeholder="$0.00"
+                            formControlName="discharge"
+                          >
                           </ion-input>
                         </ion-item>
                         <ion-item>
-                          <ion-label position="stacked">(persona que entrega / descripción)</ion-label>
-                          <ion-textarea formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
+                          <ion-label position="stacked"
+                            >(persona que entrega / descripción)</ion-label
+                          >
+                          <ion-textarea
+                            formControlName="comment"
+                            type="text"
+                            placeholder="Detalles"
+                          ></ion-textarea>
                         </ion-item>
                       </ion-item-group>
                       <ion-footer>
                         <ion-toolbar class="ion-text-center">
-                          <ion-button [disabled]="this.dialogForm.invalid" color="success"
-                            (click)="this.updateStatusPackage(i, item.id, 'entregado')" fill="solid" shape="round">
+                          <ion-button
+                            [disabled]="this.dialogForm.invalid"
+                            color="success"
+                            (click)="
+                              this.updateStatusPackage(i, item.id, 'entregado')
+                            "
+                            fill="solid"
+                            shape="round"
+                          >
                             <ion-label>Entregar</ion-label>
                           </ion-button>
                         </ion-toolbar>
@@ -176,13 +272,23 @@
                 <!--  ---  -->
               </ion-col>
               <ion-col size="6">
-                <ion-button id="{{'btn-status-decline-message-modal' + i}}" color="danger" expand="block" fill="solid"
-                  shape="round" size="small">
+                <ion-button
+                  id="{{ 'btn-status-decline-message-modal' + i }}"
+                  color="danger"
+                  expand="block"
+                  fill="solid"
+                  shape="round"
+                  size="small"
+                >
                   <ion-label>Reportar</ion-label>
                 </ion-button>
                 <!-- modal -->
-                <ion-modal class="modal-dialogs" id="example-modal" #modal
-                  trigger="{{'btn-status-decline-message-modal' + i}}">
+                <ion-modal
+                  class="modal-dialogs"
+                  id="example-modal"
+                  #modal
+                  trigger="{{ 'btn-status-decline-message-modal' + i }}"
+                >
                   <ng-template>
                     <div class="wrapper">
                       <ion-header>
@@ -191,20 +297,36 @@
                         </ion-toolbar>
                       </ion-header>
                       <ion-item-group [formGroup]="this.dialogForm">
-                        <ion-item-divider style="margin-right: 16px;">
-                          <ion-label>Ingresar descripción y valor recibidos</ion-label>
+                        <ion-item-divider style="margin-right: 16px">
+                          <ion-label
+                            >Ingresar descripción y valor recibidos</ion-label
+                          >
                         </ion-item-divider>
                         <ion-item>
-                          <ion-label position="stacked">(persona que entrega / descripción) </ion-label>
-                          <ion-textarea #declineTextarea (ionFocus)="declineTextarea.value = ''"
-                            formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
+                          <ion-label position="stacked"
+                            >(persona que entrega / descripción)
+                          </ion-label>
+                          <ion-textarea
+                            #declineTextarea
+                            (ionFocus)="declineTextarea.value = ''"
+                            formControlName="comment"
+                            type="text"
+                            placeholder="Detalles"
+                          ></ion-textarea>
                         </ion-item>
                       </ion-item-group>
                       <ion-footer>
                         <ion-toolbar class="ion-text-center">
-                          <ion-button [disabled]="this.dialogForm.invalid" color="danger"
-                            (click)="this.updateStatusPackage(i, item.id, 'rechazado'); modal.dismiss()" fill="solid"
-                            shape="round">
+                          <ion-button
+                            [disabled]="this.dialogForm.invalid"
+                            color="danger"
+                            (click)="
+                              this.updateStatusPackage(i, item.id, 'rechazado');
+                              modal.dismiss()
+                            "
+                            fill="solid"
+                            shape="round"
+                          >
                             <ion-label>Reportar</ion-label>
                           </ion-button>
                         </ion-toolbar>
@@ -219,33 +341,77 @@
         </ion-grid>
 
         <ion-card-header class="ion-text-center ion-no-padding">
-          <ion-item lines="none" id="btn-{{i}}" class="ion-text-center" button>
+          <ion-item
+            lines="none"
+            id="btn-{{ i }}"
+            class="ion-text-center"
+            button
+          >
             <ion-label>Ver Detalles </ion-label>
             <ion-icon slot="end" name="chevron-down"></ion-icon>
           </ion-item>
-          <ion-modal id="example-modal modal-{{i}}" #modal trigger="btn-{{i}}">
+          <ion-modal
+            id="example-modal modal-{{ i }}"
+            #modal
+            trigger="btn-{{ i }}"
+          >
             <ng-template>
               <ion-content>
                 <ion-toolbar>
                   <ion-title>Mas Detalles</ion-title>
                   <ion-buttons slot="end">
                     <ion-button [id]="i">
-                      <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
+                      <ion-icon
+                        slot="icon-only"
+                        name="ellipsis-horizontal"
+                      ></ion-icon>
                     </ion-button>
                   </ion-buttons>
-                  <ion-popover side="top" alignment="end" reference="trigger" [trigger]="i" [dismissOnSelect]="true">
+                  <ion-popover
+                    side="top"
+                    alignment="end"
+                    reference="trigger"
+                    [trigger]="i"
+                    [dismissOnSelect]="true"
+                  >
                     <ng-template>
                       <ion-content>
                         <ion-item-group>
-                          <ion-item [detail]="false" [button]="true" (click)="this.selectPackage(item.id)">
-                            <ion-icon color="orange" name="link" slot="start"></ion-icon>
+                          <ion-item
+                            [detail]="false"
+                            [button]="true"
+                            (click)="this.selectPackage(item.id)"
+                          >
+                            <ion-icon
+                              color="orange"
+                              name="link"
+                              slot="start"
+                            ></ion-icon>
                             <ion-label>Traspasar</ion-label>
                           </ion-item>
-                          <ion-item *ngIf="item.attributes.receiver != null"
-                            [href]="'https://www.google.com/maps/dir/' + item.attributes.location.position.lat + ',' + item.attributes.location.position.lng + '/' + item.attributes.receiver.direction.position.lat + ',' + item.attributes.receiver.direction.position.lng "
-                            target="_blank" rel="noreferrer external" [button]="true" [detail]="false">
+                          <ion-item
+                            *ngIf="item.attributes.receiver != null"
+                            [href]="
+                              'https://www.google.com/maps/dir/' +
+                              item.attributes.location.position.lat +
+                              ',' +
+                              item.attributes.location.position.lng +
+                              '/' +
+                              item.attributes.receiver.direction.position.lat +
+                              ',' +
+                              item.attributes.receiver.direction.position.lng
+                            "
+                            target="_blank"
+                            rel="noreferrer external"
+                            [button]="true"
+                            [detail]="false"
+                          >
                             <ion-label>Ver Ruta en Mapas </ion-label>
-                            <ion-icon color="orange" slot="start" name="map"></ion-icon>
+                            <ion-icon
+                              color="orange"
+                              slot="start"
+                              name="map"
+                            ></ion-icon>
                           </ion-item>
                         </ion-item-group>
                       </ion-content>
@@ -260,9 +426,18 @@
                 <ion-item-group>
                   <ion-item-divider>
                     <ion-label>Informacion General</ion-label>
-                    <ion-chip style="margin-right: 16px;" slot="end" color="success" mode="ios" outline="true">
+                    <ion-chip
+                      style="margin-right: 16px"
+                      slot="end"
+                      color="success"
+                      mode="ios"
+                      outline="true"
+                    >
                       <ion-icon name="cash"></ion-icon>
-                      <ion-label>Cobrar: {{(item.attributes.value | currency )}}</ion-label>
+                      <ion-label
+                        >Cobrar:
+                        {{ item.attributes.value | currency }}</ion-label
+                      >
                     </ion-chip>
                   </ion-item-divider>
                   <!-- <ion-chip color="	primary" mode="ios" outline="true">
@@ -276,7 +451,9 @@
                         <ion-item lines="none">
                           <ion-label>
                             <p>Fecha de Creación</p>
-                            <h2>{{item.attributes.createdAt | date:'short'}}</h2>
+                            <h2>
+                              {{ item.attributes.createdAt | date : "short" }}
+                            </h2>
                           </ion-label>
                         </ion-item>
                       </ion-col>
@@ -284,7 +461,12 @@
                         <ion-item lines="none">
                           <ion-label>
                             <p>Tiempo de Retiro:</p>
-                            <h2>{{(item.attributes.pickup | date:'short') || 'Esperando Confirmación'}}</h2>
+                            <h2>
+                              {{
+                                (item.attributes.pickup | date : "short") ||
+                                  "Esperando Confirmación"
+                              }}
+                            </h2>
                           </ion-label>
                         </ion-item>
                       </ion-col>
@@ -295,23 +477,65 @@
                               <ion-text color="orange">Estado </ion-text>
                             </p>
                             <h2 [ngSwitch]="item.attributes.shipping_status">
-                              <ion-text *ngSwitchCase="'aceptado'" color="tertiary">
-                                <p>{{ item.attributes.shipping_status | titlecase}}</p>
+                              <ion-text
+                                *ngSwitchCase="'aceptado'"
+                                color="tertiary"
+                              >
+                                <p>
+                                  {{
+                                    item.attributes.shipping_status | titlecase
+                                  }}
+                                </p>
                               </ion-text>
-                              <ion-text *ngSwitchCase="'entregado'" color="success">
-                                <p>{{ item.attributes.shipping_status | titlecase}}</p>
+                              <ion-text
+                                *ngSwitchCase="'entregado'"
+                                color="success"
+                              >
+                                <p>
+                                  {{
+                                    item.attributes.shipping_status | titlecase
+                                  }}
+                                </p>
                               </ion-text>
-                              <ion-text *ngSwitchCase="'invalido'" color="medium">
-                                <p>{{ item.attributes.shipping_status | titlecase}}</p>
+                              <ion-text
+                                *ngSwitchCase="'invalido'"
+                                color="medium"
+                              >
+                                <p>
+                                  {{
+                                    item.attributes.shipping_status | titlecase
+                                  }}
+                                </p>
                               </ion-text>
-                              <ion-text *ngSwitchCase="'pendiente'" color="dark">
-                                <p>{{ item.attributes.shipping_status | titlecase}}</p>
+                              <ion-text
+                                *ngSwitchCase="'pendiente'"
+                                color="dark"
+                              >
+                                <p>
+                                  {{
+                                    item.attributes.shipping_status | titlecase
+                                  }}
+                                </p>
                               </ion-text>
-                              <ion-text *ngSwitchCase="'recibido'" color="primary">
-                                <p>{{ item.attributes.shipping_status | titlecase}}</p>
+                              <ion-text
+                                *ngSwitchCase="'recibido'"
+                                color="primary"
+                              >
+                                <p>
+                                  {{
+                                    item.attributes.shipping_status | titlecase
+                                  }}
+                                </p>
                               </ion-text>
-                              <ion-text *ngSwitchCase="'rechazadoionic '" color="danger">
-                                <p>{{ item.attributes.shipping_status | titlecase}}</p>
+                              <ion-text
+                                *ngSwitchCase="'rechazadoionic '"
+                                color="danger"
+                              >
+                                <p>
+                                  {{
+                                    item.attributes.shipping_status | titlecase
+                                  }}
+                                </p>
                               </ion-text>
                               <ion-text *ngSwitchDefault color="dark">
                                 <p>Sin Estado</p>
@@ -324,35 +548,61 @@
                         <ion-item>
                           <ion-label>
                             <p>Tipo de Encomienda</p>
-                            <h2 style="color: var(--ion-color-orange);">
-                              <p>{{ (item.attributes.category |titlecase) }}</p>
+                            <h2 style="color: var(--ion-color-orange)">
+                              <p>{{ item.attributes.category | titlecase }}</p>
                             </h2>
                           </ion-label>
                         </ion-item>
                       </ion-col>
                     </ion-row>
-
                   </ion-grid>
 
                   <ion-item>
-                    <ion-icon color="orange" slot="start" name="person"></ion-icon>
-                    <ng-container *ngIf="item.attributes.sender.data != null; else notSender">
+                    <ion-icon
+                      color="orange"
+                      slot="start"
+                      name="person"
+                    ></ion-icon>
+                    <ng-container
+                      *ngIf="
+                        item.attributes.sender.data != null;
+                        else notSender
+                      "
+                    >
                       <ion-label>
                         <p>
                           <ion-text color="orange">Proveedor</ion-text>
                         </p>
                         <h4>
                           <ion-text color="orange">
-                            <b>{{(item.attributes.sender.data.attributes.business.data.attributes.name | titlecase)
-                              }}</b></ion-text>
+                            <b>{{
+                              item.attributes.sender.data.attributes.business
+                                .data.attributes.name | titlecase
+                            }}</b></ion-text
+                          >
                         </h4>
                       </ion-label>
-                      <ion-fab-button href="tel:{{item.attributes.sender.data.attributes.phone}}" size="small">
+                      <ion-fab-button
+                        href="tel:{{
+                          item.attributes.sender.data.attributes.phone
+                        }}"
+                        size="small"
+                      >
                         <ion-icon name="call"></ion-icon>
                       </ion-fab-button>
                       <ion-fab-button
-                        [href]="'https://api.whatsapp.com/send?phone=' + item.attributes.sender.data.attributes.phone.replace('+','')"
-                        target="_blank" rel="noopener noreferrer" color="success" size="small">
+                        [href]="
+                          'https://api.whatsapp.com/send?phone=' +
+                          item.attributes.sender.data.attributes.phone.replace(
+                            '+',
+                            ''
+                          )
+                        "
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        color="success"
+                        size="small"
+                      >
                         <ion-icon name="logo-whatsapp"></ion-icon>
                       </ion-fab-button>
                     </ng-container>
@@ -365,17 +615,29 @@
                   </ion-item>
                   <ion-item>
                     <ion-icon slot="start" name="person"></ion-icon>
-                    <ng-container *ngIf="item.attributes.receiver != null; else notReceiver">
+                    <ng-container
+                      *ngIf="item.attributes.receiver != null; else notReceiver"
+                    >
                       <ion-label>
                         <p>Cliente</p>
-                        <h4>{{(item.attributes.receiver.name | titlecase) }}</h4>
+                        <h4>{{ item.attributes.receiver.name | titlecase }}</h4>
                       </ion-label>
-                      <ion-fab-button href="tel:{{item.attributes.receiver.phone}}" size="small">
+                      <ion-fab-button
+                        href="tel:{{ item.attributes.receiver.phone }}"
+                        size="small"
+                      >
                         <ion-icon name="call"></ion-icon>
                       </ion-fab-button>
                       <ion-fab-button
-                        [href]="'https://api.whatsapp.com/send?phone=' + item.attributes.receiver.phone.replace('+','')"
-                        target="_blank" rel="noopener noreferrer" color="success" size="small">
+                        [href]="
+                          'https://api.whatsapp.com/send?phone=' +
+                          item.attributes.receiver.phone.replace('+', '')
+                        "
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        color="success"
+                        size="small"
+                      >
                         <ion-icon name="logo-whatsapp"></ion-icon>
                       </ion-fab-button>
                     </ng-container>
@@ -393,18 +655,42 @@
                   <ion-item>
                     <ion-label>
                       <p>Manzana/villa/ casa | apartamento</p>
-                      <h2>{{item.attributes.sender.data.attributes.business.data.attributes.home}}</h2>
+                      <h2>
+                        {{
+                          item.attributes.sender.data.attributes.business.data
+                            .attributes.home
+                        }}
+                      </h2>
                     </ion-label>
                   </ion-item>
-                  <ion-item button
-                    [href]="'https://maps.google.com/?q=' + item.attributes.location.position.lat + ',' + item.attributes.location.position.lng"
-                    target="_blank" rel="noreferrer external">
+                  <ion-item
+                    button
+                    [href]="
+                      'https://maps.google.com/?q=' +
+                      item.attributes.location.position.lat +
+                      ',' +
+                      item.attributes.location.position.lng
+                    "
+                    target="_blank"
+                    rel="noreferrer external"
+                  >
                     <ion-label class="ion-text-wrap">
-                      <p><ion-text color="orange">Dirección de Retiro</ion-text></p>
-                      <h4>{{item.attributes.location.address}}</h4>
-                      <br>
-                      <p><ion-text color="orange" >Indicaciones de Retiro</ion-text></p>
-                      <h4>{{item.attributes.location.description || 'Sin Descripcion'}}</h4>
+                      <p>
+                        <ion-text color="orange">Dirección de Retiro</ion-text>
+                      </p>
+                      <h4>{{ item.attributes.location.address }}</h4>
+                      <br />
+                      <p>
+                        <ion-text color="orange"
+                          >Indicaciones de Retiro</ion-text
+                        >
+                      </p>
+                      <h4>
+                        {{
+                          item.attributes.location.description ||
+                            "Sin Descripcion"
+                        }}
+                      </h4>
                     </ion-label>
                     <ion-icon color="orange" slot="start" name="map"></ion-icon>
                   </ion-item>
@@ -412,15 +698,29 @@
                   <ion-item-divider>
                     <ion-label>Indicaciones de Entrega</ion-label>
                   </ion-item-divider>
-                  <ion-item *ngIf="item.attributes.receiver != null; else notDirection" button
-                    [href]="'https://maps.google.com/?q=' +  item.attributes.receiver.direction.position.lat + ',' +  item.attributes.receiver.direction.position.lng"
-                    target="_blank" rel="noreferrer external">
+                  <ion-item
+                    *ngIf="item.attributes.receiver != null; else notDirection"
+                    button
+                    [href]="
+                      'https://maps.google.com/?q=' +
+                      item.attributes.receiver.direction.position.lat +
+                      ',' +
+                      item.attributes.receiver.direction.position.lng
+                    "
+                    target="_blank"
+                    rel="noreferrer external"
+                  >
                     <ion-label class="ion-text-wrap">
                       <p>Dirección de Entrega</p>
-                      <h4>{{ item.attributes.receiver.direction.address}}</h4>
-                      <br>
+                      <h4>{{ item.attributes.receiver.direction.address }}</h4>
+                      <br />
                       <p>Dirección de Entrega</p>
-                      <h4>{{ item.attributes.receiver.description || 'Sin Descripcion'}}</h4>
+                      <h4>
+                        {{
+                          item.attributes.receiver.description ||
+                            "Sin Descripcion"
+                        }}
+                      </h4>
                     </ion-label>
                     <ion-icon slot="start" name="map"></ion-icon>
                   </ion-item>
@@ -437,12 +737,6 @@
               </ion-content>
             </ng-template>
           </ion-modal>
-        </ion-card-header>
-      </ion-card>
-      <ion-card *ngIf="(source.loading | async)">
-        <ion-card-header class="ion-text-center">
-          <ion-card-subtitle>Buscando Información</ion-card-subtitle>
-          <ion-spinner name="circular"></ion-spinner>
         </ion-card-header>
       </ion-card>
     </ng-container>

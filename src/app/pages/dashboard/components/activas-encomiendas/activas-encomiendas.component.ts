@@ -228,5 +228,12 @@ export class ActivasEncomiendasComponent implements OnInit {
     }
   }
 
+  async onRefresh(event?: any) {
+    await this.source.refresh()
+    if (event) {
+      event.target.complete()
+    }
+  }
+
 }
 

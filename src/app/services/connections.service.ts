@@ -328,7 +328,7 @@ export class ConectionsService {
             color: 'success',
             message: '¡Archivo guardado correctamente en Documentos!',
           })
-          if(open){
+          if (open) {
             await this.fileOpener.open(dir.uri, 'application/pdf')
           }
         }
@@ -460,6 +460,28 @@ export class Source extends DataSource<any | undefined>{
 
     this.itemsChanges$.next(this.source);
     this.loading.next(false)
+  }
+
+  public async refresh() {
+
+    //Before to fetch
+    this.loading.next(true)
+    this.setPagination = { page: 1 }
+    this.source = Array.from<any>({ length: 0 });
+    this.itemsChanges$.next(this.source);
+
+    //On fetch
+    const { data, meta } = await this.getData(this.path)
+    const { page, pageSize } = meta.pagination
+    this.pagination = meta.pagination
+    this.source.splice(page * pageSize, pageSize, ...data);
+    this.varRef = { ...data[0] }
+
+    //After fetch complete
+    this.itemsChanges$.next(this.source);
+    this.loading.next(false)
+
+    return this.source.length
   }
 
   public connect(collectionViewer: CollectionViewer) {
