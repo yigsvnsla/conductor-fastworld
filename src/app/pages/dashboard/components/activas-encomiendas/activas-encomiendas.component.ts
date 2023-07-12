@@ -177,6 +177,7 @@ export class ActivasEncomiendasComponent implements OnInit {
       }).toPromise()
       if (status == 'recibido') {
         this.source.updateItemToSource(_id, response.data);
+        this.chooseDownload(_id)
       }
       if (status != 'recibido') {
         this.source.deleteItemToSource(_id);

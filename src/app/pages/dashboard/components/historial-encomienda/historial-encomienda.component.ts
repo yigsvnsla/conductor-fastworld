@@ -39,7 +39,6 @@ export class HistorialEncomiendaComponent implements OnInit {
   }
 
   download(pack: any) {
-    //let name = this.titlecasePipe.transform(pack.attributes.sender.data.attributes.business.data.attributes.name);
     this.conectionsService.downloadPDF(pack.id, `Encomienda #${pack.id}`, true)
   }
 
