@@ -314,34 +314,14 @@ export class ConectionsService {
         return;
       }
 
-      const write = () => {
-        let reader = new FileReader()
-        reader.onloadend = async () => {
-          let base64 = reader.result as string
-          let dir = await Filesystem.writeFile({
-            path: `Fastworld/${name}.pdf`,
-            directory: Directory.Documents,
-            data: base64,
-            recursive: true
-          })
-          this.toolsService.showToast({
-            color: 'success',
-            message: '¡Archivo guardado correctamente en Documentos!',
-          })
-          if (open) {
-            await this.fileOpener.open(dir.uri, 'application/pdf')
-          }
-        }
-        reader.readAsDataURL(file)
-      }
 
       Filesystem.checkPermissions().then(async res => {
         if (res.publicStorage == 'granted') {
-          write()
+          this.writeFileSystem(file)
         } else {
           let response = await Filesystem.requestPermissions()
           if (response.publicStorage == 'granted') {
-            write()
+            this.writeFileSystem(file)
           }
         }
       })
@@ -351,6 +331,27 @@ export class ConectionsService {
     } finally {
       loading.dismiss()
     }
+  }
+
+  writeFileSystem(file) {
+    let reader = new FileReader()
+    reader.onloadend = async () => {
+      let base64 = reader.result as string
+      let dir = await Filesystem.writeFile({
+        path: `Fastworld/${name}.pdf`,
+        directory: Directory.Documents,
+        data: base64,
+        recursive: true
+      })
+      this.toolsService.showToast({
+        color: 'success',
+        message: '¡Archivo guardado correctamente en Documentos!',
+      })
+      if (open) {
+        await this.fileOpener.open(dir.uri, 'application/pdf')
+      }
+    }
+    reader.readAsDataURL(file)
   }
 
 }

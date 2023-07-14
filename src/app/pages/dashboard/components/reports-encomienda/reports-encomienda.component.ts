@@ -1,11 +1,13 @@
 import { ToolsService } from './../../../../services/tools.service';
-import { IonDatetime } from '@ionic/angular';
+import { IonDatetime, Platform } from '@ionic/angular';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { startOfMonth, endOfDay, startOfDay, startOfWeek, format } from 'date-fns';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { environment } from 'src/environments/environment';
 import { ConectionsService } from 'src/app/services/connections.service';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+
 const MimeTypes = [
   {
     name: 'excel',
@@ -32,7 +34,8 @@ export class ReportsEncomiendaComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toolsService: ToolsService,
     private localStorageService: LocalStorageService,
-    private http: ConectionsService
+    private http: ConectionsService,
+    private platform: Platform
   ) {
 
 
@@ -135,12 +138,22 @@ export class ReportsEncomiendaComponent implements OnInit {
     var a = document.createElement("a"), url = URL.createObjectURL(file);
     a.href = url;
     a.download = `${name}${mimeType.extension}`;
-    if (response) {
+
+    if (response && !this.platform.is('android') || !this.platform.is('mobile')) {
       a.click()
+      return;
     }
-    this.toolsService.showToast({
-      message: 'Descarga completada!',
-      color: 'success'
+
+
+    Filesystem.checkPermissions().then(async res => {
+      if (res.publicStorage == 'granted') {
+        this.http.writeFileSystem(file)
+      } else {
+        let response = await Filesystem.requestPermissions()
+        if (response.publicStorage == 'granted') {
+          this.http.writeFileSystem(file)
+        }
+      }
     })
   }
 
