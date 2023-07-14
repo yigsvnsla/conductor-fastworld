@@ -1,0 +1,23 @@
+<ion-fab-button [id]="'btn-'+package.id" color="danger" size="small">
+  <ion-icon name="print-outline"></ion-icon>
+</ion-fab-button>
+<ion-popover [trigger]="'btn-'+package.id" triggerAction="click" dismissOnSelect="true" side="bottom">
+  <ng-template>
+    <ion-list>
+      <ion-item button (click)="download('entrega')">
+        <ion-icon name="print" slot="start"></ion-icon>
+        <ion-label>
+          <p>Factura</p>
+          <ion-text color="primary">Recibido</ion-text>
+        </ion-label>
+      </ion-item>
+      <ion-item button (click)="download('recibido')">
+        <ion-icon name="print" slot="start"></ion-icon>
+        <ion-label>
+          <p>Factura</p>
+          <ion-text color="success">Entregado</ion-text>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-template>
+</ion-popover>

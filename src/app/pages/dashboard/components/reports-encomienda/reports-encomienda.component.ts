@@ -6,6 +6,18 @@ import { startOfMonth, endOfDay, startOfDay, startOfWeek, format } from 'date-fn
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { environment } from 'src/environments/environment';
 import { ConectionsService } from 'src/app/services/connections.service';
+const MimeTypes = [
+  {
+    name: 'excel',
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    extension: '.xlsx',
+  },
+  {
+    name: 'pdf',
+    type: 'application/pdf',
+    extension: '.pdf',
+  },
+]
 
 @Component({
   selector: 'app-reports-encomienda',
@@ -13,78 +25,6 @@ import { ConectionsService } from 'src/app/services/connections.service';
   styleUrls: ['./reports-encomienda.component.scss'],
 })
 export class ReportsEncomiendaComponent implements OnInit {
-  /*
-    @ViewChild('dateTimeRange') public dateTimeRange: IonDatetime
-
-    public reportForm: FormGroup
-
-    constructor(
-      private formBuilder: FormBuilder,
-      private toolsService:ToolsService
-    ) {
-
-
-    }
-
-    public ngOnInit() {
-      this.reportForm = this.formBuilder.nonNullable.group({
-        start: [startOfMonth(new Date()).toISOString()],
-        end: [new Date(Date.now()).toISOString()],
-        type: ['',[Validators.required]]
-      })
-
-    }
-
-    public ionViewWillEnter() {
-      console.log(this.reportForm.status);
-
-    }
-
-    public modalWillPresent() {
-      const { start, end } = this.reportForm.value
-      this.dateTimeRange.max = end
-      this.dateTimeRange.value = [start, end]
-    }
-
-
-    public loading: boolean
-
-    public async changeDateRate($event: Event): Promise<void> {
-      const event = $event as CustomEvent<IonDatetime>
-      const value = event.detail.value as Array<string>
-      const { start, end } = this.reportForm.value
-
-      if (value == undefined || value.length == 1 ) {
-        await this.toolsService.showAlert({
-          header:'Alerta ⚠',
-          subHeader:'solo puede selecionar dos fechas para generar su reporte',
-          cssClass:'alert-warning',
-          buttons:['cancel',{
-            text:'aceptar',
-            handler: () => {
-              this.dateTimeRange.value = [start, end]
-            },
-          }]
-        })
-        return
-      }
-
-      if ( !this.loading ) {
-        this.loading = true
-        // console.log(value);
-        value.shift();
-        this.dateTimeRange.value = [value[0], value[1]]
-        this.reportForm.get(['start']).setValue(value[0])
-        this.reportForm.get(['end']).setValue(value[1])
-        this.loading = false
-      }
-
-    }
-
-    public onSubmit(): void{
-
-    } */
-
 
   public reportForm: FormGroup
 
@@ -102,16 +42,48 @@ export class ReportsEncomiendaComponent implements OnInit {
     this.reportForm = this.formBuilder.nonNullable.group({
       start: ['', Validators.required],
       end: ['', Validators.required],
-      type: ['', [Validators.required]]
+      type: ['pdf', [Validators.required]],
+      target: ['packages', [Validators.required]]
     })
 
   }
 
   async onSubmit() {
-    let basic = await this.localStorageService.get(environment['user_tag']);
-    const { type } = this.reportForm.value
-    await this.getExport(basic.id, type, this.reportForm.value)
+    let loading = await this.toolsService.showLoading("Generando archivo...")
+    try {
+      let basic = await this.localStorageService.get(environment['user_tag']);
+      const { type, target, start, end } = this.reportForm.value
+      let all = new Date(start).getFullYear() == 2020;
+      if (target == 'packages') {
+        let route = `report/${type}/${basic.id}`;
+        await this.downloader({
+          data: { ...this.reportForm.value, all },
+          route,
+          name: `Listado rutas - ${format(new Date(), 'dd-MM-yyyy')}`
+        }, type)
+        return
+      }
 
+      let paramStart = startOfDay(this.toolsService.satinizeDate(new Date(start), true)).toISOString()
+      let paramEnd = endOfDay(this.toolsService.satinizeDate(new Date(end), true)).toISOString()
+      await this.downloader({
+        data: {
+          mode: 'drivers',
+          current: basic.id,
+          day: [paramStart, paramEnd]
+        },
+        route: `finances/${type}`,
+        name: `Record balance - ${format(new Date(), 'dd-MM-yyyy')}`
+      }, type)
+    } catch (error) {
+      console.log("Error intentando descargar archivo")
+      this.toolsService.showToast({
+        message: '¡Error al descargar!',
+        color: 'danger'
+      })
+    } finally {
+      loading.dismiss()
+    }
   }
 
   selectChange(event) {
@@ -122,6 +94,10 @@ export class ReportsEncomiendaComponent implements OnInit {
     let dateStart: Date;
     let dateEnd: Date;
     switch (value) {
+      case '0':
+        dateStart = this.toolsService.satinizeDate(new Date('2020-01-01'), true)
+        dateEnd = endOfDay(new Date())
+        break;
       case '1':
         dateStart = startOfDay(new Date())
         dateEnd = endOfDay(new Date())
@@ -140,6 +116,7 @@ export class ReportsEncomiendaComponent implements OnInit {
     }
     this.reportForm.get('start').patchValue(format(dateStart, 'yyyy-MM-dd'))
     this.reportForm.get('end').patchValue(format(dateEnd, 'yyyy-MM-dd'))
+    console.log(this.reportForm.value)
   }
 
   /*Modals handlers */
@@ -150,30 +127,21 @@ export class ReportsEncomiendaComponent implements OnInit {
   }
 
 
-  async getExport(id: any, type: string, data: any) {
-    const loading = await this.toolsService.showLoading('Cargando informacion...')
-    try {
-      let response = await this.http.postStream(`report/${id}`, data).toPromise()
-      let name = new Date().toString()
-      let file = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
-      var a = document.createElement("a"), url = URL.createObjectURL(file);
-      a.href = url;
-      a.download = `${name}.xlsx`;
-      // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
-      if (response) {
-        await this.toolsService.showAlert({
-          cssClass: 'alert-success',
-          keyboardClose: true,
-          mode: 'ios',
-          header: 'Exito',
-          buttons: [{ text: 'Aceptar', handler: () => a.click() }]
-        })
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      loading.dismiss()
+
+  async downloader({ data, name, route }, mime) {
+    let mimeType = MimeTypes.find(e => e.name == mime)
+    let response = await this.http.postStream(route, data).toPromise()
+    let file = new Blob([response], { type: mimeType.type })
+    var a = document.createElement("a"), url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = `${name}${mimeType.extension}`;
+    if (response) {
+      a.click()
     }
+    this.toolsService.showToast({
+      message: 'Descarga completada!',
+      color: 'success'
+    })
   }
 
 }
