@@ -317,11 +317,11 @@ export class ConectionsService {
 
       Filesystem.checkPermissions().then(async res => {
         if (res.publicStorage == 'granted') {
-          this.writeFileSystem(file)
+          this.writeFileSystem(file, name)
         } else {
           let response = await Filesystem.requestPermissions()
           if (response.publicStorage == 'granted') {
-            this.writeFileSystem(file)
+            this.writeFileSystem(file, name)
           }
         }
       })
@@ -333,7 +333,7 @@ export class ConectionsService {
     }
   }
 
-  writeFileSystem(file) {
+  writeFileSystem(file, name) {
     let reader = new FileReader()
     reader.onloadend = async () => {
       let base64 = reader.result as string

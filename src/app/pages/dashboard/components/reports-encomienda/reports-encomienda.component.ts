@@ -46,7 +46,7 @@ export class ReportsEncomiendaComponent implements OnInit {
       start: ['', Validators.required],
       end: ['', Validators.required],
       type: ['pdf', [Validators.required]],
-      target: ['packages', [Validators.required]]
+      target: ['balance', [Validators.required]]
     })
 
   }
@@ -147,11 +147,11 @@ export class ReportsEncomiendaComponent implements OnInit {
 
     Filesystem.checkPermissions().then(async res => {
       if (res.publicStorage == 'granted') {
-        this.http.writeFileSystem(file)
+        this.http.writeFileSystem(file,name)
       } else {
         let response = await Filesystem.requestPermissions()
         if (response.publicStorage == 'granted') {
-          this.http.writeFileSystem(file)
+          this.http.writeFileSystem(file,name)
         }
       }
     })
