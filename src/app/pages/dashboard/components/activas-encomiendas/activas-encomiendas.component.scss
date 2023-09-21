@@ -1,16 +1,16 @@
 ion-modal {
-    &.modal-dialogs {
-        --width: fit-content;
-        --min-width: 250px;
-        --height: fit-content;
-        --border-radius: 6px;
-        --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+  &.modal-dialogs {
+    --width: fit-content;
+    --min-width: 250px;
+    --height: fit-content;
+    --border-radius: 6px;
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
 
-        h1 {
-            margin: 20px 20px 10px 20px;
+    h1 {
+      margin: 20px 20px 10px 20px;
 
-        }
     }
+  }
 }
 
 // ion-modal.example-modal {
@@ -38,4 +38,11 @@ ion-modal.example-modal h1 {
 
 ion-modal.example-modal .wrapper {
   margin-bottom: 10px;
+}
+
+
+.selectable-text {
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
