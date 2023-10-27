@@ -1,0 +1,310 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Mas Detalles</ion-title>
+    <ion-buttons slot="end">
+      <ion-button id="hamburger-button">
+        <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-popover side="top" alignment="end" reference="trigger" trigger="hamburger-button" [dismissOnSelect]="true">
+      <ng-template>
+        <ion-content>
+          <ion-item-group>
+            <ion-item [detail]="false" [button]="true" *ngIf="item.attributes.receiver == null"
+              (click)="sharePackage()">
+              <ion-icon color="orange" name="link" slot="start"></ion-icon>
+              <ion-label>Generar Confirmación</ion-label>
+            </ion-item>
+            <ion-item *ngIf="item.attributes.receiver != null"
+              [href]="'https://www.google.com/maps/dir/' + item.attributes.location.position.lat + ',' + item.attributes.location.position.lng + '/' + item.attributes.receiver.direction.position.lat + ',' + item.attributes.receiver.direction.position.lng "
+              target="_blank" rel="noreferrer external" [button]="true" [detail]="false">
+              <ion-label>Ver Ruta en Mapas </ion-label>
+              <ion-icon color="orange" slot="start" name="map"></ion-icon>
+            </ion-item>
+          </ion-item-group>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-item lines="none">
+          <ion-label>
+            <p>Fecha de Creación</p>
+            <h2>
+              {{ item.attributes.createdAt | date : "short" }}
+            </h2>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item lines="none">
+          <ion-label>
+            <p>Tiempo de Retiro:</p>
+            <h2>
+              {{
+              (item.attributes.pickup | date : "short") ||
+              "Esperando Confirmación"
+              }}
+            </h2>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>
+            <p>
+              <ion-text color="orange">Estado </ion-text>
+            </p>
+            <h2 [ngSwitch]="item.attributes.shipping_status">
+              <ion-text *ngSwitchCase="'aceptado'" color="tertiary">
+                <p>
+                  {{
+                  item.attributes.shipping_status | titlecase
+                  }}
+                </p>
+              </ion-text>
+              <ion-text *ngSwitchCase="'entregado'" color="success">
+                <p>
+                  {{
+                  item.attributes.shipping_status | titlecase
+                  }}
+                </p>
+              </ion-text>
+              <ion-text *ngSwitchCase="'invalido'" color="medium">
+                <p>
+                  {{
+                  item.attributes.shipping_status | titlecase
+                  }}
+                </p>
+              </ion-text>
+              <ion-text *ngSwitchCase="'pendiente'" color="dark">
+                <p>
+                  {{
+                  item.attributes.shipping_status | titlecase
+                  }}
+                </p>
+              </ion-text>
+              <ion-text *ngSwitchCase="'recibido'" color="primary">
+                <p>
+                  {{
+                  item.attributes.shipping_status | titlecase
+                  }}
+                </p>
+              </ion-text>
+              <ion-text *ngSwitchCase="'rechazadoionic '" color="danger">
+                <p>
+                  {{
+                  item.attributes.shipping_status | titlecase
+                  }}
+                </p>
+              </ion-text>
+              <ion-text *ngSwitchDefault color="dark">
+                <p>Sin Estado</p>
+              </ion-text>
+            </h2>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>
+            <p>Tipo de Encomienda</p>
+            <h2 style="color: var(--ion-color-orange)">
+              <p>{{ item.attributes.category | titlecase }}</p>
+            </h2>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-item>
+    <ion-icon color="orange" slot="start" name="person"></ion-icon>
+    <ng-container *ngIf="
+        item.attributes.sender.data != null;
+        else notSender
+      ">
+      <ion-label>
+        <p>
+          <ion-text color="orange">
+            <strong>Proveedor</strong>
+          </ion-text>
+        </p>
+        <h4>
+          <ion-text>
+            {{
+            item.attributes.sender.data.attributes.business
+            .data.attributes.name | titlecase
+            }}
+          </ion-text>
+        </h4>
+      </ion-label>
+      <ion-fab-button href="tel:{{
+          item.attributes.sender.data.attributes.phone
+        }}" size="small">
+        <ion-icon name="call"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button [href]="
+          'https://api.whatsapp.com/send?phone=' +
+          item.attributes.sender.data.attributes.phone.replace(
+            '+',
+            ''
+          )
+        " target="_blank" rel="noopener noreferrer" color="success" size="small">
+        <ion-icon name="logo-whatsapp"></ion-icon>
+      </ion-fab-button>
+    </ng-container>
+    <ng-template #notSender>
+      <ion-label>
+        <p>Usuario</p>
+        <h4>Esperando confirmnación</h4>
+      </ion-label>
+    </ng-template>
+  </ion-item>
+
+  <ion-item *ngIf="sender">
+    <ion-icon color="danger" slot="start" name="person"></ion-icon>
+    <ng-container>
+      <ion-label>
+        <p>
+          <ion-text color="danger">
+            <strong>Remitente</strong>
+          </ion-text>
+        </p>
+        <h4>
+          <ion-text>
+            {{(sender.name | titlecase) }}
+          </ion-text>
+        </h4>
+      </ion-label>
+      <ion-fab-button href="tel:{{sender.phone}}" size="small">
+        <ion-icon name="call"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + sender.phone.replace('+','')" target="_blank"
+        rel="noopener noreferrer" color="success" size="small">
+        <ion-icon name="logo-whatsapp"></ion-icon>
+      </ion-fab-button>
+    </ng-container>
+  </ion-item>
+
+  <ion-item>
+    <ion-icon slot="start" name="person" color="primary"></ion-icon>
+    <ng-container *ngIf="item.attributes.receiver != null; else notReceiver">
+      <ion-label>
+        <p>
+          <ion-text color="primary">
+            <strong>
+              Cliente
+            </strong>
+          </ion-text>
+        </p>
+        <h4>{{ item.attributes.receiver.name | titlecase }}</h4>
+      </ion-label>
+      <ion-fab-button href="tel:{{ item.attributes.receiver.phone }}" size="small">
+        <ion-icon name="call"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button [href]="
+          'https://api.whatsapp.com/send?phone=' +
+          item.attributes.receiver.phone.replace('+', '')
+        " target="_blank" rel="noopener noreferrer" color="success" size="small">
+        <ion-icon name="logo-whatsapp"></ion-icon>
+      </ion-fab-button>
+    </ng-container>
+    <ng-template #notReceiver>
+      <ion-label>
+        <p>Cliente</p>
+        <h4>Esperando confirmnación</h4>
+      </ion-label>
+    </ng-template>
+  </ion-item>
+
+  <ion-item-divider>
+    <ion-label>Información de Retiro</ion-label>
+  </ion-item-divider>
+  <ion-item>
+    <ion-label>
+      <p>Manzana/villa/ casa | apartamento</p>
+      <h2>
+        {{
+        item.attributes.sender.data.attributes.business.data
+        .attributes.home
+        }}
+      </h2>
+    </ion-label>
+  </ion-item>
+  <ion-item button [href]="
+    'https://maps.google.com/?q=' +
+    item.attributes.location.position.lat +
+    ',' +
+    item.attributes.location.position.lng
+  " target="_blank" rel="noreferrer external">
+    <ion-label class="ion-text-wrap">
+      <p>
+        <ion-text color="orange">Dirección de Retiro</ion-text>
+      </p>
+      <h4>{{ item.attributes.location.address }}</h4>
+    </ion-label>
+    <ion-icon color="danger" name="navigate-circle" slot="end"></ion-icon>
+  </ion-item>
+  <ion-item>
+    <ion-label class="ion-text-wrap">
+      <p>
+        <ion-text color="orange">Indicaciones de Retiro</ion-text>
+      </p>
+      <h4 class="selectable-text">
+        {{
+        item.attributes.location.description ||
+        "Sin Descripcion"
+        }}
+      </h4>
+    </ion-label>
+  </ion-item>
+  <ion-item-divider>
+    <ion-label>Indicaciones de Entrega</ion-label>
+  </ion-item-divider>
+  <ion-item *ngIf="item.attributes.receiver != null; else notDirection" button [href]="
+      'https://maps.google.com/?q=' +
+      item.attributes.receiver.direction.position.lat +
+      ',' +
+      item.attributes.receiver.direction.position.lng
+    " target="_blank" rel="noreferrer external">
+    <ion-label class="ion-text-wrap">
+      <p>
+        <ion-text color="primary">Dirección de Entrega</ion-text>
+      </p>
+      <h4>{{ item.attributes.receiver.direction.address }}</h4>
+    </ion-label>
+    <ion-icon name="navigate-circle" slot="end" color="danger"></ion-icon>
+  </ion-item>
+  <ion-item>
+    <ion-label class="ion-text-wrap">
+      <p>
+        <ion-text color="primary">Indicaciones de Entrega</ion-text>
+      </p>
+      <h4 class="selectable-text">
+        {{
+        item.attributes.receiver.description ||
+        "Sin Descripcion"
+        }}
+      </h4>
+    </ion-label>
+  </ion-item>
+  <ng-template #notDirection>
+    <ion-item>
+      <ion-label class="ion-text-wrap">
+        <p><ion-text color="primary">Dirección de Entrega</ion-text></p>
+        <h4>Sin Especificar</h4>
+      </ion-label>
+      <ion-icon slot="start" name="map"></ion-icon>
+    </ion-item>
+  </ng-template>
+</ion-content>

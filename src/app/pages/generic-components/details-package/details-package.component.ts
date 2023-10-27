@@ -16,6 +16,7 @@ export class DetailsPackageComponent implements OnInit {
 
   public package : Observable<any>
   public history : Observable<any>
+  sender: any;
   constructor(
     private conectionsService:ConectionsService,
     private modalController:ModalController,
@@ -29,6 +30,8 @@ export class DetailsPackageComponent implements OnInit {
   private async loadPackage(){
     this.package = this.conectionsService.get<any>(`driver/packages/${this.id}?populate=*`).pipe(delay(1000),map(res=>res.data),tap(console.log),)
     this.history = this.conectionsService.get<any>(`history/package/${this.id}?populate=*`).pipe(delay(1000),map(res=>res),tap(console.log))
+    this.sender = await this.conectionsService.get(`sender/find/${this.id}`).toPromise()
+    
   }
 
   public async paymentPackage(item:any){

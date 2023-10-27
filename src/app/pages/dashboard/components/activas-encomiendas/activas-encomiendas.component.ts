@@ -12,6 +12,7 @@ import { InputCustomEvent, IonModal, ModalController } from '@ionic/angular';
 import * as qs from 'qs';
 import { SocketService } from 'src/app/services/socket.service';
 import { TitleCasePipe } from '@angular/common';
+import { ModalDetailsComponent } from './modal-details/modal-details.component';
 
 
 @Component({
@@ -192,7 +193,7 @@ export class ActivasEncomiendasComponent implements OnInit {
       this.dialogForm = this.formBuilder.nonNullable.group({
         money_catch: ['$0.00', [Validators.required]],
         discharge: ['$0.00'],
-        comment: ['Sin Novedad', [Validators.required]]
+        comment: ['Sin novedad', [Validators.required]]
       })
       loading.dismiss();
       (await this.modalcontroller.getTop()).dismiss()
@@ -234,6 +235,17 @@ export class ActivasEncomiendasComponent implements OnInit {
     if (event) {
       event.target.complete()
     }
+  }
+
+  showDetails(item: any) {
+    this.toolsService.showModal({
+      component: ModalDetailsComponent,
+      componentProps: {
+        item
+      }
+    }).then(res => {
+      if (res == null) return
+    })
   }
 
 }

@@ -18,6 +18,7 @@ import { EntregasEncomiendaComponent } from './components/entregas-encomienda/en
 import { SocketIoModule } from 'ngx-socket-io';
 import { ReportsEncomiendaComponent } from "./components/reports-encomienda/reports-encomienda.component";
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
+import { ModalDetailsComponent } from './components/activas-encomiendas/modal-details/modal-details.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -37,7 +38,8 @@ import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
     ActivasEncomiendasComponent,
     EntregasEncomiendaComponent,
     PerfilComponent,
-    ReportsEncomiendaComponent
+    ReportsEncomiendaComponent,
+    ModalDetailsComponent
   ],
   providers:[CurrencyPipe, TitleCasePipe, FileOpener]
 })

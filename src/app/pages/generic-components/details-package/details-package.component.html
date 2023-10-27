@@ -12,38 +12,121 @@
   <ng-container *ngIf="(this.package | async) as item; else loadingPackage">
     <ion-grid>
       <ion-row>
-        <ion-col sizeXs="12" sizeSm="6" style="display: flex; justify-content: center; align-items: center;">
-          <ion-card class="data" *ngIf="item.attributes.receiver != null; else notReceiver">
-            <ion-card-header>
-              <ion-card-subtitle style="display: flex; align-items: center; ;">
-                <ion-icon style="margin: 8px" name="person"></ion-icon>
-                <ion-text color="orange">Cliente</ion-text>
-              </ion-card-subtitle>
-              <ion-card-title>{{(item.attributes.receiver.name | titlecase) }}</ion-card-title>
-              <ion-card-subtitle>Medios de Comunicación</ion-card-subtitle>
-              <ion-card-subtitle style="display: flex; align-items: center; justify-content: center;">
-                <ion-fab-button href="tel:{{item.attributes.receiver.phone}}" size="small">
-                  <ion-icon name="call"></ion-icon>
-                </ion-fab-button>
-                <ion-fab-button
-                  [href]="'https://api.whatsapp.com/send?phone=' + item.attributes.receiver.phone.replace('+','')"
-                  target="_blank" rel="noopener noreferrer" color="success" size="small">
-                  <ion-icon name="logo-whatsapp"></ion-icon>
-                </ion-fab-button>
-              </ion-card-subtitle>
+        <ion-col sizeXs="12" sizeSm="6"
+          style="display: flex; flex-direction: column;  justify-content: start; align-items: center;">
+            <ion-card-header style="width: 100%;">
+              <ion-item>
+                <ion-icon color="orange" slot="start" name="person"></ion-icon>
+                <ng-container *ngIf="
+                item.attributes.sender.data != null;
+                else notSender
+              ">
+                  <ion-label>
+                    <p>
+                      <ion-text color="orange">
+                        <strong>Proveedor</strong>
+                      </ion-text>
+                    </p>
+                    <h4>
+                      <ion-text>
+                        {{
+                        item.attributes.sender.data.attributes.business
+                        .data.attributes.name | titlecase
+                        }}
+                      </ion-text>
+                    </h4>
+                  </ion-label>
+                  <ion-fab-button href="tel:{{
+                  item.attributes.sender.data.attributes.phone
+                }}" size="small">
+                    <ion-icon name="call"></ion-icon>
+                  </ion-fab-button>
+                  <ion-fab-button [href]="
+                  'https://api.whatsapp.com/send?phone=' +
+                  item.attributes.sender.data.attributes.phone.replace(
+                    '+',
+                    ''
+                  )
+                " target="_blank" rel="noopener noreferrer" color="success" size="small">
+                    <ion-icon name="logo-whatsapp"></ion-icon>
+                  </ion-fab-button>
+                </ng-container>
+                <ng-template #notSender>
+                  <ion-label>
+                    <p>Usuario</p>
+                    <h4>Esperando confirmnación</h4>
+                  </ion-label>
+                </ng-template>
+              </ion-item>
+
+              <ion-item *ngIf="sender">
+                <ion-icon color="danger" slot="start" name="person"></ion-icon>
+                <ng-container>
+                  <ion-label>
+                    <p>
+                      <ion-text color="danger">
+                        <strong>Remitente</strong>
+                      </ion-text>
+                    </p>
+                    <h4>
+                      <ion-text>
+                        {{(sender.name | titlecase) }}
+                      </ion-text>
+                    </h4>
+                  </ion-label>
+                  <ion-fab-button href="tel:{{sender.phone}}" size="small">
+                    <ion-icon name="call"></ion-icon>
+                  </ion-fab-button>
+                  <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + sender.phone.replace('+','')"
+                    target="_blank" rel="noopener noreferrer" color="success" size="small">
+                    <ion-icon name="logo-whatsapp"></ion-icon>
+                  </ion-fab-button>
+                </ng-container>
+              </ion-item>
+
+              <ion-item>
+                <ion-icon slot="start" name="person" color="primary"></ion-icon>
+                <ng-container *ngIf="item.attributes.receiver != null; else notReceiver">
+                  <ion-label>
+                    <p>
+                      <ion-text color="primary">
+                        <strong>
+                          Cliente
+                        </strong>
+                      </ion-text>
+                    </p>
+                    <h4>{{ item.attributes.receiver.name | titlecase }}</h4>
+                  </ion-label>
+                  <ion-fab-button href="tel:{{ item.attributes.receiver.phone }}" size="small">
+                    <ion-icon name="call"></ion-icon>
+                  </ion-fab-button>
+                  <ion-fab-button [href]="
+                  'https://api.whatsapp.com/send?phone=' +
+                  item.attributes.receiver.phone.replace('+', '')
+                " target="_blank" rel="noopener noreferrer" color="success" size="small">
+                    <ion-icon name="logo-whatsapp"></ion-icon>
+                  </ion-fab-button>
+                </ng-container>
+                <ng-template #notReceiver>
+                  <ion-label>
+                    <p>Cliente</p>
+                    <h4>Esperando confirmnación</h4>
+                  </ion-label>
+                </ng-template>
+              </ion-item>
             </ion-card-header>
-          </ion-card>
-          <ng-template #notReceiver>
-            <ion-card class="not-data">
-              <ion-card-header>
-                <ion-card-subtitle>Tiempo de vida del ticket: 30 minutos</ion-card-subtitle>
-                <ion-card-title>Esperando confirmación</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-img [src]="'../../../../assets/svg/undraw_Confirmation_re_b6q5.svg'"></ion-img>
-              </ion-card-content>
-            </ion-card>
-          </ng-template>
+            <ng-template #notReceiver>
+              <ion-card class="not-data">
+                <ion-card-header>
+                  <ion-card-subtitle>Tiempo de vida del ticket: 30 minutos</ion-card-subtitle>
+                  <ion-card-title>Esperando confirmación</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-img [src]="'../../../../assets/svg/undraw_Confirmation_re_b6q5.svg'"></ion-img>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+
         </ion-col>
 
         <ion-col sizeXs="12" sizeSm="6" style="display: flex; justify-content: center; align-items: center;">
