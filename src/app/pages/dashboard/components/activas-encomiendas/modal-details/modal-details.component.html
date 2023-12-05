@@ -10,6 +10,10 @@
       <ng-template>
         <ion-content>
           <ion-item-group>
+            <ion-item [detail]="false" [button]="true" (click)="transfer(item.id)">
+              <ion-icon color="orange" name="link" slot="start"></ion-icon>
+              <ion-label>Traspasar</ion-label>
+            </ion-item>
             <ion-item [detail]="false" [button]="true" *ngIf="item.attributes.receiver == null"
               (click)="sharePackage()">
               <ion-icon color="orange" name="link" slot="start"></ion-icon>
